@@ -22,7 +22,7 @@ const theme = createTheme({
 
     body1: {
       fontWeight: "500",
-      fontSize: "18px",
+      fontSize: "16px",
     },
     body2: {
       fontSize: "16px",
@@ -31,6 +31,10 @@ const theme = createTheme({
     },
     h4: {
       fontWeight: "700",
+    },
+    caption: {
+      fontSize: "14px",
+      fontWeight: "500",
     },
   },
 });

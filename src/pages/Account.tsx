@@ -57,7 +57,7 @@ function Account() {
                 <Grid item xs={12} md={12}>
                   <Grid container columns={12} spacing={3}>
                     <Grid item xs={6}>
-                      <Typography variant="h5">Product Name</Typography>
+                      <Typography variant="body1">Product Name</Typography>
                     </Grid>
                     <Grid item xs={6}>
                       <Box
@@ -67,13 +67,13 @@ function Account() {
                           justifyContent: "space-between",
                         }}
                       >
-                        <Typography variant="h5">Price</Typography>
-                        <Typography variant="h5">Qty</Typography>
-                        <Typography variant="h5">SubTotal</Typography>
+                        <Typography variant="body1">Price</Typography>
+                        <Typography variant="body1">Qty</Typography>
+                        <Typography variant="body1">SubTotal</Typography>
                       </Box>
                     </Grid>
                   </Grid>
-                  <Divider sx={{ margin: "1rem 0rem" }} />
+                  <Divider sx={{ margin: "0.5rem 0rem" }} />
                   {items.map((item, index) => {
                     return (
                       <Grid container columns={12} margin={"0.8rem 0rem"}>
@@ -101,16 +101,27 @@ function Account() {
                             sx={{
                               display: "flex",
                               flexDirection: "column",
-                              gap: "0.06rem",
                             }}
                           >
                             <Typography variant="body1">
                               Product name
                             </Typography>
-                            <Typography variant="body2">
+                            <Typography
+                              sx={{
+                                fontSize: 14,
+                                color: "gray",
+                              }}
+                            >
                               Product Category
                             </Typography>
-                            <Typography variant="body2">Qty-1</Typography>
+                            <Typography
+                              sx={{
+                                fontSize: 14,
+                                color: "gray",
+                              }}
+                            >
+                              Qty-1
+                            </Typography>
                           </Box>
                         </Grid>
                         <Grid
@@ -136,13 +147,79 @@ function Account() {
               <Grid container columns={12}>
                 <Grid item md={4}>
                   <Typography variant="body2">Order Details</Typography>
-                  <Box></Box>
+                  <Box sx={{ display: "flex", gap: "2rem" }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <Typography variant="caption">Sub Total</Typography>
+                      <Typography variant="caption">Discount</Typography>
+                      <Typography variant="caption">Shipping Fee</Typography>
+                      <Typography variant="caption">Grand Total</Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <Typography variant="caption">$118</Typography>
+                      <Typography variant="caption">$0.00</Typography>
+                      <Typography variant="caption">$0.00</Typography>
+                      <Typography variant="caption">$118</Typography>
+                    </Box>
+                  </Box>
                 </Grid>
                 <Grid item md={4}>
                   <Typography variant="body2">Payment Details</Typography>
+                  <Typography sx={{ fontSize: 14, color: "black" }}>
+                    Cash on Deliver
+                  </Typography>
                 </Grid>
                 <Grid item md={4}>
                   <Typography variant="body2">Address Details</Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "0.083rem",
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        fontSize: 14,
+                        color: "black",
+                      }}
+                    >
+                      Vaaritehtankatu,
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: 14,
+                        color: "black",
+                      }}
+                    >
+                      01300,Tikkurila
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: 14,
+                        color: "black",
+                      }}
+                    >
+                      Finland
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: 14,
+                        color: "black",
+                      }}
+                    >
+                      +358-046239787
+                    </Typography>
+                  </Box>
                 </Grid>
               </Grid>
             </>

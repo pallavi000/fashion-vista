@@ -38,9 +38,23 @@ const categorySlice = createSlice({
 
 export const fetchProductsByCategory = createAsyncThunk(
   "fetchProductsByCategory",
-  async ({ id }: { id: number }) => {
+  async ({
+    id,
+    offset,
+    limit,
+    price_min,
+    price_max,
+  }: {
+    id: number;
+    offset: number;
+    limit: number;
+    price_min: number;
+    price_max: number;
+  }) => {
     try {
-      const result = await axiosInstance.get(`/categories/${id}/products`);
+      const result = await axiosInstance.get(
+        `/categories/${id}/products?offset=${offset}&limit=${limit}&price_min=${price_min}&price_max=${price_max}`
+      );
       return result.data;
     } catch (e) {
       const error = e as AxiosError;

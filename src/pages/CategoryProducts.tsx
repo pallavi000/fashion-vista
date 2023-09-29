@@ -1,12 +1,18 @@
 import {
   Box,
   Breadcrumbs,
+  Button,
   Container,
+  FormControl,
   Grid,
+  InputLabel,
+  MenuItem,
   Link as MuiLink,
+  Select,
+  SelectChangeEvent,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { AppState, useAppDispatch } from "../redux/store";
@@ -20,10 +26,15 @@ import BreadCrumb from "../components/Breadcrumb";
 import SidebarFilter from "../components/SidebarFilter";
 import GridViewIcon from "@mui/icons-material/GridView";
 import BannerImg from "../images/category.png";
+import { ArrowLeft, ArrowRight } from "@mui/icons-material";
 
 function CategoryProducts() {
   const { id } = useParams();
   const dispatch = useAppDispatch();
+
+  const [offset, setOffset] = useState<number>(0);
+  const [limit, setLimit] = useState<number>(10);
+  const [price, setPrice] = React.useState<number[]>([0, 10000]);
 
   const categories = useSelector((state: AppState) => state.categories.data);
   const { category, products } = useSelector((state: AppState) => ({
@@ -32,8 +43,17 @@ function CategoryProducts() {
   }));
 
   React.useEffect(() => {
-    dispatch(fetchProductsByCategory({ id: Number(id) }));
-  }, [id]);
+    console.log(price[0], price[1], "priceeeeeeeeeeee");
+    dispatch(
+      fetchProductsByCategory({
+        id: Number(id),
+        offset,
+        limit,
+        price_min: price[0],
+        price_max: price[1],
+      })
+    );
+  }, [id, offset, limit, price]);
 
   React.useEffect(() => {
     if (categories.length) {
@@ -50,6 +70,17 @@ function CategoryProducts() {
       {category?.name}
     </Typography>,
   ];
+
+  const handlePrevPage = () => {
+    setOffset((prev) => prev - limit);
+  };
+  const handleNextPage = () => {
+    setOffset((prev) => prev + limit);
+  };
+
+  const handleChange = (e: SelectChangeEvent) => {
+    setLimit(Number(e.target.value));
+  };
 
   return (
     <Container maxWidth="xl" sx={{ padding: "2rem 0rem" }}>
@@ -72,7 +103,7 @@ function CategoryProducts() {
       </Box>
       <Grid container columns={12} spacing={4} sx={{ padding: "2rem 0rem" }}>
         <Grid item xs={12} md={4} lg={3}>
-          <SidebarFilter />
+          <SidebarFilter price={price} setPrice={setPrice} />
         </Grid>
         <Grid item xs={12} md={8} lg={9}>
           <Box
@@ -84,23 +115,57 @@ function CategoryProducts() {
           >
             <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
               <GridViewIcon />
-              <Typography variant="h6">Showing 1-20 of 45 items</Typography>
+              <Typography variant="h6">
+                Showing {offset} - {offset + limit} items
+              </Typography>
             </Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-              <Typography variant="h6">To Show : </Typography>
-
-              <Typography>0</Typography>
-            </Box>
-            <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-              <Typography variant="h6">Short by : </Typography>
-              <GridViewIcon />
+              <Typography variant="h6">Show </Typography>
+              <FormControl fullWidth>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={limit.toString()}
+                  onChange={handleChange}
+                >
+                  <MenuItem value={10}>10</MenuItem>
+                  <MenuItem value={20}>20</MenuItem>
+                  <MenuItem value={30}>30</MenuItem>
+                </Select>
+              </FormControl>
             </Box>
           </Box>
           <Grid container spacing={3} columns={12} sx={{ marginTop: "2rem" }}>
-            {products.slice(0, 16).map((product) => {
+            {products.map((product) => {
               return <Product product={product} />;
             })}
           </Grid>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: "2rem",
+              margin: "2rem 0rem",
+              justifyContent: "flex-end",
+            }}
+          >
+            <Button
+              variant="contained"
+              disabled={!Boolean(offset)}
+              startIcon={<ArrowLeft />}
+              onClick={handlePrevPage}
+            >
+              Prev
+            </Button>
+            <Button
+              variant="contained"
+              disabled={products.length === limit ? false : true}
+              endIcon={<ArrowRight />}
+              onClick={handleNextPage}
+            >
+              Next
+            </Button>
+          </Box>
         </Grid>
       </Grid>
     </Container>
