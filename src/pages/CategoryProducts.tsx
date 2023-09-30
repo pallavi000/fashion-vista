@@ -35,6 +35,7 @@ function CategoryProducts() {
   const [offset, setOffset] = useState<number>(0);
   const [limit, setLimit] = useState<number>(10);
   const [price, setPrice] = React.useState<number[]>([1, 5000]);
+  const [selectedCategory, setSelectedCategory] = useState<number>(0);
 
   const categories = useSelector((state: AppState) => state.categories.data);
   const { category, products } = useSelector((state: AppState) => ({
@@ -50,9 +51,10 @@ function CategoryProducts() {
         limit,
         price_min: price[0],
         price_max: price[1],
+        categoryId: selectedCategory,
       })
     );
-  }, [id, offset, limit, price]);
+  }, [id, offset, limit, price, selectedCategory]);
 
   React.useEffect(() => {
     if (categories.length) {
@@ -102,7 +104,11 @@ function CategoryProducts() {
       </Box>
       <Grid container columns={12} spacing={4} sx={{ padding: "2rem 0rem" }}>
         <Grid item xs={12} md={4} lg={3}>
-          <SidebarFilter price={price} setPrice={setPrice} />
+          <SidebarFilter
+            price={price}
+            setPrice={setPrice}
+            setSelectedCategory={setSelectedCategory}
+          />
         </Grid>
         <Grid item xs={12} md={8} lg={9}>
           <Box

@@ -59,15 +59,17 @@ export const fetchFilterProducts = createAsyncThunk(
     limit,
     price_min,
     price_max,
+    categoryId,
   }: {
     offset: number;
     limit: number;
     price_min: number;
     price_max: number;
+    categoryId: number;
   }) => {
     try {
       const result = await axiosInstance.get(
-        `/products?offset=${offset}&limit=${limit}&price_min=${price_min}&price_max=${price_max}`
+        `/products?offset=${offset}&limit=${limit}&price_min=${price_min}&price_max=${price_max}&categoryId=${categoryId}`
       );
       return result.data;
     } catch (e) {
@@ -83,15 +85,21 @@ export const fetchSearchProducts = createAsyncThunk(
     query,
     price_min,
     price_max,
+    categoryId,
   }: {
     query: string;
     price_min: number;
     price_max: number;
+    categoryId: number;
   }) => {
     try {
-      const result = await axiosInstance.get(
-        `/products/?title=${query}&price_min=${price_min}&price_max=${price_max}`
-      );
+      let url;
+      if (categoryId) {
+        url = `/products/?title=${query}&price_min=${price_min}&price_max=${price_max}&categoryId=${categoryId}`;
+      } else {
+        url = `/products/?title=${query}&price_min=${price_min}&price_max=${price_max}`;
+      }
+      const result = await axiosInstance.get(url);
       console.log(result.data);
       return result.data;
     } catch (e) {

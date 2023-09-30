@@ -44,12 +44,14 @@ export const fetchProductsByCategory = createAsyncThunk(
     limit,
     price_min,
     price_max,
+    categoryId,
   }: {
     id: number;
     offset: number;
     limit: number;
     price_min: number;
     price_max: number;
+    categoryId: number;
   }) => {
     try {
       const result = await axiosInstance.get(
