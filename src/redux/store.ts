@@ -10,6 +10,10 @@ import cartReducer from "./reducers/cartReducer";
 import categoriesReducer from "./reducers/categoriesReducer";
 import categoryReducer from "./reducers/categoryReducer";
 
+import adminUserReducer from "./reducers/admin/adminUserReducer";
+import adminProductReducer from "./reducers/admin/adminProductReducer";
+import adminCategoryReducer from "./reducers/admin/adminCategoryReducer";
+
 const store = configureStore({
   reducer: {
     products: productsReducer,
@@ -18,6 +22,9 @@ const store = configureStore({
     category: categoryReducer,
     auth: authReducer,
     cart: cartReducer,
+    adminUsers: adminUserReducer,
+    adminProducts: adminProductReducer,
+    adminCategories: adminCategoryReducer,
   },
   middleware: (getDEfaultMiddleware) => getDEfaultMiddleware().concat(thunk),
 });

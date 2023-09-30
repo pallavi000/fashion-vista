@@ -14,6 +14,13 @@ import Account from "./pages/Account";
 import CategoryProducts from "./pages/CategoryProducts";
 import Register from "./pages/Register";
 import Dashboard from "./pages/admin/Dashboard";
+import Products from "./pages/Products";
+import SearchResult from "./pages/SearchResult";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminDashboardLayout from "./components/layout/admin/AdminDashboardLayout";
+import AdminCategories from "./pages/admin/AdminCategories";
+import AdminProducts from "./pages/admin/AdminProducts";
+import NotFound from "./pages/NotFound";
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -33,20 +40,26 @@ const App = () => {
     <>Loading</>
   ) : user && user.role === "admin" ? (
     <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/admin/dashboard" element={<Dashboard />} />
-      </Routes>
-      <Footer />
+      <AdminDashboardLayout>
+        <Routes>
+          <Route path="/admin/dashboard" element={<Dashboard />} />
+          <Route path="/admin/users" element={<AdminUsers />} />
+          <Route path="/admin/categories" element={<AdminCategories />} />
+          <Route path="/admin/products" element={<AdminProducts />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </AdminDashboardLayout>
     </Router>
   ) : (
     <Router>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/products" element={<Products />} />
         <Route path="/product-detail/:id" element={<ProductDetail />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/search" element={<SearchResult />} />
         <Route path="/category/:id/products" element={<CategoryProducts />} />
         {user && user.role === "customer" && (
           <>
@@ -55,6 +68,7 @@ const App = () => {
             <Route path="/account/:page?" element={<Account />} />
           </>
         )}
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
     </Router>

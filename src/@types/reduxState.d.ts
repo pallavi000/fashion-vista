@@ -11,6 +11,8 @@ export type ProductState = {
 
 export type ProductsState = {
   data: TProduct[];
+  filterProducts: TProduct[];
+  searchProducts: TProduct[];
   isLoading: boolean;
   error: string | null;
 };
@@ -42,6 +44,12 @@ export type CartState = {
   totalPrice: number;
   totalQuantity: number;
   shippingId: number | null;
+  isLoading: boolean;
+  error: string | null;
+};
+
+export type UserStates = {
+  data: TUser[];
   isLoading: boolean;
   error: string | null;
 };

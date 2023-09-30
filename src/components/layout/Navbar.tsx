@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ReactEventHandler, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -24,6 +24,7 @@ import {
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import {
   FavoriteBorder,
+  Navigation,
   ShoppingBagOutlined,
   Visibility,
 } from "@mui/icons-material";
@@ -97,7 +98,7 @@ export default function Navbar() {
             <Typography variant="h4" color="inherit">
               <Link to="/">Logo</Link>
             </Typography>
-            {categories.map((category) => {
+            {categories.slice(0, 6).map((category) => {
               return (
                 <Link
                   color="text.primary"
@@ -119,7 +120,9 @@ export default function Navbar() {
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton edge="end">
-                    <SearchIcon />
+                    <SearchIcon
+                      onClick={() => navigate(`/search/?query=${input}`)}
+                    />
                   </IconButton>
                 </InputAdornment>
               }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -21,10 +21,18 @@ function SidebarFilter({
   price: number[];
   setPrice: Function;
 }) {
+  const [value, setValue] = useState<number[]>(price);
   const categories = useSelector((state: AppState) => state.categories.data);
 
   const handleChange = (event: Event, newValue: number | number[]) => {
-    console.log(newValue);
+    setValue(newValue as number[]);
+  };
+
+  const handleChangeCommited = (
+    event: Event | React.SyntheticEvent<Element | Event>,
+    newValue: number | number[]
+  ) => {
+    setValue(newValue as number[]);
     setPrice(newValue as number[]);
   };
 
@@ -32,7 +40,7 @@ function SidebarFilter({
     <div>
       <Accordion>
         <AccordionSummary
-          expandIcon={<AddIcon />}
+          expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
@@ -56,14 +64,14 @@ function SidebarFilter({
         <Typography variant="h6" marginBottom={"1rem 0rem"}>
           Price
         </Typography>
-
         <Slider
-          getAriaLabel={() => "Temperature range"}
-          value={price}
+          getAriaLabel={() => "Price range"}
+          value={value}
+          onChangeCommitted={handleChangeCommited}
           onChange={handleChange}
           valueLabelDisplay="auto"
           getAriaValueText={valuetext}
-          max={1000}
+          max={5000}
         />
       </Box>
     </div>

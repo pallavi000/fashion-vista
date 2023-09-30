@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { useAppDispatch } from "../redux/store";
+import { AppState, useAppDispatch } from "../redux/store";
 import { fetchAllProducts } from "../redux/reducers/productsReducer";
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { Box, Button, Container, Grid, Typography } from "@mui/material";
 
 import Img1 from "../images/img1.png";
 import Img2 from "../images/img2.png";
@@ -18,13 +18,12 @@ import BrandImg6 from "../images/brand6.png";
 import Brand from "../components/Brand";
 import { useSelector } from "react-redux";
 import { TProduct } from "../@types/product";
+import { Link } from "react-router-dom";
 
 function Home() {
   const dispatch = useAppDispatch();
-  const products: any = useSelector((state: any) => state.products.data);
-
-  console.log(products, "data");
-
+  const products: any = useSelector((state: AppState) => state.products.data);
+  const categories = useSelector((state: AppState) => state.categories.data);
   const offset = 0;
   const limit = 10;
 
@@ -62,18 +61,16 @@ function Home() {
           }}
         >
           <Typography variant="h4">New Arrivals</Typography>
-          <Typography variant="caption" color={"primary"}>
-            View All
-          </Typography>
+          <Button>
+            <Link to="/products">View All</Link>
+          </Button>
         </Box>
-
         <Grid container spacing={6} columns={12}>
           {products?.slice(0, 8).map((product: TProduct) => {
             return <Product product={product} />;
           })}
         </Grid>
       </Container>
-
       <Box
         bgcolor={"primary.main"}
         padding={"2rem 2rem 6rem 2rem"}
@@ -83,12 +80,11 @@ function Home() {
           HandPicked Collection
         </Typography>
         <Grid container spacing={6} columns={12}>
-          {images.map((img, index) => {
-            return <Category img={img} />;
+          {categories.slice(0, 4).map((category, index) => {
+            return <Category category={category} key={category.id} />;
           })}
         </Grid>
       </Box>
-
       <Box padding={"4rem 2rem"}>
         <Typography variant="h4" padding={"2rem 0rem"}>
           Shop By Brand

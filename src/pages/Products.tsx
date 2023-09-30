@@ -27,25 +27,29 @@ import SidebarFilter from "../components/SidebarFilter";
 import GridViewIcon from "@mui/icons-material/GridView";
 import BannerImg from "../images/category.png";
 import { ArrowLeft, ArrowRight } from "@mui/icons-material";
+import {
+  fetchAllProducts,
+  fetchFilterProducts,
+} from "../redux/reducers/productsReducer";
 
-function CategoryProducts() {
+function Products() {
   const { id } = useParams();
   const dispatch = useAppDispatch();
 
   const [offset, setOffset] = useState<number>(0);
   const [limit, setLimit] = useState<number>(10);
-  const [price, setPrice] = React.useState<number[]>([1, 5000]);
+  const [price, setPrice] = React.useState<number[]>([0, 10000]);
 
-  const categories = useSelector((state: AppState) => state.categories.data);
-  const { category, products } = useSelector((state: AppState) => ({
+  const products = useSelector(
+    (state: AppState) => state.products.filterProducts
+  );
+  const { category } = useSelector((state: AppState) => ({
     category: state.category.data,
-    products: state.category.products,
   }));
 
   React.useEffect(() => {
     dispatch(
-      fetchProductsByCategory({
-        id: Number(id),
+      fetchFilterProducts({
         offset,
         limit,
         price_min: price[0],
@@ -53,13 +57,6 @@ function CategoryProducts() {
       })
     );
   }, [id, offset, limit, price]);
-
-  React.useEffect(() => {
-    if (categories.length) {
-      const foundCategory = categories.find((cat) => cat.id === Number(id));
-      if (foundCategory) dispatch(setCategory(foundCategory));
-    }
-  }, [categories, id]);
 
   const breadcrumbs = [
     <MuiLink underline="hover" key="1" color="inherit" href="/">
@@ -95,7 +92,7 @@ function CategoryProducts() {
         />
       </Box>
       <Box sx={{ margin: "2rem 0rem" }}>
-        <BreadCrumb label={category?.name || ""} />
+        <BreadCrumb label={"products"} />
         <Typography variant="h4" color={"primary.main"} margin={"1rem 0rem"}>
           {category?.name}
         </Typography>
@@ -156,11 +153,6 @@ function CategoryProducts() {
             >
               Prev
             </Button>
-            <Button disabled size="small">
-              <Typography variant="body1">
-                {Math.ceil((offset + 1) / limit)}
-              </Typography>
-            </Button>
             <Button
               variant="contained"
               disabled={products.length === limit ? false : true}
@@ -176,4 +168,4 @@ function CategoryProducts() {
   );
 }
 
-export default CategoryProducts;
+export default Products;

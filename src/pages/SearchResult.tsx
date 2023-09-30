@@ -12,9 +12,9 @@ import {
   SelectChangeEvent,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { AppState, useAppDispatch } from "../redux/store";
 import {
   fetchProductsByCategory,
@@ -27,39 +27,46 @@ import SidebarFilter from "../components/SidebarFilter";
 import GridViewIcon from "@mui/icons-material/GridView";
 import BannerImg from "../images/category.png";
 import { ArrowLeft, ArrowRight } from "@mui/icons-material";
+import {
+  fetchAllProducts,
+  fetchFilterProducts,
+  fetchSearchProducts,
+} from "../redux/reducers/productsReducer";
 
-function CategoryProducts() {
-  const { id } = useParams();
+function SearchResult() {
+  const location = useLocation();
   const dispatch = useAppDispatch();
-
   const [offset, setOffset] = useState<number>(0);
   const [limit, setLimit] = useState<number>(10);
-  const [price, setPrice] = React.useState<number[]>([1, 5000]);
+  const [price, setPrice] = React.useState<number[]>([0, 10000]);
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
-  const categories = useSelector((state: AppState) => state.categories.data);
-  const { category, products } = useSelector((state: AppState) => ({
+  const products = useSelector(
+    (state: AppState) => state.products.searchProducts
+  );
+  const { category } = useSelector((state: AppState) => ({
     category: state.category.data,
-    products: state.category.products,
   }));
 
-  React.useEffect(() => {
-    dispatch(
-      fetchProductsByCategory({
-        id: Number(id),
-        offset,
-        limit,
-        price_min: price[0],
-        price_max: price[1],
-      })
-    );
-  }, [id, offset, limit, price]);
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const query = queryParams.get("query");
+    if (query) {
+      setSearchQuery(query);
+    }
+  }, [location.search, searchQuery]);
 
   React.useEffect(() => {
-    if (categories.length) {
-      const foundCategory = categories.find((cat) => cat.id === Number(id));
-      if (foundCategory) dispatch(setCategory(foundCategory));
+    if (searchQuery) {
+      dispatch(
+        fetchSearchProducts({
+          query: searchQuery,
+          price_min: price[0],
+          price_max: price[1],
+        })
+      );
     }
-  }, [categories, id]);
+  }, [searchQuery, price]);
 
   const breadcrumbs = [
     <MuiLink underline="hover" key="1" color="inherit" href="/">
@@ -95,7 +102,7 @@ function CategoryProducts() {
         />
       </Box>
       <Box sx={{ margin: "2rem 0rem" }}>
-        <BreadCrumb label={category?.name || ""} />
+        <BreadCrumb label={"products"} />
         <Typography variant="h4" color={"primary.main"} margin={"1rem 0rem"}>
           {category?.name}
         </Typography>
@@ -156,11 +163,6 @@ function CategoryProducts() {
             >
               Prev
             </Button>
-            <Button disabled size="small">
-              <Typography variant="body1">
-                {Math.ceil((offset + 1) / limit)}
-              </Typography>
-            </Button>
             <Button
               variant="contained"
               disabled={products.length === limit ? false : true}
@@ -176,4 +178,4 @@ function CategoryProducts() {
   );
 }
 
-export default CategoryProducts;
+export default SearchResult;
