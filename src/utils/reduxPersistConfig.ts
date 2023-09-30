@@ -12,3 +12,9 @@ export const cartPersistConfig = {
   storage: storage,
   whitelist: ["totalQuantity", "totalPrice", "items", "shippingId"],
 };
+
+export const orderPersistConfig = {
+  key: "order",
+  storage: storage,
+  whitelist: ["data"],
+};

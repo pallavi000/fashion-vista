@@ -1,9 +1,9 @@
 import { Box, Button, Divider, Grid, Typography } from "@mui/material";
 import React from "react";
 import Img from "../images/img1.png";
+import { TOrder } from "../@types/order";
 
-function OrderItem() {
-  const items = [1, 2];
+function OrderItem({ order }: { order: TOrder }) {
   return (
     <>
       <Grid container columns={12} spacing={3}>
@@ -31,7 +31,7 @@ function OrderItem() {
             </Grid>
           </Grid>
           <Divider sx={{ margin: "0.5rem 0rem" }} />
-          {items.map((item, index) => {
+          {order?.items?.map((item, index) => {
             return (
               <Grid container columns={12} margin={"0.8rem 0rem"}>
                 <Grid
@@ -45,7 +45,7 @@ function OrderItem() {
                 >
                   <Box sx={{ height: "75px", width: "75px" }}>
                     <img
-                      src={Img}
+                      src={item.product.images[0]}
                       style={{
                         height: "100%",
                         width: "100%",
@@ -60,14 +60,8 @@ function OrderItem() {
                       flexDirection: "column",
                     }}
                   >
-                    <Typography variant="caption">Product name</Typography>
-                    <Typography
-                      sx={{
-                        fontSize: 14,
-                        color: "gray",
-                      }}
-                    >
-                      Product Category
+                    <Typography variant="caption">
+                      {item.product.title}
                     </Typography>
                     <Typography
                       sx={{
@@ -75,7 +69,15 @@ function OrderItem() {
                         color: "gray",
                       }}
                     >
-                      Qty-1
+                      {item.product.category.name}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: 14,
+                        color: "gray",
+                      }}
+                    >
+                      {item.quantity}
                     </Typography>
                   </Box>
                 </Grid>
@@ -88,17 +90,24 @@ function OrderItem() {
                     justifyContent: "space-between",
                   }}
                 >
-                  <Typography variant="caption">#08933</Typography>
-                  <Typography variant="caption">16/09</Typography>
-                  <Typography variant="caption">$54</Typography>
-                  <Typography variant="caption">1</Typography>
-                  <Typography variant="caption">$54</Typography>
-                  <Typography variant="caption">COD</Typography>
+                  <Typography variant="caption">{order.orderId}</Typography>
+                  <Typography variant="caption">{order.orderDate}</Typography>
+                  <Typography variant="caption">
+                    ${item.product.price}
+                  </Typography>
+                  <Typography variant="caption">{item.quantity}</Typography>
+                  <Typography variant="caption">
+                    ${item.quantity * item.product.price}
+                  </Typography>
+                  <Typography variant="caption">
+                    {order.paymentMethod}
+                  </Typography>
                   <Button
                     variant="outlined"
+                    size="small"
                     sx={{ borderColor: "greenyellow" }}
                   >
-                    Completed
+                    {order.deliveryStatus}
                   </Button>
                 </Grid>
               </Grid>

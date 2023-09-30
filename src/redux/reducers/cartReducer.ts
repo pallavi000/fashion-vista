@@ -34,6 +34,7 @@ const cartSlice = createSlice({
       state.totalQuantity++;
       state.totalPrice += action.payload.price;
     },
+
     removeFromCart: (state, action: PayloadAction<TProduct>) => {
       const productIndex = state.items.findIndex(
         (item) => item.product.id === action.payload.id
@@ -48,8 +49,19 @@ const cartSlice = createSlice({
         state.items.splice(productIndex, 1);
       }
     },
+    emptyCart: (state) => {
+      return {
+        ...state,
+        items: [],
+        totalPrice: 0,
+        totalQuantity: 0,
+        shippingId: null,
+        isLoading: false,
+        error: null,
+      };
+    },
   },
 });
 
-export const { addToCart, removeFromCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, emptyCart } = cartSlice.actions;
 export default persistReducer(cartPersistConfig, cartSlice.reducer);

@@ -48,6 +48,12 @@ export type CartState = {
   error: string | null;
 };
 
+export type OrderState = {
+  data: TOrder[];
+  isLoading: boolean;
+  error: string | null;
+};
+
 export type UserStates = {
   data: TUser[];
   isLoading: boolean;

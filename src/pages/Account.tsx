@@ -20,6 +20,7 @@ import { useSelector } from "react-redux";
 import { AppState } from "../redux/store";
 import { useNavigate, useParams } from "react-router-dom";
 import OrderItem from "../components/OrderItem";
+import { TOrder } from "../@types/order";
 
 const orderLists = [1, 2];
 
@@ -28,6 +29,7 @@ function Account() {
   const navigate = useNavigate();
 
   const user = useSelector((state: AppState) => state.auth.user);
+  const orders = useSelector((state: AppState) => state.orders.data);
 
   return (
     <Container>
@@ -53,8 +55,8 @@ function Account() {
         <Grid item xs={8}>
           {page && page === "orders" ? (
             <>
-              {orderLists.map((order) => {
-                return <OrderItem />;
+              {orders.map((order: TOrder) => {
+                return <OrderItem key={order.orderId} order={order} />;
               })}
             </>
           ) : (

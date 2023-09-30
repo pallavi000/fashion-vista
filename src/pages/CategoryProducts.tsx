@@ -35,7 +35,7 @@ function CategoryProducts() {
   const [offset, setOffset] = useState<number>(0);
   const [limit, setLimit] = useState<number>(10);
   const [price, setPrice] = React.useState<number[]>([1, 5000]);
-  const [selectedCategory, setSelectedCategory] = useState<number>(0);
+  const [selectedCategory, setSelectedCategory] = useState<number>(Number(id));
 
   const categories = useSelector((state: AppState) => state.categories.data);
   const { category, products } = useSelector((state: AppState) => ({
@@ -46,7 +46,7 @@ function CategoryProducts() {
   React.useEffect(() => {
     dispatch(
       fetchProductsByCategory({
-        id: Number(id),
+        id: selectedCategory,
         offset,
         limit,
         price_min: price[0],

@@ -2,20 +2,9 @@ import { Breadcrumbs, Link, Typography } from "@mui/material";
 import React from "react";
 import { TProduct } from "../@types/product";
 
-function handleClick(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
-  event.preventDefault();
-  console.info("You clicked a breadcrumb.");
-}
-
 function BreadCrumb({ label }: { label: string }) {
   const breadcrumbs = [
-    <Link
-      underline="hover"
-      key="1"
-      color="inherit"
-      href="/"
-      onClick={handleClick}
-    >
+    <Link underline="hover" key="1" color="inherit" href="/">
       Home
     </Link>,
     <Typography key="3" color="text.primary">
