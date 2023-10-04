@@ -1,5 +1,12 @@
 import * as React from "react";
-import Add from "@mui/icons-material/Add";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+// redux
+import { useSelector } from "react-redux";
+import { AppState, useAppDispatch } from "../../../redux/store";
+
+// MUI
 import {
   Box,
   Button,
@@ -7,34 +14,31 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
-  FormControl,
-  FormLabel,
-  Input,
-  Modal,
-  Slide,
-  Stack,
   TextField,
-  Typography,
 } from "@mui/material";
-import { Controller, useForm } from "react-hook-form";
+
+// types
 import { CategoryInputs, TCategory } from "../../../@types/category";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { useAppDispatch } from "../../../redux/store";
+
+// reducers
 import { updateAdminCategory } from "../../../redux/reducers/admin/adminCategoryReducer";
 
+// components
+import LoadingButton from "../../LoadingButton";
+
+// yup validation schema
+const validationSchema = yup.object().shape({
+  name: yup.string().required("Name is required"),
+  image: yup.string().required("Image Link is required"),
+});
+
+// component props type
 type AdminCategoryEditModalProps = {
   category: TCategory;
   isOpen: boolean;
   setIsOpen: Function;
 };
-
-const validationSchema = yup.object().shape({
-  name: yup.string().required("Name is required"),
-  image: yup.string().required("Image Link is required"),
-});
 
 export default function AdminCategoryEditModal({
   category,
@@ -42,6 +46,13 @@ export default function AdminCategoryEditModal({
   setIsOpen,
 }: AdminCategoryEditModalProps) {
   const dispatch = useAppDispatch();
+
+  // user state
+  const isLoading = useSelector(
+    (state: AppState) => state.adminCategories.isLoading
+  );
+
+  // react hook form with yup validation
   const {
     handleSubmit,
     control,
@@ -51,11 +62,13 @@ export default function AdminCategoryEditModal({
     resolver: yupResolver(validationSchema),
   });
 
+  // set default values
   React.useEffect(() => {
     setValue("name", category.name);
     setValue("image", category.image);
   }, [category]);
 
+  // form submit handler
   const onSubmit = async (data: CategoryInputs) => {
     const categoryData: TCategory = { ...data, id: category.id };
     await dispatch(updateAdminCategory(categoryData));
@@ -119,9 +132,7 @@ export default function AdminCategoryEditModal({
           >
             Cancel
           </Button>
-          <Button variant="contained" color="success" type="submit">
-            Update
-          </Button>
+          <LoadingButton isLoading={isLoading} color="success" title="Update" />
         </DialogActions>
       </Dialog>
     </React.Fragment>

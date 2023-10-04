@@ -1,14 +1,15 @@
 import * as React from "react";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import { Button, Card } from "@mui/material";
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
+// MUI
+import { Button, Card, Grid, TextField } from "@mui/material";
+
+// types
+import { UserAddressInputs } from "../@types/user";
+
+// yup validation schema
 const validationSchema = yup.object().shape({
   firstName: yup.string().required("First name is required"),
   lastName: yup.string().required("Last name is required"),
@@ -19,26 +20,22 @@ const validationSchema = yup.object().shape({
   country: yup.string().required("Country is required"),
 });
 
-type Inputs = {
-  firstName: string;
-  lastName: string;
-  address: string;
-  city: string;
-  state: string;
-  zip: string;
-  country: string;
-};
+// compoenent props type
+type AddressFormProps = { handleNext: Function };
 
-export default function AddressForm({ handleNext }: { handleNext: Function }) {
+export default function AddressForm({ handleNext }: AddressFormProps) {
+  // react hook form with yup validation
   const {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<Inputs>({
+  } = useForm<UserAddressInputs>({
     resolver: yupResolver(validationSchema),
   });
 
-  const onSubmit = (data: Inputs) => {
+  // form submit handler
+  const onSubmit = (data: UserAddressInputs) => {
+    // do something with address data
     handleNext();
   };
   return (

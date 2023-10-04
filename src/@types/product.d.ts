@@ -8,3 +8,16 @@ export type TProduct = {
   category: TCategory;
   images: string[];
 };
+
+export interface ProductInputs {
+  title: string;
+  price: number;
+  description: string;
+  categoryId: number;
+  image: string;
+}
+
+export interface ProductInputsData extends ProductInputs {
+  id: number;
+  images: string[];
+}

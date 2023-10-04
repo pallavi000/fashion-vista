@@ -1,8 +1,10 @@
+// MUI
 import { Breadcrumbs, Link, Typography } from "@mui/material";
-import React from "react";
-import { TProduct } from "../@types/product";
 
-function BreadCrumb({ label }: { label: string }) {
+// component props type
+type BreadCrumbProps = { label: string };
+
+function BreadCrumb({ label }: BreadCrumbProps) {
   const breadcrumbs = [
     <Link underline="hover" key="1" color="inherit" href="/">
       Home

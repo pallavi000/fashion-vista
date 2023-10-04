@@ -1,12 +1,22 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { AuthState } from "../../@types/reduxState";
-import axiosInstance from "../../utils/AxiosInstance";
 import { persistReducer } from "redux-persist";
 import { authPersistConfig } from "../../utils/reduxPersistConfig";
+
+// App state
 import { AppState } from "../store";
+
+// axios
 import { AxiosError } from "axios";
+import axiosInstance from "../../utils/AxiosInstance";
+
+// types
+import { AuthState } from "../../@types/reduxState";
 import { RegisterInputs } from "../../@types/user";
 
+// helper
+import { showApiErrorToastr, showCustomToastr } from "../../utils/helper";
+
+// initial states
 const initialState: AuthState = {
   isAuthenticated: false,
   user: null,
@@ -16,6 +26,7 @@ const initialState: AuthState = {
   refresh_token: null,
 };
 
+// slice
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -31,6 +42,12 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(loginUser.pending, (state, action) => {
+      return {
+        ...state,
+        isLoading: true,
+      };
+    });
     builder.addCase(loginUser.fulfilled, (state, action) => {
       return {
         ...state,
@@ -49,6 +66,13 @@ const authSlice = createSlice({
         error: action.error.message || "",
       };
     });
+
+    builder.addCase(registerUser.pending, (state, action) => {
+      return {
+        ...state,
+        isLoading: true,
+      };
+    });
     builder.addCase(registerUser.fulfilled, (state, action) => {
       return {
         ...state,
@@ -65,6 +89,7 @@ const authSlice = createSlice({
         error: action.error.message || "",
       };
     });
+
     builder.addCase(getCurrentUser.pending, (state, action) => {
       return {
         ...state,
@@ -85,6 +110,9 @@ const authSlice = createSlice({
   },
 });
 
+// ==============================================
+// API Calls
+// ==============================================
 export const loginUser = createAsyncThunk(
   "loginUser",
   async ({ email, password }: { email: string; password: string }) => {
@@ -93,9 +121,11 @@ export const loginUser = createAsyncThunk(
         email,
         password,
       });
+      showCustomToastr("Login successfull.", "success");
       return result.data;
     } catch (e) {
       const error = e as AxiosError;
+      showApiErrorToastr(error);
       throw error;
     }
   }
@@ -111,6 +141,7 @@ export const registerUser = createAsyncThunk(
       return result.data;
     } catch (e) {
       const error = e as AxiosError;
+      showApiErrorToastr(error);
       throw error;
     }
   }
@@ -134,7 +165,7 @@ export const getCurrentUser = createAsyncThunk(
       return userData;
     } catch (e) {
       const error = e as AxiosError;
-      return error;
+      throw error;
     }
   }
 );

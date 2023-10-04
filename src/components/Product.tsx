@@ -1,10 +1,19 @@
-import { FavoriteBorder } from "@mui/icons-material";
-import { Box, Grid, Typography } from "@mui/material";
 import React from "react";
-import { TProduct } from "../@types/product";
 import { Link } from "react-router-dom";
 
-function Product({ product }: { product: TProduct }) {
+// MUI
+import { Box, Grid, Typography } from "@mui/material";
+
+// icons
+import { FavoriteBorder } from "@mui/icons-material";
+
+// types
+import { TProduct } from "../@types/product";
+
+// component props type
+type ProductProps = { product: TProduct };
+
+function Product({ product }: ProductProps) {
   return (
     <Grid item xs={12} sm={6} md={3}>
       <Box sx={{ height: "412px" }}>

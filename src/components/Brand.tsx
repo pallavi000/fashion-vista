@@ -1,7 +1,10 @@
+// MUI
 import { Box, Grid } from "@mui/material";
-import React from "react";
 
-function Brand({ brand }: { brand: string }) {
+// component props type
+type BrandProps = { brand: string };
+
+function Brand({ brand }: BrandProps) {
   return (
     <Grid item xs={6} sm={4} md={2}>
       <Box sx={{ cursor: "pointer", height: "168px", width: "168px" }}>

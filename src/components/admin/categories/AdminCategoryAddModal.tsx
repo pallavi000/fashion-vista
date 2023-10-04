@@ -1,58 +1,65 @@
 import * as React from "react";
-import Add from "@mui/icons-material/Add";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+// redux
+import { useSelector } from "react-redux";
+import { AppState, useAppDispatch } from "../../../redux/store";
+
+// MUI
 import {
   Box,
   Button,
-  Card,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
-  FormControl,
-  FormLabel,
-  Input,
-  Modal,
-  Slide,
-  Stack,
   TextField,
-  Typography,
 } from "@mui/material";
-import { Controller, useForm } from "react-hook-form";
-import { CategoryInputs, TCategory } from "../../../@types/category";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { useAppDispatch } from "../../../redux/store";
-import {
-  addNewCategory,
-  updateAdminCategory,
-} from "../../../redux/reducers/admin/adminCategoryReducer";
 
-type AdminCategoryAddProps = {
-  isOpen: boolean;
-  setIsOpen: Function;
-};
+// reducers
+import { addNewCategory } from "../../../redux/reducers/admin/adminCategoryReducer";
 
+// types
+import { CategoryInputs } from "../../../@types/category";
+
+// components
+import LoadingButton from "../../LoadingButton";
+
+// yup validation schema
 const validationSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
   image: yup.string().required("Image Link is required"),
 });
+
+// component props type
+type AdminCategoryAddProps = {
+  isOpen: boolean;
+  setIsOpen: Function;
+};
 
 export default function AdminCategoryAddModal({
   isOpen,
   setIsOpen,
 }: AdminCategoryAddProps) {
   const dispatch = useAppDispatch();
+
+  // user state
+  const isLoading = useSelector(
+    (state: AppState) => state.adminCategories.isLoading
+  );
+
+  // react hook form with yup validation
   const {
     handleSubmit,
     control,
-    setValue,
     reset,
     formState: { errors },
   } = useForm<CategoryInputs>({
     resolver: yupResolver(validationSchema),
   });
 
+  // form submit handler
   const onSubmit = async (data: CategoryInputs) => {
     await dispatch(addNewCategory(data));
     reset();
@@ -116,9 +123,7 @@ export default function AdminCategoryAddModal({
           >
             Cancel
           </Button>
-          <Button variant="contained" color="success" type="submit">
-            Update
-          </Button>
+          <LoadingButton isLoading={isLoading} color="success" title="Create" />
         </DialogActions>
       </Dialog>
     </React.Fragment>

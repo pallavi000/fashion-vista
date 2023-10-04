@@ -1,27 +1,26 @@
-import React from "react";
-import {
-  Alert,
-  Box,
-  Button,
-  Card,
-  Container,
-  FormControl,
-  FormHelperText,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useForm, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { AppState, useAppDispatch } from "../redux/store";
-import { loginUser, registerUser } from "../redux/reducers/authReducer";
+// redux
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { AppState, useAppDispatch } from "../redux/store";
+
+// MUI
+import { Box, Button, Card, Container, Typography } from "@mui/material";
+
+// components
+import UserForm from "../components/UserForm";
+import LoadingButton from "../components/LoadingButton";
+
+// reducers
+import { registerUser } from "../redux/reducers/authReducer";
+
+// types
 import { RegisterInputs } from "../@types/user";
 
+// yup form validation schema
 const validationSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
   email: yup
@@ -32,38 +31,48 @@ const validationSchema = yup.object().shape({
     .string()
     .min(8, "Password must be at least 8 characters")
     .required("Password is required"),
-  role: yup.string().required("Role is required"),
+  role: yup.string().oneOf(["admin", "customer"]).required("Role is required"),
+  avatar: yup.string().required("Role is required"),
 });
 
 function Register() {
   const navigate = useNavigate();
+
+  // app dispatch
   const dispatch = useAppDispatch();
-  const { isAuthenticated, error } = useSelector((state: AppState) => ({
+
+  // auth states
+  const { isAuthenticated, isLoading } = useSelector((state: AppState) => ({
     isAuthenticated: state.auth.isAuthenticated,
-    error: state.auth.error,
+    isLoading: state.auth.isLoading,
   }));
 
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<RegisterInputs>({
-    resolver: yupResolver(validationSchema),
-  });
-
-  const onSubmit: SubmitHandler<RegisterInputs> = (data) => {
-    data.avatar =
-      data.role === "admin"
-        ? "https://i.imgur.com/gxaUWSF.jpeg"
-        : "https://i.imgur.com/fpT4052.jpeg";
-    dispatch(registerUser(data));
-  };
-
+  // redirect user after successful registraion/login
   React.useEffect(() => {
     if (isAuthenticated) {
       navigate("/");
     }
   }, [isAuthenticated]);
+
+  // react hook form with yup validation
+  const {
+    handleSubmit,
+    control,
+    setValue,
+    formState: { errors },
+  } = useForm<RegisterInputs>({
+    resolver: yupResolver(validationSchema),
+  });
+
+  useEffect(() => {
+    // demo avatar link set
+    setValue("avatar", "https://i.imgur.com/fpT4052.jpeg");
+  }, []);
+
+  // form submit handler
+  const onSubmit: SubmitHandler<RegisterInputs> = (data) => {
+    dispatch(registerUser(data));
+  };
 
   return (
     <Container maxWidth="sm">
@@ -76,81 +85,14 @@ function Register() {
         <Typography variant="h4" marginBottom={"3rem"}>
           Register
         </Typography>
-        {error ? (
-          <Alert severity="error" sx={{ marginBottom: "3rem" }}>
-            {error}
-          </Alert>
-        ) : null}
+
         <Box sx={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-          <Controller
-            name="name"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                label="Full name"
-                variant="outlined"
-                error={Boolean(errors.name)}
-                helperText={errors.name?.message}
-              />
-            )}
+          <UserForm control={control} errors={errors} />
+          <LoadingButton
+            isLoading={isLoading}
+            color="success"
+            title="Register"
           />
-
-          <Controller
-            name="email"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                label="Email"
-                variant="outlined"
-                error={Boolean(errors.email)}
-                helperText={errors.email?.message}
-              />
-            )}
-          />
-          <Controller
-            name="password"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                type="password"
-                {...field}
-                id="outlined-basic"
-                label="Password"
-                variant="outlined"
-                error={Boolean(errors.password)}
-                helperText={errors.password?.message}
-              />
-            )}
-          />
-
-          <Controller
-            name="role"
-            control={control}
-            render={({ field }) => (
-              <FormControl error={Boolean(errors.role)}>
-                <InputLabel id="demo-simple-select-label">
-                  Select a role
-                </InputLabel>
-                <Select
-                  {...field}
-                  label="Select a role"
-                  variant="outlined"
-                  error={Boolean(errors.role)}
-                >
-                  <MenuItem value="customer">Customer</MenuItem>
-                  <MenuItem value="admin">Admin</MenuItem>
-                </Select>
-                {errors.role?.message ? (
-                  <FormHelperText>{errors.role?.message}</FormHelperText>
-                ) : null}
-              </FormControl>
-            )}
-          />
-          <Button type="submit" variant="contained">
-            Sign In
-          </Button>
         </Box>
       </Card>
     </Container>

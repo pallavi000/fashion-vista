@@ -1,40 +1,40 @@
+import React from "react";
+import { Link } from "react-router-dom";
+// redux
+import { useSelector } from "react-redux";
+import { AppState, useAppDispatch } from "../redux/store";
+
+// MUI
 import {
   Alert,
   Box,
   Button,
   Container,
   Divider,
-  Fab,
   Grid,
-  IconButton,
   Table,
   TableBody,
   TableCell,
   TableContainer,
-  TableFooter,
   TableHead,
   TableRow,
   Typography,
 } from "@mui/material";
-import React from "react";
-import Close from "@mui/icons-material/Close";
-import { useSelector } from "react-redux";
-import { AppState, useAppDispatch } from "../redux/store";
-import { TCart } from "../@types/cart";
-import { removeFromCart } from "../redux/reducers/cartReducer";
-import { TProduct } from "../@types/product";
+
+// icons
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import { Link } from "react-router-dom";
+
+// types
+import { TCart } from "../@types/cart";
+
+// components
+import CartItem from "../components/CartItem";
 
 function Cart() {
-  const dispatch = useAppDispatch();
+  // cart items state
   const cart = useSelector((state: AppState) => state.cart);
   const { items } = cart;
-
-  const handleRemoveCart = (product: TProduct) => {
-    dispatch(removeFromCart(product));
-  };
 
   return (
     <Container>
@@ -44,7 +44,11 @@ function Cart() {
             Shopping Cart
           </Typography>
           <Link to="/checkout">
-            <Button variant="contained" endIcon={<KeyboardArrowRight />}>
+            <Button
+              variant="contained"
+              disabled={!Boolean(items.length)}
+              endIcon={<KeyboardArrowRight />}
+            >
               Checkout
             </Button>
           </Link>
@@ -69,69 +73,9 @@ function Cart() {
                 </TableHead>
                 <TableBody>
                   {items.map((item: TCart) => (
-                    <TableRow key={item.product.id}>
-                      <TableCell component="th" scope="row">
-                        <Box display={"flex"} alignItems={"center"}>
-                          <Box width={80} height={80}>
-                            <img
-                              style={{
-                                width: "100%",
-                                height: "100%",
-                                objectFit: "contain",
-                              }}
-                              alt={item.product.title}
-                              src={item.product.images[0]}
-                            />
-                          </Box>
-                          <Box ml={2}>
-                            <p
-                              style={{
-                                fontWeight: "bold",
-                                fontSize: 16,
-                                margin: "0 0 8px 0",
-                              }}
-                            >
-                              {item.product.title}
-                            </p>
-                            <div
-                              style={{
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                                width: "20rem",
-                              }}
-                            >
-                              <Typography variant="caption" noWrap>
-                                {item.product.description}
-                              </Typography>
-                            </div>
-                          </Box>
-                        </Box>
-                      </TableCell>
-                      <TableCell>{item.product.category.name}</TableCell>
-                      <TableCell>{item.quantity}</TableCell>
-                      <TableCell>${item.product.price}</TableCell>
-                      <TableCell>
-                        <Fab
-                          onClick={() => handleRemoveCart(item.product)}
-                          size="small"
-                          color="error"
-                          disableRipple
-                        >
-                          <Close />
-                        </Fab>
-                      </TableCell>
-                    </TableRow>
+                    <CartItem key={item.product.id} item={item} />
                   ))}
                 </TableBody>
-                {/* <TableFooter>
-                <TableRow>
-                  <TableCell>Total</TableCell>
-                  <TableCell></TableCell>
-                  <TableCell>{cart.totalQuantity}</TableCell>
-                  <TableCell>${cart.totalPrice}</TableCell>
-                  <TableCell></TableCell>
-                </TableRow>
-              </TableFooter> */}
               </Table>
             </TableContainer>
             <Grid

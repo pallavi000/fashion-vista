@@ -1,30 +1,77 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
+// axios
 import { AxiosError } from "axios";
-import { CategoriesState } from "../../../@types/reduxState";
 import axiosInstance from "../../../utils/AxiosInstance";
+
+// types
+import { CategoriesState } from "../../../@types/reduxState";
 import { CategoryInputs, TCategory } from "../../../@types/category";
 
+// helpers
+import { showApiErrorToastr, showCustomToastr } from "../../../utils/helper";
+
+// initial states
 const initialState: CategoriesState = {
   data: [],
   isLoading: false,
   error: null,
 };
 
+// slice
 const adminCategorySlice = createSlice({
   name: "adminCategory",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(fetchAdminCategories.pending, (state, action) => {
+      return {
+        ...state,
+        isLoading: true,
+      };
+    });
     builder.addCase(fetchAdminCategories.fulfilled, (state, action) => {
       return {
         ...state,
+        isLoading: false,
+        error: null,
         data: action.payload,
+      };
+    });
+    builder.addCase(fetchAdminCategories.rejected, (state, action) => {
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error.message || "",
+      };
+    });
+
+    builder.addCase(addNewCategory.pending, (state) => {
+      return {
+        ...state,
+        isLoading: true,
       };
     });
     builder.addCase(addNewCategory.fulfilled, (state, action) => {
       return {
         ...state,
+        isLoading: false,
+        error: null,
         data: [action.payload, ...state.data],
+      };
+    });
+    builder.addCase(addNewCategory.rejected, (state, action) => {
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error.message || "",
+      };
+    });
+
+    builder.addCase(updateAdminCategory.pending, (state, action) => {
+      return {
+        ...state,
+        isLoading: true,
       };
     });
     builder.addCase(updateAdminCategory.fulfilled, (state, action) => {
@@ -34,16 +81,44 @@ const adminCategorySlice = createSlice({
       if (categoryIndex !== -1) {
         state.data[categoryIndex] = action.payload;
       }
+      state.isLoading = false;
+      state.error = null;
+    });
+    builder.addCase(updateAdminCategory.rejected, (state, action) => {
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error.message || "",
+      };
+    });
+
+    builder.addCase(deleteAdminCategory.pending, (state, action) => {
+      return {
+        ...state,
+        isLoading: true,
+      };
     });
     builder.addCase(deleteAdminCategory.fulfilled, (state, action) => {
       return {
         ...state,
+        isLoading: false,
+        error: null,
         data: state.data.filter((cat) => cat.id !== action.payload),
+      };
+    });
+    builder.addCase(deleteAdminCategory.rejected, (state, action) => {
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error.message || "",
       };
     });
   },
 });
 
+// ==============================================
+// API Calls
+// ==============================================
 export const fetchAdminCategories = createAsyncThunk(
   "fetchAdminCategories",
   async () => {
@@ -52,6 +127,7 @@ export const fetchAdminCategories = createAsyncThunk(
       return result.data;
     } catch (e) {
       const error = e as AxiosError;
+      showApiErrorToastr(error);
       throw error;
     }
   }
@@ -62,9 +138,11 @@ export const addNewCategory = createAsyncThunk(
   async (data: CategoryInputs) => {
     try {
       const response = await axiosInstance.post(`/categories`, data);
+      showCustomToastr("Category created successfully.", "success");
       return response.data;
     } catch (e) {
       const error = e as AxiosError;
+      showApiErrorToastr(error);
       throw error;
     }
   }
@@ -75,9 +153,11 @@ export const updateAdminCategory = createAsyncThunk(
   async (data: TCategory) => {
     try {
       const response = await axiosInstance.put(`/categories/${data.id}`, data);
+      showCustomToastr("Category updated successfully.", "success");
       return response.data;
     } catch (e) {
       const error = e as AxiosError;
+      showApiErrorToastr(error);
       throw error;
     }
   }
@@ -88,9 +168,11 @@ export const deleteAdminCategory = createAsyncThunk(
   async ({ id }: { id: number }) => {
     try {
       await axiosInstance.delete(`/categories/${id}`);
+      showCustomToastr("Category removed successfully.", "success");
       return id;
     } catch (e) {
       const error = e as AxiosError;
+      showApiErrorToastr(error);
       throw error;
     }
   }

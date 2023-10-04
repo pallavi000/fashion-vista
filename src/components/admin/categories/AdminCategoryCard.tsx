@@ -1,27 +1,38 @@
 import React, { useState } from "react";
-import { TCategory } from "../../../@types/category";
+// redux
+import { useAppDispatch } from "../../../redux/store";
+
+// MUI
 import {
   Box,
   Button,
   Card,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
   Fab,
-  IconButton,
-  Link,
   Slide,
   Stack,
   Typography,
 } from "@mui/material";
-import { Delete, Edit } from "@mui/icons-material";
-import AdminCategoryEditModal from "./AdminCategoryEditModal";
 import { TransitionProps } from "@mui/material/transitions";
-import { useAppDispatch } from "../../../redux/store";
+
+// icons
+import { Delete, Edit } from "@mui/icons-material";
+
+// components
+import AdminCategoryEditModal from "./AdminCategoryEditModal";
+
+// types
+import { TCategory } from "../../../@types/category";
+
+// reducers
 import { deleteAdminCategory } from "../../../redux/reducers/admin/adminCategoryReducer";
 
+// popover transition from down to up
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement<any, any>;
@@ -31,14 +42,23 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function AdminCategoryCard({ category }: { category: TCategory }) {
+// component props type
+type AdminCategoryCardProps = { category: TCategory };
+
+function AdminCategoryCard({ category }: AdminCategoryCardProps) {
   const dispatch = useAppDispatch();
+  const [isLoading, setIsloading] = useState(false);
+
+  // modal open/close states
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
+  // handle category delete submit
   const handleCategoryDelete = async () => {
+    setIsloading(true);
     await dispatch(deleteAdminCategory({ id: category.id }));
     setIsDeleteModalOpen(false);
+    setIsloading(false);
   };
 
   return (
@@ -74,6 +94,7 @@ function AdminCategoryCard({ category }: { category: TCategory }) {
           <Button
             variant="contained"
             color="error"
+            disabled={isLoading}
             onClick={() => handleCategoryDelete()}
           >
             Delete
@@ -117,10 +138,11 @@ function AdminCategoryCard({ category }: { category: TCategory }) {
             <Fab
               size="small"
               color="error"
+              disabled={isLoading}
               aria-label="delete"
               onClick={() => setIsDeleteModalOpen(true)}
             >
-              <Delete fontSize={"small"} />
+              {isLoading ? <CircularProgress /> : <Delete fontSize={"small"} />}
             </Fab>
           </Stack>
         </Stack>

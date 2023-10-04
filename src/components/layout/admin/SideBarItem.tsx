@@ -1,8 +1,15 @@
-import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import React from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
-function SideBarItem({ item }: { item: any }) {
+// MUI
+import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { SidebarItem } from "../../../@types/sidebar";
+
+type SideBarItemProps = {
+  item: SidebarItem;
+};
+
+function SideBarItem({ item }: SideBarItemProps) {
   return (
     <ListItemButton
       component={NavLink}

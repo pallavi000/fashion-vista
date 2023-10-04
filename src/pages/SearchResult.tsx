@@ -1,62 +1,75 @@
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+// redux
+import { AppState, useAppDispatch } from "../redux/store";
+
+//MUI
 import {
   Box,
-  Breadcrumbs,
   Button,
   Container,
   FormControl,
   Grid,
-  InputLabel,
   MenuItem,
-  Link as MuiLink,
   Select,
   SelectChangeEvent,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useLocation, useParams } from "react-router-dom";
-import { AppState, useAppDispatch } from "../redux/store";
-import {
-  fetchProductsByCategory,
-  setCategory,
-} from "../redux/reducers/categoryReducer";
-import { TProduct } from "../@types/product";
+
+// icons
+import GridViewIcon from "@mui/icons-material/GridView";
+import { ArrowLeft, ArrowRight } from "@mui/icons-material";
+
+// components
 import Product from "../components/Product";
 import BreadCrumb from "../components/Breadcrumb";
 import SidebarFilter from "../components/SidebarFilter";
-import GridViewIcon from "@mui/icons-material/GridView";
+import SkeletonProductCard from "../components/skeleton/SkeletonProductCard";
+
+// images
 import BannerImg from "../images/category.png";
-import { ArrowLeft, ArrowRight } from "@mui/icons-material";
-import {
-  fetchAllProducts,
-  fetchFilterProducts,
-  fetchSearchProducts,
-} from "../redux/reducers/productsReducer";
+
+// reducers
+import { fetchSearchProducts } from "../redux/reducers/productsReducer";
 
 function SearchResult() {
   const location = useLocation();
+
+  // query params
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
+  // app dispatch
   const dispatch = useAppDispatch();
+
+  // for pagination
   const [offset, setOffset] = useState<number>(0);
   const [limit, setLimit] = useState<number>(10);
+
+  // sidebar filter
   const [price, setPrice] = React.useState<number[]>([1, 5000]);
-  const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<number>(0);
 
-  const products = useSelector(
-    (state: AppState) => state.products.searchProducts
-  );
+  // products state
+  const { products, isLoading } = useSelector((state: AppState) => ({
+    products: state.products.searchProducts,
+    isLoading: state.products.isLoading,
+  }));
+  // categories states
   const { category } = useSelector((state: AppState) => ({
     category: state.category.data,
   }));
 
+  // search query param
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const query = queryParams.get("query");
     if (query) {
       setSearchQuery(query);
     }
-  }, [location.search, searchQuery]);
+  }, [location]);
 
+  // search products fetch
   React.useEffect(() => {
     if (searchQuery) {
       dispatch(
@@ -70,22 +83,12 @@ function SearchResult() {
     }
   }, [searchQuery, price, selectedCategory]);
 
-  const breadcrumbs = [
-    <MuiLink underline="hover" key="1" color="inherit" href="/">
-      Home
-    </MuiLink>,
-    <Typography key="3" color="text.primary">
-      {category?.name}
-    </Typography>,
-  ];
-
   const handlePrevPage = () => {
     setOffset((prev) => prev - limit);
   };
   const handleNextPage = () => {
     setOffset((prev) => prev + limit);
   };
-
   const handleChange = (e: SelectChangeEvent) => {
     setLimit(Number(e.target.value));
   };
@@ -148,9 +151,13 @@ function SearchResult() {
             </Box>
           </Box>
           <Grid container spacing={3} columns={12} sx={{ marginTop: "2rem" }}>
-            {products.map((product) => {
-              return <Product product={product} />;
-            })}
+            {isLoading && !products?.length
+              ? [...Array(5)].map((_, index) => (
+                  <SkeletonProductCard key={index} />
+                ))
+              : products?.slice(0, 8).map((product) => {
+                  return <Product key={product.id} product={product} />;
+                })}
           </Grid>
           <Box
             sx={{

@@ -1,21 +1,32 @@
-import { Delete, Edit } from "@mui/icons-material";
-import { MenuItem, Popover } from "@mui/material";
 import React from "react";
 
+// MUI
+import { MenuItem, Popover, Typography } from "@mui/material";
+
+// icons
+import { Delete, Edit } from "@mui/icons-material";
+
+// component props type
 type TableOptionPopoverProps = {
-  isOpen: boolean;
-  setIsOpen: Function;
+  isLoading?: boolean;
+  anchorEl: (EventTarget & HTMLButtonElement) | null;
+  handleEdit: Function;
+  handleDelete: Function;
+  handleCloseMenu: Function;
 };
 
-function TableOptionPopover({ isOpen, setIsOpen }: TableOptionPopoverProps) {
-  const handleCloseMenu = () => {
-    setIsOpen(false);
-  };
-
+function TableOptionPopover({
+  isLoading = false,
+  anchorEl,
+  handleEdit,
+  handleDelete,
+  handleCloseMenu,
+}: TableOptionPopoverProps) {
   return (
     <Popover
-      open={isOpen}
-      onClose={handleCloseMenu}
+      open={Boolean(anchorEl)}
+      anchorEl={anchorEl}
+      onClose={() => handleCloseMenu()}
       anchorOrigin={{ vertical: "top", horizontal: "left" }}
       transformOrigin={{ vertical: "top", horizontal: "right" }}
       PaperProps={{
@@ -30,14 +41,36 @@ function TableOptionPopover({ isOpen, setIsOpen }: TableOptionPopoverProps) {
         },
       }}
     >
-      <MenuItem>
-        <Edit />
-        Edit
+      <MenuItem disabled={isLoading} onClick={() => handleEdit()}>
+        <Edit color="action" fontSize="small" />
+        <Typography
+          variant="caption"
+          fontWeight={"normal"}
+          color={"text.primary"}
+          sx={{
+            marginLeft: "1rem",
+          }}
+        >
+          Edit
+        </Typography>
       </MenuItem>
 
-      <MenuItem sx={{ color: "error.main" }}>
-        <Delete />
-        Delete
+      <MenuItem
+        disabled={isLoading}
+        sx={{ color: "error.main" }}
+        onClick={() => handleDelete()}
+      >
+        <Delete color="error" fontSize="small" />
+        <Typography
+          variant="caption"
+          color={"error"}
+          fontWeight={"normal"}
+          sx={{
+            marginLeft: "1rem",
+          }}
+        >
+          Delete
+        </Typography>
       </MenuItem>
     </Popover>
   );

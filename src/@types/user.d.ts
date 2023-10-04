@@ -5,8 +5,8 @@ export interface LoginInputs {
 
 export interface RegisterInputs extends LoginInputs {
   name: string;
-  role: string;
-  avatar?: string;
+  role: "customer" | "admin";
+  avatar: string;
 }
 
 export type TAuthProps = {
@@ -26,4 +26,14 @@ export type TUser = {
   avatar: string;
   creationAt: string;
   updatedAt: string;
+};
+
+export type UserAddressInputs = {
+  firstName: string;
+  lastName: string;
+  address: string;
+  city: string;
+  state: string;
+  zip: string;
+  country: string;
 };

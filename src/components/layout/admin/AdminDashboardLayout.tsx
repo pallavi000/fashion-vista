@@ -1,28 +1,11 @@
-import {
-  AppBar,
-  Avatar,
-  Box,
-  Button,
-  Divider,
-  Drawer,
-  IconButton,
-  Link,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Stack,
-  Toolbar,
-  Typography,
-} from "@mui/material";
-import React, { useState } from "react";
+// MUI
+import { Box } from "@mui/material";
+
+// components
 import TopBar from "./TopBar";
 import SideBar from "./SideBar";
-import { Outlet } from "react-router-dom";
 
 function AdminDashboardLayout({ children }: { children: any }) {
-  const [open, setOpen] = useState(false);
-
   return (
     <Box
       sx={{

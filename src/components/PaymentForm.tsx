@@ -1,4 +1,13 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+// redux
+import { useSelector } from "react-redux";
+import { AppState, useAppDispatch } from "../redux/store";
+
+// MUI
+import { Button, Card } from "@mui/material";
+
+// stripe
 import { Elements } from "@stripe/react-stripe-js";
 import { StripeElementsOptions, loadStripe } from "@stripe/stripe-js";
 import {
@@ -6,39 +15,59 @@ import {
   useElements,
   PaymentElement,
 } from "@stripe/react-stripe-js";
-import { Button, Card } from "@mui/material";
-import { AppState, useAppDispatch } from "../redux/store";
+
+// reducers
 import { emptyCart } from "../redux/reducers/cartReducer";
 import { addOrder } from "../redux/reducers/orderReducer";
-import { useSelector } from "react-redux";
+
+// types
 import { TOrder } from "../@types/order";
+
+// helpers
 import { getOrderDate, getOrderId } from "../utils/helper";
 
+// theme
+import theme from "../utils/theme";
+import { TCart } from "../@types/cart";
+import { CartState } from "../@types/reduxState";
+
+// load stripe
 const stripePromise = loadStripe("pk_test_TYooMQauvdEDq54NiTphI7jx");
 
 function PaymentForm({ handleNext }: { handleNext: Function }) {
+  // cart items states
+  const cart = useSelector((state: AppState) => state.cart);
+
+  // stripe element options
   const options: StripeElementsOptions = {
     mode: "payment",
-    amount: 1099,
+    amount: cart.totalPrice,
     currency: "usd",
-    appearance: {},
+    appearance: {
+      variables: {
+        colorPrimary: theme.palette.primary.main,
+      },
+    },
     loader: "auto",
   };
   return (
     <Elements stripe={stripePromise} options={options}>
-      <PaymentHandler handleNext={handleNext} />
+      <PaymentHandler cart={cart} />
     </Elements>
   );
 }
 
-function PaymentHandler({ handleNext }: { handleNext: Function }) {
-  const stripe = useStripe();
-  const elements = useElements();
+function PaymentHandler({ cart }: { cart: CartState }) {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
-  const cart = useSelector((state: AppState) => state.cart);
+  // cart items
   const { items } = cart;
 
+  // stripe hooks
+  const stripe = useStripe();
+  const elements = useElements();
+
+  // handle payment form submit
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     if (!stripe || !elements) {
@@ -56,7 +85,7 @@ function PaymentHandler({ handleNext }: { handleNext: Function }) {
       };
       dispatch(addOrder(orderData));
       dispatch(emptyCart());
-      handleNext();
+      navigate(`/order-success/${orderData.orderId}`);
     }
   };
 
@@ -71,7 +100,7 @@ function PaymentHandler({ handleNext }: { handleNext: Function }) {
         sx={{ marginTop: "1rem", marginBottom: "1rem" }}
         type="submit"
         variant="contained"
-        disabled={!elements}
+        disabled={!elements || !stripe}
       >
         Pay & Order
       </Button>

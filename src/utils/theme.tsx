@@ -1,4 +1,5 @@
 import { alpha, createTheme } from "@mui/material/styles";
+import { pxToRem, responsiveFontSizes } from "./helper";
 
 const GREY = {
   0: "#FFFFFF",
@@ -14,57 +15,57 @@ const GREY = {
 };
 
 const PRIMARY = {
-  lighter: "#D1E9FC",
-  light: "#76B0F1",
-  main: "#2065D1",
-  dark: "#103996",
-  darker: "#061B64",
-  contrastText: "#fff",
+  lighter: "#C8FACD",
+  light: "#5BE584",
+  main: "#00AB55",
+  dark: "#007B55",
+  darker: "#005249",
+  contrastText: "#FFFFFF",
 };
 
 const SECONDARY = {
   lighter: "#D6E4FF",
   light: "#84A9FF",
-  main: "#3366FF",
-  dark: "#1939B7",
+  main: "rgb(59 130 246)",
+  dark: "rgb(29 78 216)",
   darker: "#091A7A",
-  contrastText: "#fff",
+  contrastText: "#FFFFFF",
 };
 
 const INFO = {
-  lighter: "#D0F2FF",
-  light: "#74CAFF",
-  main: "#1890FF",
-  dark: "#0C53B7",
-  darker: "#04297A",
-  contrastText: "#fff",
+  lighter: "#CAFDF5",
+  light: "#61F3F3",
+  main: "#00B8D9",
+  dark: "#006C9C",
+  darker: "#003768",
+  contrastText: "#FFFFFF",
 };
 
 const SUCCESS = {
-  lighter: "#E9FCD4",
-  light: "#AAF27F",
-  main: "#54D62C",
-  dark: "#229A16",
-  darker: "#08660D",
-  contrastText: "#212B36",
+  lighter: "#D8FBDE",
+  light: "#86E8AB",
+  main: "#36B37E",
+  dark: "#1B806A",
+  darker: "#0A5554",
+  contrastText: "#FFFFFF",
 };
 
 const WARNING = {
-  lighter: "#FFF7CD",
-  light: "#FFE16A",
-  main: "#FFC107",
-  dark: "#B78103",
-  darker: "#7A4F01",
-  contrastText: "#212B36",
+  lighter: "#FFF5CC",
+  light: "#FFD666",
+  main: "#FFAB00",
+  dark: "#B76E00",
+  darker: "#7A4100",
+  contrastText: GREY[800],
 };
 
-const ERROR = {
-  lighter: "#FFE7D9",
-  light: "#FFA48D",
-  main: "#FF4842",
-  dark: "#B72136",
-  darker: "#7A0C2E",
-  contrastText: "#fff",
+export const ERROR = {
+  lighter: "#FFE9D5",
+  light: "#FFAC82",
+  main: "#FF5630",
+  dark: "#B71D18",
+  darker: "#7A0916",
+  contrastText: "#FFFFFF",
 };
 
 // Create a custom theme
@@ -100,22 +101,78 @@ const theme = createTheme({
   },
   typography: {
     fontFamily: "Roboto",
-
-    body1: {
-      fontWeight: "500",
-      fontSize: "16px",
+    fontWeightRegular: 400,
+    fontWeightMedium: 600,
+    fontWeightBold: 700,
+    h1: {
+      fontWeight: 800,
+      lineHeight: 80 / 64,
+      fontSize: pxToRem(40),
+      ...responsiveFontSizes({ sm: 52, md: 58, lg: 64 }),
     },
-    body2: {
-      fontSize: "16px",
-      fontWeight: "500",
-      color: "#7E7E7E",
+    h2: {
+      fontWeight: 800,
+      lineHeight: 64 / 48,
+      fontSize: pxToRem(32),
+      ...responsiveFontSizes({ sm: 40, md: 44, lg: 48 }),
+    },
+    h3: {
+      fontWeight: 700,
+      lineHeight: 1.5,
+      fontSize: pxToRem(24),
+      ...responsiveFontSizes({ sm: 26, md: 30, lg: 32 }),
     },
     h4: {
-      fontWeight: "700",
+      fontWeight: 700,
+      lineHeight: 1.5,
+      fontSize: pxToRem(20),
+      ...responsiveFontSizes({ sm: 20, md: 24, lg: 24 }),
+    },
+    h5: {
+      fontWeight: 700,
+      lineHeight: 1.5,
+      fontSize: pxToRem(18),
+      ...responsiveFontSizes({ sm: 19, md: 20, lg: 20 }),
+    },
+    h6: {
+      fontWeight: 700,
+      lineHeight: 28 / 18,
+      fontSize: pxToRem(17),
+      ...responsiveFontSizes({ sm: 18, md: 18, lg: 18 }),
+    },
+    subtitle1: {
+      fontWeight: 600,
+      lineHeight: 1.5,
+      fontSize: pxToRem(16),
+    },
+    subtitle2: {
+      fontWeight: 600,
+      lineHeight: 22 / 14,
+      fontSize: pxToRem(14),
+    },
+    body1: {
+      lineHeight: 1.5,
+      fontSize: pxToRem(16),
+    },
+    body2: {
+      lineHeight: 22 / 14,
+      fontSize: pxToRem(14),
     },
     caption: {
-      fontSize: "14px",
-      fontWeight: "500",
+      lineHeight: 1.5,
+      fontSize: pxToRem(12),
+    },
+    overline: {
+      fontWeight: 700,
+      lineHeight: 1.5,
+      fontSize: pxToRem(12),
+      textTransform: "uppercase",
+    },
+    button: {
+      fontWeight: 700,
+      lineHeight: 24 / 14,
+      fontSize: pxToRem(14),
+      textTransform: "capitalize",
     },
   },
 });

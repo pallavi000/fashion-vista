@@ -1,12 +1,16 @@
 import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
+// redux
+import { useSelector } from "react-redux";
 import { AppState, useAppDispatch } from "../redux/store";
-import { fetchAllProducts } from "../redux/reducers/productsReducer";
+
+// MUI
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
 
-import Img1 from "../images/img1.png";
-import Img2 from "../images/img2.png";
-import Img3 from "../images/img3.png";
-import Img4 from "../images/img4.png";
+// reducers
+import { fetchAllProducts } from "../redux/reducers/productsReducer";
+
+// images
 import Product from "../components/Product";
 import Category from "../components/Category";
 import BrandImg1 from "../images/brand1.png";
@@ -15,19 +19,32 @@ import BrandImg3 from "../images/brand3.png";
 import BrandImg4 from "../images/brand4.png";
 import BrandImg5 from "../images/brand5.png";
 import BrandImg6 from "../images/brand6.png";
+
+// components
 import Brand from "../components/Brand";
-import { useSelector } from "react-redux";
+import SkeletonProductCard from "../components/skeleton/SkeletonProductCard";
+
+// types
 import { TProduct } from "../@types/product";
-import { Link } from "react-router-dom";
 
 function Home() {
+  // app dispatch
   const dispatch = useAppDispatch();
-  const products: any = useSelector((state: AppState) => state.products.data);
+
+  // products state
+  const { products, isLoading } = useSelector((state: AppState) => ({
+    products: state.products.data,
+    isLoading: state.products.isLoading,
+  }));
+
+  // categories state
   const categories = useSelector((state: AppState) => state.categories.data);
+
+  // products fetch/display limit
   const offset = 0;
   const limit = 10;
 
-  const images = [Img1, Img2, Img3, Img4];
+  // brands
   const brands = [
     BrandImg1,
     BrandImg2,
@@ -37,6 +54,7 @@ function Home() {
     BrandImg6,
   ];
 
+  // fetch products
   useEffect(() => {
     dispatch(fetchAllProducts({ offset, limit }));
   }, []);
@@ -66,9 +84,13 @@ function Home() {
           </Button>
         </Box>
         <Grid container spacing={6} columns={12}>
-          {products?.slice(0, 8).map((product: TProduct) => {
-            return <Product product={product} />;
-          })}
+          {isLoading && !products?.length
+            ? [...Array(5)].map((_, index) => (
+                <SkeletonProductCard key={index} />
+              ))
+            : products?.slice(0, 8).map((product: TProduct) => {
+                return <Product key={product.id} product={product} />;
+              })}
         </Grid>
       </Container>
       <Box

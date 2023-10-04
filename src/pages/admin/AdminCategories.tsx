@@ -1,29 +1,35 @@
-import { Add, Search } from "@mui/icons-material";
-import {
-  Button,
-  Card,
-  Container,
-  Grid,
-  InputAdornment,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
 import React, { useEffect, useState } from "react";
+// redux
 import { useSelector } from "react-redux";
 import { AppState, useAppDispatch } from "../../redux/store";
+
+// MUI
+import { Button, Container, Grid, Stack, Typography } from "@mui/material";
+
+// icons
+import { Add } from "@mui/icons-material";
+
+// components
 import AdminCategoryCard from "../../components/admin/categories/AdminCategoryCard";
-import { fetchAdminCategories } from "../../redux/reducers/admin/adminCategoryReducer";
 import AdminCategoryAddModal from "../../components/admin/categories/AdminCategoryAddModal";
+import SkeletonCategoryCard from "../../components/skeleton/SkeletonCategoryCard";
+
+// reducers
+import { fetchAdminCategories } from "../../redux/reducers/admin/adminCategoryReducer";
 
 function AdminCategories() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   const dispatch = useAppDispatch();
-  const categories = useSelector(
-    (state: AppState) => state.adminCategories.data
-  );
 
+  // categories states
+  const { categories, isLoading } = useSelector((state: AppState) => ({
+    categories: state.adminCategories.data,
+    isLoading: state.adminCategories.isLoading,
+  }));
+
+  // new category modal state
+  const [isNewCategoryModalOpen, setIsNewCategoryModalOpen] = useState(false);
+
+  // fetch categories
   useEffect(() => {
     dispatch(fetchAdminCategories());
   }, []);
@@ -38,7 +44,7 @@ function AdminCategories() {
       >
         <Typography variant="h6">Categories</Typography>
         <Button
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => setIsNewCategoryModalOpen(true)}
           size="small"
           variant="contained"
           startIcon={<Add />}
@@ -46,13 +52,24 @@ function AdminCategories() {
           New Category
         </Button>
       </Stack>
-      <AdminCategoryAddModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
+
+      <AdminCategoryAddModal
+        isOpen={isNewCategoryModalOpen}
+        setIsOpen={setIsNewCategoryModalOpen}
+      />
+
       <Grid container spacing={3}>
-        {categories.map((category) => (
-          <Grid key={category.id} item xs={12} sm={6} md={3}>
-            <AdminCategoryCard category={category} />
-          </Grid>
-        ))}
+        {isLoading && !categories.length
+          ? [...Array(8)].map((_, index) => (
+              <Grid key={index} item xs={12} sm={6} md={3}>
+                <SkeletonCategoryCard key={index} />
+              </Grid>
+            ))
+          : categories.map((category) => (
+              <Grid key={category.id} item xs={12} sm={6} md={3}>
+                <AdminCategoryCard category={category} />
+              </Grid>
+            ))}
       </Grid>
     </Container>
   );

@@ -1,10 +1,13 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { CartState } from "../../@types/reduxState";
-import { TCart } from "../../@types/cart";
-import { TProduct } from "../../@types/product";
 import { persistReducer } from "redux-persist";
 import { cartPersistConfig } from "../../utils/reduxPersistConfig";
 
+// types
+import { CartState } from "../../@types/reduxState";
+import { TCart } from "../../@types/cart";
+import { TProduct } from "../../@types/product";
+
+// initial states
 const initialState: CartState = {
   items: [],
   totalPrice: 0,
@@ -14,6 +17,7 @@ const initialState: CartState = {
   error: null,
 };
 
+// slice
 const cartSlice = createSlice({
   name: "cart",
   initialState,
@@ -63,5 +67,7 @@ const cartSlice = createSlice({
   },
 });
 
+// actions
 export const { addToCart, removeFromCart, emptyCart } = cartSlice.actions;
+// redux persist reducer
 export default persistReducer(cartPersistConfig, cartSlice.reducer);

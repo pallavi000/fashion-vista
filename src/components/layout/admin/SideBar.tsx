@@ -1,18 +1,27 @@
+import React from "react";
+// redux
+import { useSelector } from "react-redux";
+import { AppState } from "../../../redux/store";
+
+// MUI
 import { Avatar, Box, Drawer, Link, List, Typography } from "@mui/material";
+
+// icons
 import {
-  AccountBalance,
   AccountCircle,
   Category,
   Dashboard,
   Money,
   ShoppingBag,
+  Store,
 } from "@mui/icons-material";
-import React from "react";
-import SideBarItem from "./SideBarItem";
-import { useSelector } from "react-redux";
-import { AppState } from "../../../redux/store";
 
-const sidebarItems = [
+// components
+import SideBarItem from "./SideBarItem";
+import { SidebarItem } from "../../../@types/sidebar";
+
+// sidebar menus
+const sidebarItems: SidebarItem[] = [
   {
     title: "Dashboard",
     path: "/admin/dashboard",
@@ -41,6 +50,7 @@ const sidebarItems = [
 ];
 
 function SideBar() {
+  // auth user state
   const user = useSelector((state: AppState) => state.auth.user);
   return (
     <Box
@@ -71,9 +81,22 @@ function SideBar() {
             },
           }}
         >
-          <Box sx={{ px: 2.5, py: 3, display: "inline-flex" }}>Logo Here</Box>
+          <Box
+            sx={{
+              px: 2.5,
+              py: 3,
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+            }}
+          >
+            <Store fontSize={"large"} color="primary" />
+            <Typography variant="h6" color={"primary"}>
+              Logo
+            </Typography>
+          </Box>
 
-          <Box sx={{ mb: 5, mx: 2.5 }}>
+          <Box sx={{ mb: 3, mx: 2.5 }}>
             <Link underline="none">
               <Box
                 sx={{

@@ -1,9 +1,16 @@
-import { Box, Button, Divider, Grid, Typography } from "@mui/material";
 import React from "react";
-import Img from "../images/img1.png";
-import { TOrder } from "../@types/order";
 
-function OrderItem({ order }: { order: TOrder }) {
+// MUI
+import { Box, Divider, Grid, Typography } from "@mui/material";
+
+// type
+import { TOrder } from "../@types/order";
+import OrderItemItem from "./OrderItemItem";
+
+// component props type
+type OrderItemProps = { order: TOrder };
+
+function OrderItem({ order }: OrderItemProps) {
   return (
     <>
       <Grid container columns={12} spacing={3}>
@@ -31,86 +38,13 @@ function OrderItem({ order }: { order: TOrder }) {
             </Grid>
           </Grid>
           <Divider sx={{ margin: "0.5rem 0rem" }} />
-          {order?.items?.map((item, index) => {
+          {order?.items?.map((item) => {
             return (
-              <Grid container columns={12} margin={"0.8rem 0rem"}>
-                <Grid
-                  item
-                  xs={3}
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
-                  }}
-                >
-                  <Box sx={{ height: "75px", width: "75px" }}>
-                    <img
-                      src={item.product.images[0]}
-                      style={{
-                        height: "100%",
-                        width: "100%",
-                        objectFit: "cover",
-                        borderRadius: "0.3rem",
-                      }}
-                    />
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <Typography variant="caption">
-                      {item.product.title}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: 14,
-                        color: "gray",
-                      }}
-                    >
-                      {item.product.category.name}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: 14,
-                        color: "gray",
-                      }}
-                    >
-                      {item.quantity}
-                    </Typography>
-                  </Box>
-                </Grid>
-                <Grid
-                  item
-                  xs={9}
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Typography variant="caption">{order.orderId}</Typography>
-                  <Typography variant="caption">{order.orderDate}</Typography>
-                  <Typography variant="caption">
-                    ${item.product.price}
-                  </Typography>
-                  <Typography variant="caption">{item.quantity}</Typography>
-                  <Typography variant="caption">
-                    ${item.quantity * item.product.price}
-                  </Typography>
-                  <Typography variant="caption">
-                    {order.paymentMethod}
-                  </Typography>
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    sx={{ borderColor: "greenyellow" }}
-                  >
-                    {order.deliveryStatus}
-                  </Button>
-                </Grid>
-              </Grid>
+              <OrderItemItem
+                key={`${order.orderId}-${item.product.id}`}
+                order={order}
+                item={item}
+              />
             );
           })}
         </Grid>

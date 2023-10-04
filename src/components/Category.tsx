@@ -1,9 +1,16 @@
-import { Box, Grid, Typography } from "@mui/material";
 import React from "react";
-import { TCategory } from "../@types/category";
 import { Link } from "react-router-dom";
 
-function Category({ category }: { category: TCategory }) {
+// MUI
+import { Box, Grid, Typography } from "@mui/material";
+
+// types
+import { TCategory } from "../@types/category";
+
+// component props type
+type CategoryProps = { category: TCategory };
+
+function Category({ category }: CategoryProps) {
   return (
     <Grid item xs={12} sm={6} md={3}>
       <Box sx={{ height: "100%", position: "relative" }}>

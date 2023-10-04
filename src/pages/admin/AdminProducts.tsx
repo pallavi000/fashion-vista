@@ -1,11 +1,14 @@
-import { Add, MoreVert, Search } from "@mui/icons-material";
+import React, { useEffect } from "react";
+// redux
+import { useSelector } from "react-redux";
+import { AppState, useAppDispatch } from "../../redux/store";
+
+// MUI
 import {
-  Avatar,
   Button,
   Card,
   Checkbox,
   Container,
-  IconButton,
   Stack,
   Table,
   TableBody,
@@ -16,28 +19,72 @@ import {
   TableFooter,
   TablePagination,
   Typography,
-  Chip,
   TextField,
   InputAdornment,
+  LinearProgress,
 } from "@mui/material";
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { AppState, useAppDispatch } from "../../redux/store";
-import { fetchAdminAllProducts } from "../../redux/reducers/admin/adminProductReducer";
+
+// icons
+import { Add, Search } from "@mui/icons-material";
+
+// reducers
+import {
+  deleteAdminProduct,
+  fetchAdminAllProducts,
+} from "../../redux/reducers/admin/adminProductReducer";
+import { fetchAdminCategories } from "../../redux/reducers/admin/adminCategoryReducer";
+
+// components
+import TableOptionPopover from "../../components/TableOptionPopover";
+import ProductTableBody from "../../components/admin/products/ProductTableBody";
+import AdminProductEditModal from "../../components/admin/products/AdminProductEditModal";
+import AdminProductAddModal from "../../components/admin/products/AdminProductAddModal";
+
+// types
+import { TProduct } from "../../@types/product";
 
 function AdminProducts() {
+  const dispatch = useAppDispatch();
+
+  // pagination states
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  // filter states
   const [selectedProducts, setSelectedProducts] = React.useState<number[]>([]);
   const [filterName, setFilterName] = React.useState("");
 
-  const dispatch = useAppDispatch();
-  const products = useSelector((state: AppState) => state.adminProducts.data);
+  // popover control states
+  const [popoverEle, setPopOverEle] = React.useState<
+    (EventTarget & HTMLButtonElement) | null
+  >(null);
+  const [activeProduct, setActiveProduct] = React.useState<null | TProduct>(
+    null
+  );
 
+  // modal control states
+  const [isAddModalOpen, setIsAddModalOpen] = React.useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
+
+  // products state
+  const { products, isLoading } = useSelector((state: AppState) => ({
+    products: state.adminProducts.data,
+    isLoading: state.adminProducts.isLoading,
+  }));
+
+  // categories
+  const categories = useSelector(
+    (state: AppState) => state.adminCategories.data
+  );
+
+  // fetch categories & products
   useEffect(() => {
     dispatch(fetchAdminAllProducts());
+    // categories for adding and editing products
+    dispatch(fetchAdminCategories());
   }, []);
 
+  // handle checkbox all click
   const handleSelectAllClick = (event: any) => {
     if (event.target.checked) {
       const newSelecteds = products.map((u) => u.id);
@@ -47,6 +94,7 @@ function AdminProducts() {
     setSelectedProducts([]);
   };
 
+  // handle single checkbox click
   const handleSelectClick = (event: any, id: number) => {
     if (selectedProducts.includes(id)) {
       const filterdSelectedUsers = selectedProducts.filter((s) => s !== id);
@@ -56,11 +104,13 @@ function AdminProducts() {
     }
   };
 
+  // handle search by name
   const handleFilterByName = (event: any) => {
     setPage(0);
     setFilterName(event.target.value);
   };
 
+  // paginations
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
@@ -75,6 +125,33 @@ function AdminProducts() {
     setPage(0);
   };
 
+  // popover handler
+  const handlePopoverOpen = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    product: TProduct
+  ) => {
+    setActiveProduct(product);
+    setPopOverEle(e.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setPopOverEle(null);
+    //setActiveUser(null);
+  };
+
+  // handle popover menus click
+  const handleProductEditClick = () => {
+    handlePopoverClose();
+    setIsEditModalOpen(true);
+  };
+
+  const handleProductDeleteClick = async () => {
+    if (activeProduct)
+      await dispatch(deleteAdminProduct({ id: activeProduct.id }));
+    handlePopoverClose();
+  };
+
+  // serach/filter products
   const filterProducts = products.filter((u) =>
     u.title.toLocaleLowerCase().includes(filterName.toLocaleLowerCase())
   );
@@ -89,10 +166,30 @@ function AdminProducts() {
         mb={5}
       >
         <Typography variant="h6">Products</Typography>
-        <Button size="small" variant="contained" startIcon={<Add />}>
+        <Button
+          size="small"
+          variant="contained"
+          startIcon={<Add />}
+          onClick={() => setIsAddModalOpen(true)}
+        >
           New Product
         </Button>
       </Stack>
+
+      <AdminProductAddModal
+        categories={categories}
+        isOpen={isAddModalOpen}
+        setIsOpen={setIsAddModalOpen}
+      />
+      {products.length ? (
+        <AdminProductEditModal
+          categories={categories}
+          isOpen={isEditModalOpen}
+          setIsOpen={setIsEditModalOpen}
+          product={activeProduct || products[0]}
+        />
+      ) : null}
+
       <Card>
         <TextField
           size="small"
@@ -135,85 +232,46 @@ function AdminProducts() {
               {filterProducts
                 .slice(page * rowsPerPage, rowsPerPage + page * rowsPerPage)
                 .map((product) => {
-                  const selectedProduct =
-                    selectedProducts.indexOf(product.id) !== -1;
                   return (
-                    <TableRow
-                      hover
+                    <ProductTableBody
                       key={product.id}
-                      tabIndex={-1}
-                      role="checkbox"
-                      selected={selectedProduct}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={selectedProduct}
-                          onChange={(event) =>
-                            handleSelectClick(event, product.id)
-                          }
-                        />
-                      </TableCell>
-                      <TableCell component="th" scope="row" padding="none">
-                        <Stack direction="row" alignItems="center" spacing={2}>
-                          <Avatar alt={product.title} src={product.images[0]} />
-                          <Typography variant="body1" noWrap>
-                            {product.title}
-                          </Typography>
-                        </Stack>
-                      </TableCell>
-                      <TableCell component={"td"} align="left">
-                        <div
-                          style={{
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            width: "15rem",
-                          }}
-                        >
-                          <Typography
-                            variant="caption"
-                            fontWeight={"400"}
-                            color={"text.primary"}
-                            noWrap
-                          >
-                            {product.description}
-                          </Typography>
-                        </div>
-                      </TableCell>
-                      <TableCell align="left">
-                        <Stack direction="row" alignItems="center" spacing={2}>
-                          <Avatar
-                            alt={product.category.name}
-                            src={product.category.image}
-                            sx={{
-                              width: 24,
-                              height: 24,
-                            }}
-                          />
-                          <Typography
-                            variant="caption"
-                            fontWeight={"400"}
-                            color={"text.primary"}
-                          >
-                            {product.category.name}
-                          </Typography>
-                        </Stack>
-                      </TableCell>
-                      <TableCell align="left">
-                        <Chip
-                          color="success"
-                          size="small"
-                          label={`$${product.price}`}
-                        />
-                      </TableCell>
-                      <TableCell align="right">
-                        <IconButton size="large" color="inherit">
-                          <MoreVert />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
+                      product={product}
+                      selectedProducts={selectedProducts}
+                      handleSelectClick={handleSelectClick}
+                      handlePopoverOpen={handlePopoverOpen}
+                    />
                   );
                 })}
             </TableBody>
+
+            {isLoading && !products.length && (
+              <TableBody>
+                <TableRow>
+                  <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                    <LinearProgress />
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            )}
+
+            {isNotFound && (
+              <TableBody>
+                <TableRow>
+                  <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                    <Typography variant="h6" paragraph>
+                      Not found
+                    </Typography>
+
+                    <Typography variant="body2">
+                      No results found for &nbsp;
+                      <strong>&quot;{filterName}&quot;</strong>.
+                      <br /> Try checking for typos or using complete words.
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            )}
+
             <TableFooter>
               <TableRow>
                 <TablePagination
@@ -228,6 +286,13 @@ function AdminProducts() {
             </TableFooter>
           </Table>
         </TableContainer>
+        <TableOptionPopover
+          isLoading={isLoading}
+          anchorEl={popoverEle}
+          handleEdit={handleProductEditClick}
+          handleDelete={handleProductDeleteClick}
+          handleCloseMenu={handlePopoverClose}
+        />
       </Card>
     </Container>
   );

@@ -1,45 +1,54 @@
 import React, { useState } from "react";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import Typography from "@mui/material/Typography";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+// redux
+import { useSelector } from "react-redux";
+import { AppState } from "../redux/store";
+
+// MUI
 import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
   Box,
-  Button,
   FormControl,
   FormControlLabel,
-  FormLabel,
   Radio,
   RadioGroup,
   Slider,
 } from "@mui/material";
-import { useSelector } from "react-redux";
-import { AppState } from "../redux/store";
-import AddIcon from "@mui/icons-material/Add";
-import { Link } from "react-router-dom";
 
-function valuetext(value: number) {
-  return `$${value}`;
-}
+// icons
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
+// helpers
+import { valueToText } from "../utils/helper";
+
+// component props type
+type SidebarFilterProps = {
+  price: number[];
+  setPrice: Function;
+  setSelectedCategory: Function;
+};
 
 function SidebarFilter({
   price,
   setPrice,
   setSelectedCategory,
-}: {
-  price: number[];
-  setPrice: Function;
-  setSelectedCategory: Function;
-}) {
+}: SidebarFilterProps) {
+  // price ranges
   const [value, setValue] = useState<number[]>(price);
+
+  // categories states
   const categories = useSelector((state: AppState) => state.categories.data);
 
-  const handleChange = (event: Event, newValue: number | number[]) => {
+  const handlePriceRangeChange = (
+    event: Event,
+    newValue: number | number[]
+  ) => {
     setValue(newValue as number[]);
   };
 
-  const handleChangeCommited = (
+  const handlePriceRangeChangeCommited = (
     event: Event | React.SyntheticEvent<Element | Event>,
     newValue: number | number[]
   ) => {
@@ -81,6 +90,7 @@ function SidebarFilter({
               {categories.map((category) => {
                 return (
                   <FormControlLabel
+                    key={category.id}
                     value={category.id}
                     control={<Radio />}
                     label={category.name}
@@ -99,10 +109,10 @@ function SidebarFilter({
         <Slider
           getAriaLabel={() => "Price range"}
           value={value}
-          onChangeCommitted={handleChangeCommited}
-          onChange={handleChange}
+          onChangeCommitted={handlePriceRangeChangeCommited}
+          onChange={handlePriceRangeChange}
           valueLabelDisplay="auto"
-          getAriaValueText={valuetext}
+          getAriaValueText={valueToText}
           max={5000}
         />
       </Box>

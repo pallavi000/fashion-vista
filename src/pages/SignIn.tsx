@@ -1,6 +1,14 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+// Redux
+import { AppState, useAppDispatch } from "../redux/store";
+import { useSelector } from "react-redux";
+
+// MUI
 import {
-  Alert,
   Box,
   Button,
   Card,
@@ -8,15 +16,17 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { AppState, useAppDispatch } from "../redux/store";
+
+// reducer
 import { loginUser } from "../redux/reducers/authReducer";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+
+// types
 import { LoginInputs } from "../@types/user";
 
+// components
+import LoadingButton from "../components/LoadingButton";
+
+// yup validation schema
 const validationSchema = yup.object().shape({
   email: yup
     .string()
@@ -29,12 +39,18 @@ const validationSchema = yup.object().shape({
 });
 
 function SignIn() {
+  const navigate = useNavigate();
+
+  // app dispatch
   const dispatch = useAppDispatch();
-  const { isAuthenticated, error } = useSelector((state: AppState) => ({
-    isAuthenticated: state.auth.isAuthenticated,
-    error: state.auth.error,
+
+  // auth states
+  const { user, isLoading } = useSelector((state: AppState) => ({
+    user: state.auth.user,
+    isLoading: state.auth.isLoading,
   }));
 
+  // react hook form with yup validation
   const {
     handleSubmit,
     control,
@@ -42,14 +58,17 @@ function SignIn() {
   } = useForm<LoginInputs>({
     resolver: yupResolver(validationSchema),
   });
-  const navigate = useNavigate();
 
+  // redirect after login success
   React.useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/");
+    if (user) {
+      user.role && user.role === "admin"
+        ? navigate("/admin/dashboard")
+        : navigate("/");
     }
-  }, [isAuthenticated]);
+  }, [user]);
 
+  // form submit handler
   const onSubmit: SubmitHandler<LoginInputs> = (data) => {
     dispatch(loginUser(data));
   };
@@ -65,11 +84,7 @@ function SignIn() {
         <Typography variant="h4" marginBottom={"3rem"}>
           Sign In
         </Typography>
-        {error ? (
-          <Alert severity="error" sx={{ marginBottom: "3rem" }}>
-            {error}
-          </Alert>
-        ) : null}
+
         <Box sx={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
           <Controller
             name="email"
@@ -99,9 +114,11 @@ function SignIn() {
               />
             )}
           />
-          <Button type="submit" variant="contained">
-            Sign In
-          </Button>
+          <LoadingButton
+            isLoading={isLoading}
+            color="success"
+            title="Sign In"
+          />
         </Box>
       </Card>
     </Container>

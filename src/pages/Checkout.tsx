@@ -1,29 +1,34 @@
+import React from "react";
+// redux
+import { useSelector } from "react-redux";
+import { AppState } from "../redux/store";
+
+// MUI
 import {
   Alert,
   Box,
-  Button,
   Container,
-  Divider,
   Step,
   StepLabel,
   Stepper,
   Typography,
 } from "@mui/material";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import React from "react";
+
+// components
 import AddressForm from "../components/AddressForm";
 import PaymentForm from "../components/PaymentForm";
-import OrderSuccess from "../components/OrderSuccess";
-import { useSelector } from "react-redux";
-import { AppState } from "../redux/store";
 
+// form stepper steps
 const steps = ["Shipping Address", "Payment Details"];
 
 function Checkout() {
-  const [activeStep, setActiveStep] = React.useState(0);
-
+  // cart items state
   const cart = useSelector((state: AppState) => state.cart.items);
 
+  // active step
+  const [activeStep, setActiveStep] = React.useState(0);
+
+  // handle next step in stepper
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -45,17 +50,14 @@ function Checkout() {
               );
             })}
           </Stepper>
-          {activeStep === steps.length ? (
-            <OrderSuccess />
-          ) : (
-            <Box sx={{ paddingTop: "1.5rem" }}>
-              {activeStep === 0 ? (
-                <AddressForm handleNext={handleNext} />
-              ) : (
-                <PaymentForm handleNext={handleNext} />
-              )}
-            </Box>
-          )}
+
+          <Box sx={{ paddingTop: "1.5rem" }}>
+            {activeStep === 0 ? (
+              <AddressForm handleNext={handleNext} />
+            ) : (
+              <PaymentForm handleNext={handleNext} />
+            )}
+          </Box>
         </Box>
       ) : (
         <Alert severity="error" sx={{ marginTop: "2rem" }}>

@@ -1,48 +1,51 @@
-import React, { ReactEventHandler, useState } from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import LogoutIcon from "@mui/icons-material/Logout";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import MenuIcon from "@mui/icons-material/Menu";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+// redux
+import { useSelector } from "react-redux";
+import { AppState, useAppDispatch } from "../../redux/store";
 
+// MUI
 import {
+  AppBar,
+  Box,
+  Toolbar,
+  Typography,
+  Button,
+  IconButton,
   Avatar,
   Badge,
   InputAdornment,
-  InputBase,
   Menu,
   MenuItem,
   OutlinedInput,
-  TextField,
   Tooltip,
-  alpha,
 } from "@mui/material";
-import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
-import {
-  FavoriteBorder,
-  Navigation,
-  ShoppingBagOutlined,
-  Visibility,
-} from "@mui/icons-material";
-import { Link, useNavigate } from "react-router-dom";
+
+// icons
+import LogoutIcon from "@mui/icons-material/Logout";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { FavoriteBorder, ShoppingBagOutlined } from "@mui/icons-material";
 import SearchIcon from "@mui/icons-material/Search";
-import styled from "@emotion/styled";
-import { useSelector } from "react-redux";
-import { AppState, useAppDispatch } from "../../redux/store";
+import StoreIcon from "@mui/icons-material/Store";
+
+// types
 import { TUser } from "../../@types/user";
+
+// reducers
 import { logoutUser } from "../../redux/reducers/authReducer";
 import { fetchCategories } from "../../redux/reducers/categoriesReducer";
 
 export default function Navbar() {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [input, setInput] = useState("");
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  // user profile icon click popover state
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  // search state
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // auth states
   const {
     isAuthenticated,
     user,
@@ -52,15 +55,21 @@ export default function Navbar() {
       user: state.auth.user,
     })
   );
+
+  // cart state
   const cartQuantity = useSelector(
     (state: AppState) => state.cart.totalQuantity
   );
+
+  // categories
   const categories = useSelector((state: AppState) => state.categories.data);
 
+  // fetch categories
   React.useEffect(() => {
     dispatch(fetchCategories());
   }, []);
 
+  // handle user profile/icon click popover
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -68,9 +77,11 @@ export default function Navbar() {
     setAnchorEl(null);
   };
 
+  // logout handler
   const logout = () => {
     handleClose();
     dispatch(logoutUser());
+    navigate("/");
   };
 
   return (
@@ -95,16 +106,24 @@ export default function Navbar() {
               alignItems: "center",
             }}
           >
-            <Typography variant="h4" color="inherit">
-              <Link to="/">Logo</Link>
-            </Typography>
+            <Link
+              to="/"
+              style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+            >
+              <StoreIcon fontSize={"large"} color="primary" />
+              <Typography variant="h6" color={"primary"}>
+                Logo
+              </Typography>
+            </Link>
             {categories.slice(0, 6).map((category) => {
               return (
                 <Link
                   color="text.primary"
                   to={`/category/${category.id}/products`}
                 >
-                  {category.name}
+                  <Typography variant="body1" fontWeight={"500"}>
+                    {category.name}
+                  </Typography>
                 </Link>
               );
             })}
@@ -116,12 +135,12 @@ export default function Navbar() {
               size="small"
               sx={{ background: "default" }}
               placeholder="Search for products..."
-              onChange={(e) => setInput(e.target.value)}
+              onChange={(e) => setSearchQuery(e.target.value)}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton edge="end">
                     <SearchIcon
-                      onClick={() => navigate(`/search/?query=${input}`)}
+                      onClick={() => navigate(`/search/?query=${searchQuery}`)}
                     />
                   </IconButton>
                 </InputAdornment>

@@ -1,20 +1,19 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { CartState, OrderState } from "../../@types/reduxState";
-import { TCart } from "../../@types/cart";
-import { TProduct } from "../../@types/product";
 import { persistReducer } from "redux-persist";
-import {
-  cartPersistConfig,
-  orderPersistConfig,
-} from "../../utils/reduxPersistConfig";
+import { orderPersistConfig } from "../../utils/reduxPersistConfig";
+
+// types
+import { OrderState } from "../../@types/reduxState";
 import { TOrder } from "../../@types/order";
 
+// initail state
 const initialState: OrderState = {
   data: [],
   isLoading: false,
   error: null,
 };
 
+// slice
 const orderSlice = createSlice({
   name: "orders",
   initialState,
@@ -30,5 +29,7 @@ const orderSlice = createSlice({
   },
 });
 
+// actions
 export const { addOrder } = orderSlice.actions;
+// redux persist reducer
 export default persistReducer(orderPersistConfig, orderSlice.reducer);

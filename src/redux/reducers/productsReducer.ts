@@ -1,8 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axiosInstance from "../../utils/AxiosInstance";
-import { ProductsState } from "../../@types/reduxState";
-import { AxiosError } from "axios";
 
+// types
+import { ProductsState } from "../../@types/reduxState";
+
+// axios
+import { AxiosError } from "axios";
+import axiosInstance from "../../utils/AxiosInstance";
+
+// initial state
 const initialState: ProductsState = {
   data: [],
   searchProducts: [],
@@ -11,32 +16,83 @@ const initialState: ProductsState = {
   error: null,
 };
 
+// slice
 const productsSlice = createSlice({
   name: "products",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(fetchAllProducts.pending, (state, action) => {
+      return {
+        ...state,
+        isLoading: true,
+      };
+    });
     builder.addCase(fetchAllProducts.fulfilled, (state, action) => {
       return {
         ...state,
+        isLoading: false,
         data: action.payload,
+        error: null,
+      };
+    });
+    builder.addCase(fetchAllProducts.rejected, (state, action) => {
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error.message || "",
+      };
+    });
+
+    builder.addCase(fetchFilterProducts.pending, (state, action) => {
+      return {
+        ...state,
+        isLoading: true,
       };
     });
     builder.addCase(fetchFilterProducts.fulfilled, (state, action) => {
       return {
         ...state,
+        isLoading: false,
+        error: null,
         filterProducts: action.payload,
+      };
+    });
+    builder.addCase(fetchFilterProducts.rejected, (state, action) => {
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error.message || "",
+      };
+    });
+
+    builder.addCase(fetchSearchProducts.pending, (state, action) => {
+      return {
+        ...state,
+        isLoading: true,
       };
     });
     builder.addCase(fetchSearchProducts.fulfilled, (state, action) => {
       return {
         ...state,
+        isLoading: false,
+        error: null,
         searchProducts: action.payload,
+      };
+    });
+    builder.addCase(fetchSearchProducts.rejected, (state, action) => {
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error.message || "",
       };
     });
   },
 });
 
+// ==============================================
+// API Calls
+// ==============================================
 export const fetchAllProducts = createAsyncThunk(
   "fetchAllProducts",
   async ({ offset, limit }: { offset: number; limit: number }) => {
@@ -47,7 +103,7 @@ export const fetchAllProducts = createAsyncThunk(
       return result.data;
     } catch (e) {
       const error = e as AxiosError;
-      return error;
+      throw error;
     }
   }
 );
@@ -74,7 +130,7 @@ export const fetchFilterProducts = createAsyncThunk(
       return result.data;
     } catch (e) {
       const error = e as AxiosError;
-      return error;
+      throw error;
     }
   }
 );
@@ -100,11 +156,10 @@ export const fetchSearchProducts = createAsyncThunk(
         url = `/products/?title=${query}&price_min=${price_min}&price_max=${price_max}`;
       }
       const result = await axiosInstance.get(url);
-      console.log(result.data);
       return result.data;
     } catch (e) {
       const error = e as AxiosError;
-      return error;
+      throw error;
     }
   }
 );

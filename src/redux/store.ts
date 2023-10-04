@@ -1,8 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import thunk from "redux-thunk";
 import { useDispatch } from "react-redux";
 import { persistStore } from "redux-persist";
+import thunk from "redux-thunk";
 
+// Reducers
 import productsReducer from "./reducers/productsReducer";
 import productReducer from "./reducers/productReducer";
 import authReducer from "./reducers/authReducer";
@@ -10,11 +11,12 @@ import cartReducer from "./reducers/cartReducer";
 import categoriesReducer from "./reducers/categoriesReducer";
 import categoryReducer from "./reducers/categoryReducer";
 import orderReducer from "./reducers/orderReducer";
-
+// Admin Reducers
 import adminUserReducer from "./reducers/admin/adminUserReducer";
 import adminProductReducer from "./reducers/admin/adminProductReducer";
 import adminCategoryReducer from "./reducers/admin/adminCategoryReducer";
 
+// Redux Store
 const store = configureStore({
   reducer: {
     products: productsReducer,
@@ -32,11 +34,13 @@ const store = configureStore({
   middleware: (getDEfaultMiddleware) => getDEfaultMiddleware().concat(thunk),
 });
 
+// Redux Persistor
 export const persistor = persistStore(store);
 
+// App State
 export type AppState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-
+// App Dispatch hook
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 
 export default store;

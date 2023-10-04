@@ -1,11 +1,14 @@
-import { MoreVert, PersonAdd, Search } from "@mui/icons-material";
+import React, { useEffect, useState } from "react";
+// redux
+import { useSelector } from "react-redux";
+import { AppState, useAppDispatch } from "../../redux/store";
+
+// MUI
 import {
-  Avatar,
   Button,
   Card,
   Checkbox,
   Container,
-  IconButton,
   Stack,
   Table,
   TableBody,
@@ -16,29 +19,63 @@ import {
   TableFooter,
   TablePagination,
   Typography,
-  Chip,
   TextField,
   InputAdornment,
-  Popover,
+  LinearProgress,
 } from "@mui/material";
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { AppState, useAppDispatch } from "../../redux/store";
-import { fetchUsers } from "../../redux/reducers/admin/adminUserReducer";
+
+// icons
+import { PersonAdd, Search } from "@mui/icons-material";
+
+// reducers
+import {
+  deleteUser,
+  fetchUsers,
+} from "../../redux/reducers/admin/adminUserReducer";
+
+// components
+import TableOptionPopover from "../../components/TableOptionPopover";
+import UserTableBody from "../../components/admin/users/UserTableBody";
+import AdminUserEditModal from "../../components/admin/users/AdminUserEditModal";
+import AdminUserAddModal from "../../components/admin/users/AdminUserAddModal";
+
+// types
+import { TUser } from "../../@types/user";
 
 function AdminUsers() {
+  // pagination states
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  // filter states
   const [selectedUsers, setSelectedUsers] = React.useState<number[]>([]);
   const [filterName, setFilterName] = React.useState("");
 
-  const dispatch = useAppDispatch();
-  const users = useSelector((state: AppState) => state.adminUsers.data);
+  // popover menu states
+  const [popoverEle, setPopOverEle] = React.useState<
+    (EventTarget & HTMLButtonElement) | null
+  >(null);
+  const [activeUser, setActiveUser] = useState<null | TUser>(null);
 
+  // modal control states
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  // app dispatch
+  const dispatch = useAppDispatch();
+
+  // auth state
+  const { users, isLoading } = useSelector((state: AppState) => ({
+    users: state.adminUsers.data,
+    isLoading: state.adminUsers.isLoading,
+  }));
+
+  // get/fetch users
   useEffect(() => {
     dispatch(fetchUsers());
   }, []);
 
+  // handle checkbox all click
   const handleSelectAllClick = (event: any) => {
     if (event.target.checked) {
       const newSelecteds = users.map((u) => u.id);
@@ -48,6 +85,7 @@ function AdminUsers() {
     setSelectedUsers([]);
   };
 
+  // handle single checkbox click
   const handleSelectClick = (event: any, id: number) => {
     if (selectedUsers.includes(id)) {
       const filterdSelectedUsers = selectedUsers.filter((s) => s !== id);
@@ -57,11 +95,13 @@ function AdminUsers() {
     }
   };
 
+  // handle search by name
   const handleFilterByName = (event: any) => {
     setPage(0);
     setFilterName(event.target.value);
   };
 
+  // handle paginations
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
@@ -76,6 +116,32 @@ function AdminUsers() {
     setPage(0);
   };
 
+  // popover open/close handler
+  const handlePopoverOpen = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    user: TUser
+  ) => {
+    setActiveUser(user);
+    setPopOverEle(e.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setPopOverEle(null);
+    //setActiveUser(null);
+  };
+
+  // popover menu item click handler
+  const handleUserEditClick = () => {
+    handlePopoverClose();
+    setIsEditModalOpen(true);
+  };
+
+  const handleUserDeleteClick = () => {
+    if (activeUser) dispatch(deleteUser({ id: activeUser.id }));
+    handlePopoverClose();
+  };
+
+  // search filter hanlder
   const filteredUsers = users.filter((u) =>
     u.name.toLocaleLowerCase().includes(filterName.toLocaleLowerCase())
   );
@@ -91,10 +157,28 @@ function AdminUsers() {
           mb={5}
         >
           <Typography variant="h6">Users</Typography>
-          <Button size="small" variant="contained" startIcon={<PersonAdd />}>
+          <Button
+            size="small"
+            variant="contained"
+            startIcon={<PersonAdd />}
+            onClick={() => setIsAddModalOpen(true)}
+          >
             New User
           </Button>
         </Stack>
+
+        <AdminUserAddModal
+          isOpen={isAddModalOpen}
+          setIsOpen={setIsAddModalOpen}
+        />
+        {users.length ? (
+          <AdminUserEditModal
+            isOpen={isEditModalOpen}
+            setIsOpen={setIsEditModalOpen}
+            user={activeUser || users[0]}
+          />
+        ) : null}
+
         <Card>
           <TextField
             size="small"
@@ -137,66 +221,27 @@ function AdminUsers() {
               <TableBody>
                 {filteredUsers
                   .slice(page * rowsPerPage, rowsPerPage + page * rowsPerPage)
-                  .map((user) => {
-                    const selectedUser = selectedUsers.indexOf(user.id) !== -1;
+                  .map((user: TUser) => {
                     return (
-                      <TableRow
-                        hover
+                      <UserTableBody
                         key={user.id}
-                        tabIndex={-1}
-                        role="checkbox"
-                        selected={selectedUser}
-                      >
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            checked={selectedUser}
-                            onChange={(event) =>
-                              handleSelectClick(event, user.id)
-                            }
-                          />
-                        </TableCell>
-                        <TableCell component="th" scope="row" padding="none">
-                          <Stack
-                            direction="row"
-                            alignItems="center"
-                            spacing={2}
-                          >
-                            <Avatar alt={user.name} src={user.avatar} />
-                            <Typography variant="body1" noWrap>
-                              {user.name}
-                            </Typography>
-                          </Stack>
-                        </TableCell>
-                        <TableCell component={"td"} align="left">
-                          <Typography
-                            variant="caption"
-                            fontWeight={"400"}
-                            color={"text.primary"}
-                          >
-                            {user.email}
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="left">
-                          <Typography
-                            variant="caption"
-                            fontWeight={"400"}
-                            color={"text.primary"}
-                          >
-                            {user.role}
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="left">
-                          <Chip size="small" label={user.creationAt} />
-                        </TableCell>
-                        <TableCell align="right">
-                          <IconButton size="large" color="inherit">
-                            <MoreVert />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
+                        user={user}
+                        selectedUsers={selectedUsers}
+                        handleSelectClick={handleSelectClick}
+                        handlePopoverOpen={handlePopoverOpen}
+                      />
                     );
                   })}
               </TableBody>
+              {isLoading && !users.length && (
+                <TableBody>
+                  <TableRow>
+                    <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                      <LinearProgress />
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              )}
               {isNotFound && (
                 <TableBody>
                   <TableRow>
@@ -229,6 +274,13 @@ function AdminUsers() {
               </TableFooter>
             </Table>
           </TableContainer>
+
+          <TableOptionPopover
+            anchorEl={popoverEle}
+            handleEdit={handleUserEditClick}
+            handleDelete={handleUserDeleteClick}
+            handleCloseMenu={handlePopoverClose}
+          />
         </Card>
       </Container>
     </>

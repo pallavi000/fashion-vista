@@ -1,48 +1,64 @@
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
+// redux
+import { useSelector } from "react-redux";
+import { AppState, useAppDispatch } from "../redux/store";
+
+// MUI
 import {
   Box,
-  Breadcrumbs,
   Button,
   Container,
   FormControl,
   Grid,
-  InputLabel,
   MenuItem,
-  Link as MuiLink,
   Select,
   SelectChangeEvent,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { AppState, useAppDispatch } from "../redux/store";
+
+// reducers
 import {
   fetchProductsByCategory,
   setCategory,
 } from "../redux/reducers/categoryReducer";
-import { TProduct } from "../@types/product";
+
+// components
 import Product from "../components/Product";
 import BreadCrumb from "../components/Breadcrumb";
 import SidebarFilter from "../components/SidebarFilter";
+import SkeletonProductCard from "../components/skeleton/SkeletonProductCard";
+
+// icons
 import GridViewIcon from "@mui/icons-material/GridView";
 import BannerImg from "../images/category.png";
 import { ArrowLeft, ArrowRight } from "@mui/icons-material";
 
 function CategoryProducts() {
   const { id } = useParams();
+
+  // app dispatch
   const dispatch = useAppDispatch();
 
+  // pagination states
   const [offset, setOffset] = useState<number>(0);
   const [limit, setLimit] = useState<number>(10);
+
+  // sidebar filter states
   const [price, setPrice] = React.useState<number[]>([1, 5000]);
   const [selectedCategory, setSelectedCategory] = useState<number>(Number(id));
 
+  // categoreis states
   const categories = useSelector((state: AppState) => state.categories.data);
-  const { category, products } = useSelector((state: AppState) => ({
+
+  // current category and it's products state
+  const { category, products, isLoading } = useSelector((state: AppState) => ({
     category: state.category.data,
     products: state.category.products,
+    isLoading: state.category.isLoading,
   }));
 
+  // fetch products of a category
   React.useEffect(() => {
     dispatch(
       fetchProductsByCategory({
@@ -56,21 +72,13 @@ function CategoryProducts() {
     );
   }, [id, offset, limit, price, selectedCategory]);
 
+  // set current category
   React.useEffect(() => {
     if (categories.length) {
       const foundCategory = categories.find((cat) => cat.id === Number(id));
       if (foundCategory) dispatch(setCategory(foundCategory));
     }
   }, [categories, id]);
-
-  const breadcrumbs = [
-    <MuiLink underline="hover" key="1" color="inherit" href="/">
-      Home
-    </MuiLink>,
-    <Typography key="3" color="text.primary">
-      {category?.name}
-    </Typography>,
-  ];
 
   const handlePrevPage = () => {
     setOffset((prev) => prev - limit);
@@ -141,9 +149,13 @@ function CategoryProducts() {
             </Box>
           </Box>
           <Grid container spacing={3} columns={12} sx={{ marginTop: "2rem" }}>
-            {products.map((product) => {
-              return <Product product={product} />;
-            })}
+            {isLoading && !products?.length
+              ? [...Array(5)].map((_, index) => (
+                  <SkeletonProductCard key={index} />
+                ))
+              : products?.slice(0, 8).map((product) => {
+                  return <Product key={product.id} product={product} />;
+                })}
           </Grid>
           <Box
             sx={{
