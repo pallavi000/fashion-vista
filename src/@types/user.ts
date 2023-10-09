@@ -9,20 +9,13 @@ export interface RegisterInputs extends LoginInputs {
   avatar: string;
 }
 
-export type TAuthProps = {
-  setPage?: Function;
-  register?: any;
-  errors?: any;
-  isLoading: boolean;
-  setValue?: Function;
-  getValues?: Function;
-};
+export type TUserRole = "customer" | "admin";
 
 export type TUser = {
   id: number;
   email: string;
   name: string;
-  role: "customer" | "admin" | null;
+  role: TUserRole | null;
   avatar: string;
   creationAt: string;
   updatedAt: string;

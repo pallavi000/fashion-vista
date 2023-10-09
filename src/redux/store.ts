@@ -40,7 +40,7 @@ export const persistor = persistStore(store);
 // App State
 export type AppState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-// App Dispatch hook
+// App Dispatch
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 
 export default store;

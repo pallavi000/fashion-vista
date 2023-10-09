@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 
 // MUI
 import {
@@ -30,14 +30,41 @@ function Account() {
       <Grid container spacing={4}>
         <Grid item sm={12} md={4}>
           <Card>
-            <List component="nav">
-              <ListItemButton onClick={() => navigate("/account")}>
+            <List disablePadding>
+              <ListItemButton
+                component={NavLink}
+                to="/account/profile"
+                sx={{
+                  position: "relative",
+                  textTransform: "capitalize",
+                  color: "text.secondary",
+                  "&.active": {
+                    color: "text.primary",
+                    bgcolor: "action.selected",
+                    fontWeight: "bold",
+                  },
+                }}
+              >
                 <ListItemIcon>
                   <UserIcon />
                 </ListItemIcon>
                 <ListItemText primary="Account" />
               </ListItemButton>
-              <ListItemButton onClick={() => navigate("/account/orders")}>
+
+              <ListItemButton
+                component={NavLink}
+                to="/account/orders"
+                sx={{
+                  position: "relative",
+                  textTransform: "capitalize",
+                  color: "text.secondary",
+                  "&.active": {
+                    color: "text.primary",
+                    bgcolor: "action.selected",
+                    fontWeight: "bold",
+                  },
+                }}
+              >
                 <ListItemIcon>
                   <ShoppingCartIcon />
                 </ListItemIcon>

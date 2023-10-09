@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 // redux
 import { AppState, useAppDispatch } from "../redux/store";
 
@@ -15,6 +15,7 @@ import {
   Select,
   SelectChangeEvent,
   Typography,
+  ButtonGroup,
 } from "@mui/material";
 
 // icons
@@ -35,6 +36,7 @@ import { fetchSearchProducts } from "../redux/reducers/productsReducer";
 
 function SearchResult() {
   const location = useLocation();
+  const navigate = useNavigate();
 
   // query params
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -44,7 +46,7 @@ function SearchResult() {
 
   // for pagination
   const [offset, setOffset] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(10);
+  const [limit, setLimit] = useState<number>(12);
 
   // sidebar filter
   const [price, setPrice] = React.useState<number[]>([1, 5000]);
@@ -52,7 +54,7 @@ function SearchResult() {
 
   // products state
   const { products, isLoading } = useSelector((state: AppState) => ({
-    products: state.products.searchProducts,
+    products: state.products.data,
     isLoading: state.products.isLoading,
   }));
   // categories states
@@ -66,6 +68,8 @@ function SearchResult() {
     const query = queryParams.get("query");
     if (query) {
       setSearchQuery(query);
+    } else {
+      navigate("/not-found");
     }
   }, [location]);
 
@@ -95,7 +99,7 @@ function SearchResult() {
 
   return (
     <Container maxWidth="xl" sx={{ padding: "2rem 0rem" }}>
-      <Box sx={{ height: "350px", width: "100%" }}>
+      <Box sx={{ height: "250px", width: "100%" }}>
         <img
           src={BannerImg}
           style={{
@@ -143,7 +147,7 @@ function SearchResult() {
                   value={limit.toString()}
                   onChange={handleChange}
                 >
-                  <MenuItem value={10}>10</MenuItem>
+                  <MenuItem value={limit}>{limit}</MenuItem>
                   <MenuItem value={20}>20</MenuItem>
                   <MenuItem value={30}>30</MenuItem>
                 </Select>
@@ -151,40 +155,43 @@ function SearchResult() {
             </Box>
           </Box>
           <Grid container spacing={3} columns={12} sx={{ marginTop: "2rem" }}>
-            {isLoading && !products?.length
-              ? [...Array(5)].map((_, index) => (
+            {isLoading
+              ? [...Array(limit)].map((_, index) => (
                   <SkeletonProductCard key={index} />
                 ))
-              : products?.slice(0, 8).map((product) => {
+              : products?.slice(offset, offset + limit).map((product) => {
                   return <Product key={product.id} product={product} />;
                 })}
           </Grid>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: "2rem",
-              margin: "2rem 0rem",
-              justifyContent: "flex-end",
-            }}
-          >
+
+          <ButtonGroup sx={{ float: "right" }}>
             <Button
               variant="contained"
-              disabled={!Boolean(offset)}
+              disabled={isLoading || !Boolean(offset)}
               startIcon={<ArrowLeft />}
               onClick={handlePrevPage}
             >
               Prev
             </Button>
+            <Button disabled size="small">
+              <Typography variant="body1">
+                {Math.ceil((offset + 1) / limit)}
+              </Typography>
+            </Button>
             <Button
               variant="contained"
-              disabled={products.length === limit ? false : true}
+              disabled={
+                isLoading ||
+                products?.slice(offset, offset + limit).length !== limit
+                  ? true
+                  : false
+              }
               endIcon={<ArrowRight />}
               onClick={handleNextPage}
             >
               Next
             </Button>
-          </Box>
+          </ButtonGroup>
         </Grid>
       </Grid>
     </Container>

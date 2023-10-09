@@ -1,5 +1,6 @@
 import { TCart } from "./cart";
 import { TCategory } from "./category";
+import { TOrder } from "./order";
 import { TProduct } from "./product";
 import { TUser } from "./user";
 
@@ -11,8 +12,6 @@ export type ProductState = {
 
 export type ProductsState = {
   data: TProduct[];
-  filterProducts: TProduct[];
-  searchProducts: TProduct[];
   isLoading: boolean;
   error: string | null;
 };

@@ -42,7 +42,7 @@ rest.delete("/products/:id", async (req, res, ctx) => {
   if (findIndex !== -1) {
     return res(ctx.json(true));
   }
-  console.log("not delete");
+
   return res(ctx.json(false));
 });
 

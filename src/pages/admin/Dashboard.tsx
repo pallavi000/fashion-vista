@@ -90,8 +90,8 @@ const sites: TVistorsBySite[] = [
 ];
 const newsLists: TBlogPostNews[] = [...Array(5)].map((_, index) => ({
   id: Math.floor(Math.random() * 1000),
-  title: "Product Creative Architect",
-  description: "National Group Specialist",
+  title: "Blog Post Title",
+  description: "Blog Post Description",
   image: "/images/img1.png",
   postedAt: "about 5 hours ago",
 }));

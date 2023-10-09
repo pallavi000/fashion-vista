@@ -85,7 +85,7 @@ function AdminProducts() {
   }, []);
 
   // handle checkbox all click
-  const handleSelectAllClick = (event: any) => {
+  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       const newSelecteds = products.map((u) => u.id);
       setSelectedProducts(newSelecteds);
@@ -95,7 +95,10 @@ function AdminProducts() {
   };
 
   // handle single checkbox click
-  const handleSelectClick = (event: any, id: number) => {
+  const handleSelectClick = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    id: number
+  ) => {
     if (selectedProducts.includes(id)) {
       const filterdSelectedUsers = selectedProducts.filter((s) => s !== id);
       setSelectedProducts(filterdSelectedUsers);
@@ -105,7 +108,7 @@ function AdminProducts() {
   };
 
   // handle search by name
-  const handleFilterByName = (event: any) => {
+  const handleFilterByName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPage(0);
     setFilterName(event.target.value);
   };

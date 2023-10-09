@@ -94,9 +94,9 @@ function Home() {
         </Grid>
       </Container>
       <Box
-        bgcolor={"primary.main"}
+        bgcolor={"background.neutral"}
+        color="text.primary"
         padding={"2rem 2rem 6rem 2rem"}
-        color="primary.contrastText"
       >
         <Typography variant="h4" padding={"2rem 0rem"}>
           HandPicked Collection

@@ -22,21 +22,18 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addToCart: (state, action: PayloadAction<TProduct>) => {
+    addToCart: (state, action: PayloadAction<TCart>) => {
       const productIndex = state.items.findIndex(
-        (item) => item.product.id === action.payload.id
+        (item) => item.product.id === action.payload.product.id
       );
       if (productIndex != -1) {
-        state.items[productIndex].quantity++;
+        state.items[productIndex].quantity += action.payload.quantity;
       } else {
-        const newCartItem: TCart = {
-          quantity: 1,
-          product: action.payload,
-        };
-        state.items.push(newCartItem);
+        state.items.push(action.payload);
       }
-      state.totalQuantity++;
-      state.totalPrice += action.payload.price;
+      state.totalQuantity += action.payload.quantity;
+      state.totalPrice +=
+        action.payload.product.price * action.payload.quantity;
     },
 
     removeFromCart: (state, action: PayloadAction<TProduct>) => {
@@ -51,6 +48,26 @@ const cartSlice = createSlice({
           state.items[productIndex].product.price *
             state.items[productIndex].quantity;
         state.items.splice(productIndex, 1);
+      }
+    },
+    increaseCartItemQuantity: (state, action: PayloadAction<TCart>) => {
+      const productIndex = state.items.findIndex(
+        (item) => item.product.id === action.payload.product.id
+      );
+      if (productIndex != -1) {
+        state.items[productIndex].quantity++;
+        state.totalQuantity++;
+        state.totalPrice += action.payload.product.price;
+      }
+    },
+    decreaseCartItemQuantity: (state, action: PayloadAction<TCart>) => {
+      const productIndex = state.items.findIndex(
+        (item) => item.product.id === action.payload.product.id
+      );
+      if (productIndex != -1) {
+        state.items[productIndex].quantity--;
+        state.totalQuantity--;
+        state.totalPrice -= action.payload.product.price;
       }
     },
     emptyCart: (state) => {
@@ -68,6 +85,12 @@ const cartSlice = createSlice({
 });
 
 // actions
-export const { addToCart, removeFromCart, emptyCart } = cartSlice.actions;
+export const {
+  addToCart,
+  removeFromCart,
+  emptyCart,
+  increaseCartItemQuantity,
+  decreaseCartItemQuantity,
+} = cartSlice.actions;
 // redux persist reducer
 export default persistReducer(cartPersistConfig, cartSlice.reducer);

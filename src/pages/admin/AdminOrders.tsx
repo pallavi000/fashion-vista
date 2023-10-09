@@ -41,7 +41,9 @@ function AdminOrders() {
   const orders: TOrder[] = useSelector((state: AppState) => state.orders.data);
 
   // handle search by order id
-  const handleFilterByOrderId = (event: any) => {
+  const handleFilterByOrderId = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setPage(0);
     setFilterOrderId(event.target.value);
   };

@@ -107,6 +107,16 @@ const authSlice = createSlice({
         error: null,
       };
     });
+    builder.addCase(getCurrentUser.rejected, (state) => {
+      return {
+        ...state,
+        access_token: null,
+        refresh_token: null,
+        isAuthenticated: false,
+        isLoading: false,
+        error: null,
+      };
+    });
   },
 });
 
@@ -133,11 +143,9 @@ export const loginUser = createAsyncThunk(
 
 export const registerUser = createAsyncThunk(
   "registerUser",
-  async (data: RegisterInputs, { dispatch }) => {
+  async (data: RegisterInputs) => {
     try {
       const result = await axiosInstance.post("/users", data);
-      // login user
-      dispatch(loginUser({ email: data.email, password: data.password }));
       return result.data;
     } catch (e) {
       const error = e as AxiosError;

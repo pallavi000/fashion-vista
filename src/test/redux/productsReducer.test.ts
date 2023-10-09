@@ -69,7 +69,7 @@ describe("test product reducers", () => {
 
   test("update product data", async () => {
     let data = {
-      id: 100,
+      id: 9,
       title: "new product",
       price: 123,
       description: "it is a new product",
@@ -80,7 +80,7 @@ describe("test product reducers", () => {
 
     const res = store.dispatch(updateAdminProduct(data));
     expect(res.arg).toMatchObject({
-      id: 100,
+      id: 9,
       title: "new product",
       price: 123,
       description: "it is a new product",
@@ -90,8 +90,8 @@ describe("test product reducers", () => {
     });
   });
 
-  //   test("delete product by id", async () => {
-  //     const res = store.dispatch(deleteAdminProduct({ id: 9 }));
-  //     expect((await res).meta.arg).toBe(9);
-  //   });
+  test("delete product by id", async () => {
+    const res = store.dispatch(deleteAdminProduct({ id: 9 }));
+    expect(res.arg.id).toBe(9);
+  });
 });

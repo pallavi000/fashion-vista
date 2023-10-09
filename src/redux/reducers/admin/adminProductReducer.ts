@@ -14,8 +14,6 @@ import { showApiErrorToastr, showCustomToastr } from "../../../utils/helper";
 // initial states
 const initialState: ProductsState = {
   data: [],
-  filterProducts: [],
-  searchProducts: [],
   isLoading: false,
   error: null,
 };

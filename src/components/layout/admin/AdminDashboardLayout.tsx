@@ -4,8 +4,9 @@ import { Box } from "@mui/material";
 // components
 import TopBar from "./TopBar";
 import SideBar from "./SideBar";
+import { Outlet } from "react-router-dom";
 
-function AdminDashboardLayout({ children }: { children: any }) {
+function AdminDashboardLayout() {
   return (
     <Box
       sx={{
@@ -23,7 +24,7 @@ function AdminDashboardLayout({ children }: { children: any }) {
           paddingBottom: "4rem",
         }}
       >
-        {children}
+        <Outlet />
       </Box>
     </Box>
   );

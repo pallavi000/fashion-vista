@@ -15,6 +15,7 @@ import {
   Select,
   SelectChangeEvent,
   Typography,
+  ButtonGroup,
 } from "@mui/material";
 
 // components
@@ -41,7 +42,7 @@ function Products() {
 
   // pagination states
   const [offset, setOffset] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(10);
+  const [limit, setLimit] = useState<number>(12);
 
   // products filter states
   const [price, setPrice] = React.useState<number[]>([1, 5000]);
@@ -49,7 +50,7 @@ function Products() {
 
   // products state
   const { products, isLoading } = useSelector((state: AppState) => ({
-    products: state.products.filterProducts,
+    products: state.products.data,
     isLoading: state.products.isLoading,
   }));
 
@@ -83,7 +84,7 @@ function Products() {
 
   return (
     <Container maxWidth="xl" sx={{ padding: "2rem 0rem" }}>
-      <Box sx={{ height: "350px", width: "100%" }}>
+      <Box sx={{ height: "250px", width: "100%" }}>
         <img
           src={BannerImg}
           style={{
@@ -131,7 +132,7 @@ function Products() {
                   value={limit.toString()}
                   onChange={handleChange}
                 >
-                  <MenuItem value={10}>10</MenuItem>
+                  <MenuItem value={limit}>{limit}</MenuItem>
                   <MenuItem value={20}>20</MenuItem>
                   <MenuItem value={30}>30</MenuItem>
                 </Select>
@@ -139,40 +140,37 @@ function Products() {
             </Box>
           </Box>
           <Grid container spacing={3} columns={12} sx={{ marginTop: "2rem" }}>
-            {isLoading && !products?.length
-              ? [...Array(5)].map((_, index) => (
+            {isLoading
+              ? [...Array(limit)].map((_, index) => (
                   <SkeletonProductCard key={index} />
                 ))
-              : products?.slice(0, 8).map((product) => {
+              : products.map((product) => {
                   return <Product key={product.id} product={product} />;
                 })}
           </Grid>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: "2rem",
-              margin: "2rem 0rem",
-              justifyContent: "flex-end",
-            }}
-          >
+          <ButtonGroup sx={{ float: "right" }}>
             <Button
               variant="contained"
-              disabled={!Boolean(offset)}
+              disabled={isLoading || !Boolean(offset)}
               startIcon={<ArrowLeft />}
               onClick={handlePrevPage}
             >
               Prev
             </Button>
+            <Button disabled size="small">
+              <Typography variant="body1">
+                {Math.ceil((offset + 1) / limit)}
+              </Typography>
+            </Button>
             <Button
               variant="contained"
-              disabled={products.length === limit ? false : true}
+              disabled={isLoading || products.length !== limit ? true : false}
               endIcon={<ArrowRight />}
               onClick={handleNextPage}
             >
               Next
             </Button>
-          </Box>
+          </ButtonGroup>
         </Grid>
       </Grid>
     </Container>

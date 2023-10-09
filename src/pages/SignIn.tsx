@@ -26,6 +26,9 @@ import { LoginInputs } from "../@types/user";
 // components
 import LoadingButton from "../components/LoadingButton";
 
+// routes
+import { ROUTES } from "../routes/routers";
+
 // yup validation schema
 const validationSchema = yup.object().shape({
   email: yup
@@ -63,8 +66,8 @@ function SignIn() {
   React.useEffect(() => {
     if (user) {
       user.role && user.role === "admin"
-        ? navigate("/admin/dashboard")
-        : navigate("/");
+        ? navigate(ROUTES.ADMIN_DASHBOARD)
+        : navigate(ROUTES.HOME);
     }
   }, [user]);
 

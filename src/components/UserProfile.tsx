@@ -49,7 +49,6 @@ function UserProfile() {
         sx={{
           display: "flex",
           flexDirection: "column",
-
           borderRadius: "0.3rem",
           margin: "2rem",
           marginTop: "0.5rem",
@@ -62,24 +61,32 @@ function UserProfile() {
       >
         <Box>
           <Typography
-            sx={{ fontSize: "14px", color: "grey", fontWeight: "500" }}
+            sx={{ fontSize: "14px", color: "text.primary", fontWeight: "500" }}
           >
             Full Name
           </Typography>
           <Typography
-            sx={{ fontSize: "14px", color: "black", fontWeight: "500" }}
+            sx={{
+              fontSize: "14px",
+              color: "text.secondary",
+              fontWeight: "500",
+            }}
           >
             {user?.name}
           </Typography>
         </Box>
         <Box>
           <Typography
-            sx={{ fontSize: "14px", color: "grey", fontWeight: "500" }}
+            sx={{ fontSize: "14px", color: "text.primary", fontWeight: "500" }}
           >
             Email
           </Typography>
           <Typography
-            sx={{ fontSize: "14px", color: "black", fontWeight: "500" }}
+            sx={{
+              fontSize: "14px",
+              color: "text.secondary",
+              fontWeight: "500",
+            }}
           >
             {user?.email}
           </Typography>
@@ -87,12 +94,16 @@ function UserProfile() {
 
         <Box>
           <Typography
-            sx={{ fontSize: "14px", color: "grey", fontWeight: "500" }}
+            sx={{ fontSize: "14px", color: "text.primary", fontWeight: "500" }}
           >
             Role
           </Typography>
           <Typography
-            sx={{ fontSize: "14px", color: "black", fontWeight: "500" }}
+            sx={{
+              fontSize: "14px",
+              color: "text.secondary",
+              fontWeight: "500",
+            }}
           >
             {user?.role}
           </Typography>

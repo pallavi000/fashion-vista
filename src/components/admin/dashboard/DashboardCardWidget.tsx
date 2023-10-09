@@ -29,8 +29,8 @@ function DashboardCardWidget({
         py: 5,
         boxShadow: 0,
         textAlign: "center",
-        color: (theme: any) => theme.palette[color].darker,
-        bgcolor: (theme: any) => theme.palette[color].lighter,
+        color: (theme: Theme) => theme.palette[color].dark,
+        bgcolor: (theme: Theme) => theme.palette[color].light,
         ...sx,
       }}
       {...props}

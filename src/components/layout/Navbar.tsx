@@ -35,6 +35,15 @@ import { TUser } from "../../@types/user";
 import { logoutUser } from "../../redux/reducers/authReducer";
 import { fetchCategories } from "../../redux/reducers/categoriesReducer";
 
+// routes
+import { ROUTES } from "../../routes/routers";
+
+// helpers
+import { showCustomToastr } from "../../utils/helper";
+
+// components
+import ThemeModeSwitch from "../ThemeModeSwitch";
+
 export default function Navbar() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -57,9 +66,7 @@ export default function Navbar() {
   );
 
   // cart state
-  const cartQuantity = useSelector(
-    (state: AppState) => state.cart.totalQuantity
-  );
+  const cartItem = useSelector((state: AppState) => state.cart);
 
   // categories
   const categories = useSelector((state: AppState) => state.categories.data);
@@ -81,7 +88,18 @@ export default function Navbar() {
   const logout = () => {
     handleClose();
     dispatch(logoutUser());
-    navigate("/");
+    navigate(ROUTES.HOME);
+  };
+
+  // search
+  const handleSearch = () => {
+    if (searchQuery?.trim().length < 3) {
+      return showCustomToastr(
+        "Search query length must of at least of 3 characters.",
+        "error"
+      );
+    }
+    navigate(`/search/?query=${searchQuery}`);
   };
 
   return (
@@ -93,8 +111,8 @@ export default function Navbar() {
         sx={{
           borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
           padding: "0.5rem 0rem",
-          backgroundColor: "white",
-          color: "#2a2a2a",
+          backgroundColor: "background.default",
+          color: "text.primary",
         }}
       >
         <Toolbar sx={{ flexWrap: "wrap", gap: "2rem", fontSize: "18px" }}>
@@ -115,6 +133,7 @@ export default function Navbar() {
                 Logo
               </Typography>
             </Link>
+
             {categories.slice(0, 6).map((category) => {
               return (
                 <Link
@@ -128,6 +147,7 @@ export default function Navbar() {
               );
             })}
           </Box>
+
           <nav style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
             <OutlinedInput
               required
@@ -136,16 +156,22 @@ export default function Navbar() {
               sx={{ background: "default" }}
               placeholder="Search for products..."
               onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearch();
+                }
+              }}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton edge="end">
-                    <SearchIcon
-                      onClick={() => navigate(`/search/?query=${searchQuery}`)}
-                    />
+                    <SearchIcon onClick={() => handleSearch()} />
                   </IconButton>
                 </InputAdornment>
               }
             />
+
+            <ThemeModeSwitch />
+
             {isAuthenticated && user ? (
               <Box
                 sx={{ display: "flex", gap: "0.5rem", alignItems: "center" }}
@@ -153,11 +179,13 @@ export default function Navbar() {
                 <IconButton>
                   <FavoriteBorder />
                 </IconButton>
-                <IconButton onClick={() => navigate("/cart")}>
-                  <Badge badgeContent={cartQuantity} color="success">
+
+                <IconButton onClick={() => navigate(ROUTES.CART)}>
+                  <Badge badgeContent={cartItem.items.length} color="success">
                     <ShoppingBagOutlined />
                   </Badge>
                 </IconButton>
+
                 <Tooltip title={user.name}>
                   <IconButton onClick={handleMenu}>
                     <Avatar
@@ -167,17 +195,25 @@ export default function Navbar() {
                     />
                   </IconButton>
                 </Tooltip>
+
                 <Menu
                   id="menu-appbar"
                   anchorEl={anchorEl}
                   keepMounted
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
+                  PaperProps={{
+                    sx: {
+                      mt: 2.2,
+                      ml: 0.75,
+                      width: 200,
+                    },
+                  }}
                 >
                   <MenuItem
                     onClick={() => {
                       handleClose();
-                      navigate("/account");
+                      navigate("/account/profile");
                     }}
                     sx={{ minWidth: 180 }}
                   >
@@ -190,10 +226,10 @@ export default function Navbar() {
               </Box>
             ) : (
               <>
-                <Link to={"/sign-in"}>
+                <Link to={ROUTES.SIGN_IN}>
                   <Button variant="contained">Login</Button>
                 </Link>
-                <Link to={"/register"}>
+                <Link to={ROUTES.REGISTER}>
                   <Button variant="outlined">Register</Button>
                 </Link>
               </>

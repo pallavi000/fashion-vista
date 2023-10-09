@@ -3,17 +3,31 @@ import React, { useState } from "react";
 import { useAppDispatch } from "../redux/store";
 
 // MUI
-import { Box, Fab, TableCell, TableRow, Typography } from "@mui/material";
+import {
+  Box,
+  Fab,
+  TableCell,
+  TableRow,
+  Typography,
+  Button,
+  ButtonGroup,
+} from "@mui/material";
 
 //icons
 import Close from "@mui/icons-material/Close";
+import Add from "@mui/icons-material/Add";
+import Remove from "@mui/icons-material/Remove";
 
 // types
 import { TCart } from "../@types/cart";
 import { TProduct } from "../@types/product";
 
 // reducers
-import { removeFromCart } from "../redux/reducers/cartReducer";
+import {
+  decreaseCartItemQuantity,
+  increaseCartItemQuantity,
+  removeFromCart,
+} from "../redux/reducers/cartReducer";
 
 // helpers
 import { showCustomToastr } from "../utils/helper";
@@ -22,6 +36,12 @@ type CartItemProps = { item: TCart };
 
 function CartItem({ item }: CartItemProps) {
   const dispatch = useAppDispatch();
+
+  // Quantity change handler
+  const handleQuantityChange = (action: "increase" | "decrease") => {
+    if (action === "increase") dispatch(increaseCartItemQuantity(item));
+    if (action === "decrease") dispatch(decreaseCartItemQuantity(item));
+  };
 
   // remove item from cart handler
   const handleRemoveCart = async (product: TProduct) => {
@@ -69,7 +89,24 @@ function CartItem({ item }: CartItemProps) {
         </Box>
       </TableCell>
       <TableCell>{item.product.category.name}</TableCell>
-      <TableCell>{item.quantity}</TableCell>
+      <TableCell align="center">
+        <ButtonGroup size="small" variant="contained" disableElevation>
+          <Button
+            color="inherit"
+            disabled={item.quantity <= 1 ? true : false}
+            onClick={() => handleQuantityChange("decrease")}
+          >
+            <Remove fontSize="small" />
+          </Button>
+          <Button disabled>{item.quantity}</Button>
+          <Button
+            color="inherit"
+            onClick={() => handleQuantityChange("increase")}
+          >
+            <Add fontSize="small" />
+          </Button>
+        </ButtonGroup>
+      </TableCell>
       <TableCell>${item.product.price}</TableCell>
       <TableCell>
         <Fab

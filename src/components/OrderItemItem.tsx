@@ -1,7 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 // MUI
-import { Box, Button, Divider, Grid, Typography } from "@mui/material";
+import { TableCell, TableRow, Box, Chip, Tooltip } from "@mui/material";
 
 // types
 import { TOrder } from "../@types/order";
@@ -15,62 +16,33 @@ type OrderItemItemProps = {
 
 function OrderItemItem({ order, item }: OrderItemItemProps) {
   return (
-    <Grid container columns={12} margin={"0.8rem 0rem"}>
-      <Grid
-        item
-        xs={3}
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          gap: "0.5rem",
-        }}
-      >
-        <Box sx={{ height: "75px", width: "75px" }}>
-          <img
-            src={item.product.images[0]}
-            style={{
-              height: "100%",
-              width: "100%",
-              objectFit: "cover",
-              borderRadius: "0.3rem",
-            }}
-          />
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <Typography variant="caption">{item.product.title}</Typography>
-        </Box>
-      </Grid>
-      <Grid
-        item
-        xs={9}
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <Typography variant="caption">{order.orderId}</Typography>
-        <Typography variant="caption">{order.orderDate}</Typography>
-        <Typography variant="caption">${item.product.price}</Typography>
-        <Typography variant="caption">{item.quantity}</Typography>
-        <Typography variant="caption">
-          ${item.quantity * item.product.price}
-        </Typography>
-        <Typography variant="caption">{order.paymentMethod}</Typography>
-        <Button
-          variant="outlined"
-          size="small"
-          sx={{ borderColor: "greenyellow" }}
-        >
-          {order.deliveryStatus}
-        </Button>
-      </Grid>
-    </Grid>
+    <TableRow>
+      <TableCell component="th" scope="row">
+        <Tooltip title={item.product.title}>
+          <Link to={`/product-detail/${item.product.id}`}>
+            <Box width={40} height={40}>
+              <img
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "contain",
+                }}
+                alt={item.product.title}
+                src={item.product.images[0]}
+              />
+            </Box>
+          </Link>
+        </Tooltip>
+      </TableCell>
+      <TableCell>{order.orderDate}</TableCell>
+      <TableCell align="center">{order.paymentMethod}</TableCell>
+      <TableCell>${item.product.price}</TableCell>
+      <TableCell>{item.quantity}</TableCell>
+      <TableCell>${item.product.price * item.quantity}</TableCell>
+      <TableCell>
+        <Chip size="small" label={order.deliveryStatus} color="primary" />
+      </TableCell>
+    </TableRow>
   );
 }
 

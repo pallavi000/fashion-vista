@@ -17,9 +17,9 @@ function Footer() {
         container
         spacing={3}
         columns={12}
-        bgcolor={"primary.main"}
+        bgcolor={"background.neutral"}
+        color="text.primary"
         justifyContent="space-between"
-        color="primary.contrastText"
         padding={"2rem 2rem"}
         marginTop={"8rem"}
       >
@@ -28,7 +28,6 @@ function Footer() {
             container
             spacing={3}
             columns={12}
-            bgcolor={"primary.main"}
             justifyContent="space-between"
           >
             <Grid item xs={12} sm={6} md={4}>
@@ -71,16 +70,16 @@ function Footer() {
             }}
           >
             <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-              <IconButton sx={{ color: "primary.contrastText" }}>
+              <IconButton color="inherit">
                 <FacebookIcon />
               </IconButton>
-              <IconButton sx={{ color: "primary.contrastText" }}>
+              <IconButton color="inherit">
                 <InstagramIcon />
               </IconButton>
-              <IconButton sx={{ color: "primary.contrastText" }}>
+              <IconButton color="inherit">
                 <TwitterIcon />
               </IconButton>
-              <IconButton sx={{ color: "primary.contrastText" }}>
+              <IconButton color="inherit">
                 <YouTubeIcon />
               </IconButton>
             </Box>

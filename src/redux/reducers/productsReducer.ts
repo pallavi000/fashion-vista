@@ -10,8 +10,6 @@ import axiosInstance from "../../utils/AxiosInstance";
 // initial state
 const initialState: ProductsState = {
   data: [],
-  searchProducts: [],
-  filterProducts: [],
   isLoading: false,
   error: null,
 };
@@ -55,7 +53,7 @@ const productsSlice = createSlice({
         ...state,
         isLoading: false,
         error: null,
-        filterProducts: action.payload,
+        data: action.payload,
       };
     });
     builder.addCase(fetchFilterProducts.rejected, (state, action) => {
@@ -77,7 +75,7 @@ const productsSlice = createSlice({
         ...state,
         isLoading: false,
         error: null,
-        searchProducts: action.payload,
+        data: action.payload,
       };
     });
     builder.addCase(fetchSearchProducts.rejected, (state, action) => {

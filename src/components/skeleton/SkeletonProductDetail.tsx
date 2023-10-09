@@ -1,8 +1,6 @@
 // @mui
 import { Grid, Skeleton, GridProps, Divider, Box } from "@mui/material";
 
-// ----------------------------------------------------------------------
-
 export default function SkeletonProductDetail({ ...props }: GridProps) {
   return (
     <Grid container spacing={6} {...props}>

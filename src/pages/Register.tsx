@@ -15,10 +15,13 @@ import UserForm from "../components/UserForm";
 import LoadingButton from "../components/LoadingButton";
 
 // reducers
-import { registerUser } from "../redux/reducers/authReducer";
+import { loginUser, registerUser } from "../redux/reducers/authReducer";
 
 // types
 import { RegisterInputs } from "../@types/user";
+
+// routes
+import { ROUTES } from "../routes/routers";
 
 // yup form validation schema
 const validationSchema = yup.object().shape({
@@ -50,7 +53,7 @@ function Register() {
   // redirect user after successful registraion/login
   React.useEffect(() => {
     if (isAuthenticated) {
-      navigate("/");
+      navigate(ROUTES.HOME);
     }
   }, [isAuthenticated]);
 
@@ -70,8 +73,10 @@ function Register() {
   }, []);
 
   // form submit handler
-  const onSubmit: SubmitHandler<RegisterInputs> = (data) => {
-    dispatch(registerUser(data));
+  const onSubmit: SubmitHandler<RegisterInputs> = async (data) => {
+    await dispatch(registerUser(data));
+    // login user
+    dispatch(loginUser({ email: data.email, password: data.password }));
   };
 
   return (

@@ -27,14 +27,18 @@ import { TOrder } from "../@types/order";
 import { getOrderDate, getOrderId } from "../utils/helper";
 
 // theme
-import theme from "../utils/theme";
-import { TCart } from "../@types/cart";
 import { CartState } from "../@types/reduxState";
+
+// context
+import { useThemeContext } from "../context/ThemeContext";
 
 // load stripe
 const stripePromise = loadStripe("pk_test_TYooMQauvdEDq54NiTphI7jx");
 
 function PaymentForm({ handleNext }: { handleNext: Function }) {
+  // context
+  const { theme, themeMode } = useThemeContext();
+
   // cart items states
   const cart = useSelector((state: AppState) => state.cart);
 
@@ -44,6 +48,7 @@ function PaymentForm({ handleNext }: { handleNext: Function }) {
     amount: cart.totalPrice,
     currency: "usd",
     appearance: {
+      theme: themeMode === "dark" ? "night" : "stripe",
       variables: {
         colorPrimary: theme.palette.primary.main,
       },
@@ -68,7 +73,7 @@ function PaymentHandler({ cart }: { cart: CartState }) {
   const elements = useElements();
 
   // handle payment form submit
-  const handleSubmit = async (event: any) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!stripe || !elements) {
       return;

@@ -7,6 +7,8 @@ export type TProduct = {
   description: string;
   category: TCategory;
   images: string[];
+  creationAt?: string;
+  updatedAt?: string;
 };
 
 export interface ProductInputs {

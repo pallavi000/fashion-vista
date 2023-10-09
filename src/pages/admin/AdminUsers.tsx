@@ -76,7 +76,7 @@ function AdminUsers() {
   }, []);
 
   // handle checkbox all click
-  const handleSelectAllClick = (event: any) => {
+  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       const newSelecteds = users.map((u) => u.id);
       setSelectedUsers(newSelecteds);
@@ -86,7 +86,10 @@ function AdminUsers() {
   };
 
   // handle single checkbox click
-  const handleSelectClick = (event: any, id: number) => {
+  const handleSelectClick = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    id: number
+  ) => {
     if (selectedUsers.includes(id)) {
       const filterdSelectedUsers = selectedUsers.filter((s) => s !== id);
       setSelectedUsers(filterdSelectedUsers);
@@ -96,7 +99,7 @@ function AdminUsers() {
   };
 
   // handle search by name
-  const handleFilterByName = (event: any) => {
+  const handleFilterByName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPage(0);
     setFilterName(event.target.value);
   };

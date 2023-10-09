@@ -66,7 +66,7 @@ function Cart() {
                   <TableRow>
                     <TableCell>Product</TableCell>
                     <TableCell>Category</TableCell>
-                    <TableCell>Quantity</TableCell>
+                    <TableCell align="center">Quantity</TableCell>
                     <TableCell>Price</TableCell>
                     <TableCell>Action</TableCell>
                   </TableRow>
