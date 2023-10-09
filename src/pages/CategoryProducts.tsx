@@ -97,6 +97,7 @@ function CategoryProducts() {
       <Box sx={{ height: "250px", width: "100%" }}>
         <img
           src={BannerImg}
+          alt="banner_img"
           style={{
             height: "100%",
             width: "100%",

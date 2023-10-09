@@ -13,8 +13,6 @@ import {
   Container,
   Divider,
   Grid,
-  Link,
-  Paper,
   Stack,
   Typography,
 } from "@mui/material";

@@ -52,7 +52,6 @@ export const fetchProductById = createAsyncThunk(
   async ({ id }: { id: number }) => {
     try {
       const result = await axiosInstance.get(`/products/${id}`);
-      console.log(result.data);
       return result.data;
     } catch (e) {
       const error = e as AxiosError;

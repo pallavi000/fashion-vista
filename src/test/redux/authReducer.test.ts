@@ -1,4 +1,3 @@
-import { rest } from "msw";
 import usersServer from "../../server/userServer";
 import store from "../../redux/store";
 import { loginUser } from "../../redux/reducers/authReducer";
@@ -10,8 +9,8 @@ afterEach(() => usersServer.resetHandlers());
 
 afterAll(() => usersServer.close());
 
-describe("auth reducers test", () => {
-  test("test login user", async () => {
+describe("auth reducers", () => {
+  test("should test login user", async () => {
     const data: LoginInputs = {
       email: "john@mail.com",
       password: "changeme",

@@ -142,6 +142,7 @@ function ProductDetail() {
                 <Box sx={{ height: "500px" }}>
                   <img
                     src={product?.images[0]}
+                    alt={`product_${product?.id}`}
                     style={{
                       height: "100%",
                       width: "100%",

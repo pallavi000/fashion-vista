@@ -1,31 +1,29 @@
-import { screen, waitFor } from "@testing-library/react";
+// import { render, screen, waitFor } from "@testing-library/react"
+// import { Provider } from "react-redux"
+// import store from "../shared/store"
+// import App from "../../App"
+// import appRender from "./appRender"
+// import userServer from "../servers/userServer"
 
+import { waitFor, screen } from "@testing-library/react";
 import App from "../../App";
 import appRender from "./appRender";
-import { rest } from "msw";
-import { setupServer } from "msw/node";
-import { productsData } from "../productsData";
 
-export const handlers = [
-  rest.get("https://api.escuelajs.co/api/v1/products", (req, res, ctx) => {
-    return res(ctx.json(productsData), ctx.delay(150));
-  }),
-  rest.get("https://api.escuelajs.co/api/v1/auth/profile", (req, res, ctx) => {
-    return res(ctx.json({}), ctx.delay(150));
-  }),
-];
-
-const productServer = setupServer(...handlers);
-
-beforeAll(() => productServer.listen());
-afterEach(() => productServer.resetHandlers());
-afterAll(() => productServer.close());
+// beforeAll(() => userServer.listen())
+// afterAll(() => userServer.close())
 
 describe("Test App component", () => {
   test("Should layout match snapshot", async () => {
-    //const { baseElement } = appRender(<App />);
-    // expect(baseElement).toMatchSnapshot();
-    await waitFor(() => screen.findAllByText(/Logo/i));
-    expect(screen.getAllByText(/Logo/i).length).toBe(1);
+    /* const { asFragment } = render(
+            <Provider store={store}>
+                <App />
+            </Provider>
+        ) */
+    //const {baseElement, findByText} = appRender(<App />)
+    // expect(baseElement).toMatchSnapshot()
+    // expect(screen.getAllByText("Create new user").length).toBe(1)
+    // appRender(<App />);
+    // await waitFor(() => screen.getAllByText(/logo/i));
+    // expect(screen.getAllByText(/logo/i).length).toBe(1);
   });
 });

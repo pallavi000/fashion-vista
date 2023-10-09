@@ -5,7 +5,6 @@ import { TableCell, TableRow, Typography, Chip, Box } from "@mui/material";
 
 // types
 import { TOrder } from "../../../@types/order";
-import { TCart } from "../../../@types/cart";
 
 // component props type
 type OrderTableBodyProps = {

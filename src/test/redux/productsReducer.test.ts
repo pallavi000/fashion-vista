@@ -1,10 +1,6 @@
-import { rest } from "msw";
 import { fetchAllProducts } from "../../redux/reducers/productsReducer";
 import store from "../../redux/store";
-import { productsData } from "../testData/productData";
-import { setupServer } from "msw/node";
 import { fetchProductById } from "../../redux/reducers/productReducer";
-import { TProduct } from "../../@types/product";
 import productsServer from "../../server/productServer";
 import {
   addNewProduct,
@@ -18,13 +14,13 @@ afterEach(() => productsServer.resetHandlers());
 
 afterAll(() => productsServer.close());
 
-describe("test product reducers", () => {
-  test("test fetchAllProducts", async () => {
+describe("product reducers", () => {
+  test("should successfully fetch all products", async () => {
     await store.dispatch(fetchAllProducts({ offset: 0, limit: 10 }));
     expect(store.getState().products.data.length).toBe(3);
   });
 
-  test("fetch single product", async () => {
+  test("should fetch single product", async () => {
     await store.dispatch(fetchProductById({ id: 9 }));
     expect(store.getState().product.data).toMatchObject({
       id: 9,
@@ -45,7 +41,7 @@ describe("test product reducers", () => {
     });
   });
 
-  test("add new product", async () => {
+  test("should add new product", async () => {
     let data = {
       id: 100,
       title: "new product",
@@ -67,7 +63,7 @@ describe("test product reducers", () => {
     });
   });
 
-  test("update product data", async () => {
+  test("should update product data", async () => {
     let data = {
       id: 9,
       title: "new product",
@@ -90,7 +86,7 @@ describe("test product reducers", () => {
     });
   });
 
-  test("delete product by id", async () => {
+  test("should delete product by id", async () => {
     const res = store.dispatch(deleteAdminProduct({ id: 9 }));
     expect(res.arg.id).toBe(9);
   });

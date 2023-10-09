@@ -17,6 +17,7 @@ function Category({ category }: CategoryProps) {
         <Link to={`/category/${category.id}/products`}>
           <img
             src={category.image}
+            alt={category?.name}
             height={250}
             style={{
               objectFit: "cover",

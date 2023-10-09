@@ -20,6 +20,7 @@ function Product({ product }: ProductProps) {
         <Link to={`/product-detail/${product.id}`}>
           <img
             src={product.images[0]}
+            alt={product.title}
             height={250}
             style={{
               objectFit: "cover",

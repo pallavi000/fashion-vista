@@ -1,6 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
-import { persistStore } from "redux-persist";
+import {
+  persistStore,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
 import thunk from "redux-thunk";
 
 // Reducers
@@ -31,7 +39,12 @@ const store = configureStore({
     adminProducts: adminProductReducer,
     adminCategories: adminCategoryReducer,
   },
-  middleware: (getDEfaultMiddleware) => getDEfaultMiddleware().concat(thunk),
+  middleware: (getDEfaultMiddleware) =>
+    getDEfaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }).concat(thunk),
 });
 
 // Redux Persistor

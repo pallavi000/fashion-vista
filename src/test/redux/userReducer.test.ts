@@ -9,13 +9,13 @@ import store from "../../redux/store";
 import usersServer from "../../server/userServer";
 import { userData } from "../testData/userData";
 
-describe("test user reducers", () => {
-  test("fetch all users", async () => {
+describe("user reducers", () => {
+  test("should fetch all users", async () => {
     await store.dispatch(fetchUsers());
     expect(store.getState().adminUsers.data.length).toBe(3);
   });
 
-  test("register new user", async () => {
+  test("should register new user", async () => {
     const data: RegisterInputs = {
       name: "test user",
       email: "test@gmail.com",
@@ -33,7 +33,7 @@ describe("test user reducers", () => {
     });
   });
 
-  test("update user data", async () => {
+  test("should update user data", async () => {
     const data: TUser = {
       id: 2,
       email: "test@mail.com",
@@ -55,7 +55,7 @@ describe("test user reducers", () => {
     });
   });
 
-  test("delete product by id", async () => {
+  test("should delete product by id", async () => {
     const res = store.dispatch(deleteUser({ id: 1 }));
     expect(res.arg.id).toBe(1);
   });

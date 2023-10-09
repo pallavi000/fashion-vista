@@ -22,12 +22,10 @@ import { addOrder } from "../redux/reducers/orderReducer";
 
 // types
 import { TOrder } from "../@types/order";
+import { CartState } from "../@types/reduxState";
 
 // helpers
 import { getOrderDate, getOrderId } from "../utils/helper";
-
-// theme
-import { CartState } from "../@types/reduxState";
 
 // context
 import { useThemeContext } from "../context/ThemeContext";

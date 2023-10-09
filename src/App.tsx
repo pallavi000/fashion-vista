@@ -27,7 +27,7 @@ const App = () => {
     if (access_token && !user) {
       dispatch(getCurrentUser());
     }
-  }, [access_token, user]);
+  }, [access_token, user, dispatch]);
 
   return (
     <Router>

@@ -11,16 +11,17 @@ import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import { fetchAllProducts } from "../redux/reducers/productsReducer";
 
 // images
-import Product from "../components/Product";
-import Category from "../components/Category";
 import BrandImg1 from "../images/brand1.png";
 import BrandImg2 from "../images/brand2.png";
 import BrandImg3 from "../images/brand3.png";
 import BrandImg4 from "../images/brand4.png";
 import BrandImg5 from "../images/brand5.png";
 import BrandImg6 from "../images/brand6.png";
+import BannerImg from "../images/hero.png";
 
 // components
+import Product from "../components/Product";
+import Category from "../components/Category";
 import Brand from "../components/Brand";
 import SkeletonProductCard from "../components/skeleton/SkeletonProductCard";
 
@@ -68,7 +69,7 @@ function Home() {
             height: "auto",
           }}
         >
-          <img src="./images/hero.png" height={"auto"} width={"100%"} />
+          <img src={BannerImg} alt="hero_img" height={"auto"} width={"100%"} />
         </Box>
         <Box
           sx={{
@@ -113,7 +114,7 @@ function Home() {
         </Typography>
         <Grid container spacing={3} columns={12}>
           {brands.map((brand, index) => {
-            return <Brand key={index} brand={brand} />;
+            return <Brand key={index} brand={brand} index={index} />;
           })}
         </Grid>
       </Box>
