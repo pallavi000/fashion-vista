@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { AppState, useAppDispatch } from "../redux/store";
 
 // MUI
-import { Box, Button, Card, Container, Typography } from "@mui/material";
+import { Box, Card, Container, Typography } from "@mui/material";
 
 // components
 import UserForm from "../components/UserForm";
@@ -45,17 +45,17 @@ function Register() {
   const dispatch = useAppDispatch();
 
   // auth states
-  const { isAuthenticated, isLoading } = useSelector((state: AppState) => ({
-    isAuthenticated: state.auth.isAuthenticated,
+  const { user, isLoading } = useSelector((state: AppState) => ({
+    user: state.auth.user,
     isLoading: state.auth.isLoading,
   }));
 
   // redirect user after successful registraion/login
   React.useEffect(() => {
-    if (isAuthenticated) {
+    if (user) {
       navigate(ROUTES.HOME);
     }
-  }, [isAuthenticated]);
+  }, [user]);
 
   // react hook form with yup validation
   const {

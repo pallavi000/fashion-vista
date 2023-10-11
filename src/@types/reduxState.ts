@@ -30,7 +30,6 @@ export type CategoryState = {
 };
 
 export type AuthState = {
-  isAuthenticated: boolean;
   user: TUser | null;
   error: string | null;
   isLoading: boolean;

@@ -18,7 +18,6 @@ import { showApiErrorToastr, showCustomToastr } from "../../utils/helper";
 
 // initial states
 const initialState: AuthState = {
-  isAuthenticated: false,
   user: null,
   error: null,
   isLoading: false,
@@ -34,7 +33,6 @@ const authSlice = createSlice({
     logoutUser: (state) => {
       return {
         ...state,
-        isAuthenticated: false,
         access_token: null,
         refresh_token: null,
         user: null,
@@ -51,7 +49,6 @@ const authSlice = createSlice({
     builder.addCase(loginUser.fulfilled, (state, action) => {
       return {
         ...state,
-        isAuthenticated: true,
         isLoading: false,
         access_token: action.payload.access_token,
         refresh_token: action.payload.refresh_token,
@@ -61,7 +58,6 @@ const authSlice = createSlice({
     builder.addCase(loginUser.rejected, (state, action) => {
       return {
         ...state,
-        isAuthenticated: false,
         isLoading: false,
         error: action.error.message || "",
       };
@@ -84,7 +80,6 @@ const authSlice = createSlice({
     builder.addCase(registerUser.rejected, (state, action) => {
       return {
         ...state,
-        isAuthenticated: false,
         isLoading: false,
         error: action.error.message || "",
       };
@@ -93,7 +88,6 @@ const authSlice = createSlice({
     builder.addCase(getCurrentUser.pending, (state, action) => {
       return {
         ...state,
-        isAuthenticated: false,
         isLoading: true,
         error: null,
       };
@@ -101,7 +95,6 @@ const authSlice = createSlice({
     builder.addCase(getCurrentUser.fulfilled, (state, action) => {
       return {
         ...state,
-        isAuthenticated: true,
         user: action.payload,
         isLoading: false,
         error: null,
@@ -112,7 +105,6 @@ const authSlice = createSlice({
         ...state,
         access_token: null,
         refresh_token: null,
-        isAuthenticated: false,
         isLoading: false,
         error: null,
       };

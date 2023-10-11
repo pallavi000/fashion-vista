@@ -55,15 +55,9 @@ export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
 
   // auth states
-  const {
-    isAuthenticated,
-    user,
-  }: { isAuthenticated: boolean; user: TUser | null } = useSelector(
-    (state: AppState) => ({
-      isAuthenticated: state.auth.isAuthenticated,
-      user: state.auth.user,
-    })
-  );
+  const { user }: { user: TUser | null } = useSelector((state: AppState) => ({
+    user: state.auth.user,
+  }));
 
   // cart state
   const cartItem = useSelector((state: AppState) => state.cart);
@@ -130,11 +124,11 @@ export default function Navbar() {
             >
               <StoreIcon fontSize={"large"} color="primary" />
               <Typography variant="h6" color={"primary"}>
-                Logo
+                हाम्रो-Closet
               </Typography>
             </Link>
 
-            {categories.slice(0, 6).map((category) => {
+            {categories.slice(0, 5).map((category) => {
               return (
                 <Link
                   color="text.primary"
@@ -173,7 +167,7 @@ export default function Navbar() {
 
             <ThemeModeSwitch />
 
-            {isAuthenticated && user ? (
+            {user ? (
               <Box
                 sx={{ display: "flex", gap: "0.5rem", alignItems: "center" }}
               >

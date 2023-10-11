@@ -32,8 +32,8 @@ import SkeletonProductCard from "../components/skeleton/SkeletonProductCard";
 
 // icons
 import GridViewIcon from "@mui/icons-material/GridView";
-import BannerImg from "../images/category.png";
 import { ArrowLeft, ArrowRight } from "@mui/icons-material";
+import BannerContainer from "../components/BannerContainer";
 
 function CategoryProducts() {
   const { id } = useParams();
@@ -93,19 +93,8 @@ function CategoryProducts() {
   };
 
   return (
-    <Container maxWidth="xl" sx={{ padding: "2rem 0rem" }}>
-      <Box sx={{ height: "250px", width: "100%" }}>
-        <img
-          src={BannerImg}
-          alt="banner_img"
-          style={{
-            height: "100%",
-            width: "100%",
-            objectFit: "cover",
-            borderRadius: "1rem",
-          }}
-        />
-      </Box>
+    <Container maxWidth="xl" sx={{ padding: "0rem 0rem 2rem 0rem " }}>
+      <BannerContainer />
       <Box sx={{ margin: "2rem 0rem" }}>
         <BreadCrumb label={category?.name || ""} />
         <Typography variant="h4" color={"primary.main"} margin={"1rem 0rem"}>

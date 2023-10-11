@@ -42,7 +42,8 @@ function ThemeContextProvider({ children }: React.PropsWithChildren) {
     }),
     [themeMode]
   );
-  // creat theme
+
+  // create theme
   const theme = createTheme(themeOptions);
 
   // toggle theme mode
@@ -51,16 +52,17 @@ function ThemeContextProvider({ children }: React.PropsWithChildren) {
   }, []);
 
   // context value
-  const vaules: ThemeContextStates = useMemo(
+  const values: ThemeContextStates = useMemo(
     () => ({
       theme,
       themeMode,
       onThemeModeChange,
     }),
-    [themeMode, onThemeModeChange]
+    [theme, themeMode, onThemeModeChange]
   );
+
   return (
-    <ThemeContext.Provider value={vaules}>
+    <ThemeContext.Provider value={values}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         {children}

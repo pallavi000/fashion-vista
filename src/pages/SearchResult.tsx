@@ -33,6 +33,7 @@ import BannerImg from "../images/category.png";
 
 // reducers
 import { fetchSearchProducts } from "../redux/reducers/productsReducer";
+import BannerContainer from "../components/BannerContainer";
 
 function SearchResult() {
   const location = useLocation();
@@ -99,18 +100,7 @@ function SearchResult() {
 
   return (
     <Container maxWidth="xl" sx={{ padding: "2rem 0rem" }}>
-      <Box sx={{ height: "250px", width: "100%" }}>
-        <img
-          src={BannerImg}
-          alt="banner_img"
-          style={{
-            height: "100%",
-            width: "100%",
-            objectFit: "cover",
-            borderRadius: "1rem",
-          }}
-        />
-      </Box>
+      <BannerContainer />
       <Box sx={{ margin: "2rem 0rem" }}>
         <BreadCrumb label={"products"} />
         <Typography variant="h4" color={"primary.main"} margin={"1rem 0rem"}>
