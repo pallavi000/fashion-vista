@@ -23,13 +23,14 @@ import Product from "../components/Product";
 import BreadCrumb from "../components/Breadcrumb";
 import SidebarFilter from "../components/SidebarFilter";
 import SkeletonProductCard from "../components/skeleton/SkeletonProductCard";
+import BannerContainer from "../components/BannerContainer";
 
 // icons
 import GridViewIcon from "@mui/icons-material/GridView";
 import { ArrowLeft, ArrowRight } from "@mui/icons-material";
+
 // reducers
 import { fetchFilterProducts } from "../redux/reducers/productsReducer";
-import BannerContainer from "../components/BannerContainer";
 
 function Products() {
   const { id } = useParams();
@@ -80,7 +81,7 @@ function Products() {
   };
 
   return (
-    <Container maxWidth="xl" sx={{ padding: "2rem 0rem" }}>
+    <Container maxWidth="xl" sx={{ padding: "2rem 1rem" }}>
       <BannerContainer />
       <Box sx={{ margin: "2rem 0rem" }}>
         <BreadCrumb label={"products"} />
@@ -119,14 +120,20 @@ function Products() {
                   value={limit.toString()}
                   onChange={handleChange}
                 >
-                  <MenuItem value={limit}>{limit}</MenuItem>
+                  <MenuItem value={12}>12</MenuItem>
                   <MenuItem value={20}>20</MenuItem>
                   <MenuItem value={30}>30</MenuItem>
                 </Select>
               </FormControl>
             </Box>
           </Box>
-          <Grid container spacing={3} columns={12} sx={{ marginTop: "2rem" }}>
+          <Grid
+            container
+            columnSpacing={6}
+            rowSpacing={0}
+            columns={12}
+            sx={{ marginTop: "2rem" }}
+          >
             {isLoading
               ? [...Array(limit)].map((_, index) => (
                   <SkeletonProductCard key={index} />

@@ -1,12 +1,22 @@
+import { useEffect, useState } from "react";
+import { Outlet, useLocation } from "react-router-dom";
+
 // MUI
 import { Box } from "@mui/material";
 
 // components
 import TopBar from "./TopBar";
 import SideBar from "./SideBar";
-import { Outlet } from "react-router-dom";
 
 function AdminDashboardLayout() {
+  // mobile view drawer handlers and states
+  const { pathname } = useLocation();
+  const [openDrawer, setOpenDrawer] = useState(false);
+
+  useEffect(() => {
+    setOpenDrawer(false);
+  }, [pathname]);
+
   return (
     <Box
       sx={{
@@ -15,8 +25,8 @@ function AdminDashboardLayout() {
         overflow: "hidden",
       }}
     >
-      <TopBar />
-      <SideBar />
+      <TopBar handleSideBarOpen={() => setOpenDrawer(true)} />
+      <SideBar isOpen={openDrawer} handleClose={() => setOpenDrawer(false)} />
       <Box
         sx={{
           paddingTop: "100px",

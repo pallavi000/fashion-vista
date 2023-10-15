@@ -43,6 +43,7 @@ import { showCustomToastr } from "../../utils/helper";
 
 // components
 import ThemeModeSwitch from "../ThemeModeSwitch";
+import MobileNavbarDrawer from "./MobileNavbarDrawer";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -86,6 +87,12 @@ export default function Navbar() {
   };
 
   // search
+  const handleSearchQueryChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setSearchQuery(e.target.value);
+  };
+
   const handleSearch = () => {
     if (searchQuery?.trim().length < 3) {
       return showCustomToastr(
@@ -109,11 +116,16 @@ export default function Navbar() {
           color: "text.primary",
         }}
       >
-        <Toolbar sx={{ flexWrap: "wrap", gap: "2rem", fontSize: "18px" }}>
+        <Toolbar
+          sx={{
+            flexWrap: "wrap",
+            display: "flex",
+            gap: "2rem",
+          }}
+        >
           <Box
             sx={{
-              flexGrow: 1,
-              display: "flex",
+              display: { xs: "none", md: "flex" },
               gap: "2rem",
               alignItems: "center",
             }}
@@ -127,8 +139,7 @@ export default function Navbar() {
                 हाम्रो-Closet
               </Typography>
             </Link>
-
-            {categories.slice(0, 5).map((category) => {
+            {categories.slice(0, 4).map((category) => {
               return (
                 <Link
                   color="text.primary"
@@ -143,29 +154,53 @@ export default function Navbar() {
             })}
           </Box>
 
-          <nav style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
-            <OutlinedInput
-              required
-              id="outlined-required"
-              size="small"
-              sx={{ background: "default" }}
-              placeholder="Search for products..."
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleSearch();
-                }
-              }}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton edge="end">
-                    <SearchIcon onClick={() => handleSearch()} />
-                  </IconButton>
-                </InputAdornment>
-              }
+          <Box
+            component={"nav"}
+            sx={{
+              display: "flex",
+              gap: "1.5rem",
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexGrow: 1,
+            }}
+          >
+            <MobileNavbarDrawer
+              categories={categories}
+              handleSearch={handleSearch}
+              handleSearchQueryChange={handleSearchQueryChange}
             />
 
-            <ThemeModeSwitch />
+            <Box
+              sx={{
+                gap: "1.5rem",
+                alignItems: "center",
+                justifyContent: "flex-end",
+                display: { xs: "none", md: "flex" },
+                flexGrow: 1,
+              }}
+            >
+              <OutlinedInput
+                required
+                id="outlined-required"
+                size="small"
+                sx={{ background: "default" }}
+                placeholder="Search for products..."
+                onChange={handleSearchQueryChange}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSearch();
+                  }
+                }}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton edge="end">
+                      <SearchIcon onClick={() => handleSearch()} />
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+              <ThemeModeSwitch />
+            </Box>
 
             {user ? (
               <Box
@@ -220,16 +255,18 @@ export default function Navbar() {
                 </Menu>
               </Box>
             ) : (
-              <>
+              <Box
+                sx={{ display: "flex", gap: "1.5rem", alignItems: "center" }}
+              >
                 <Link to={ROUTES.SIGN_IN}>
                   <Button variant="contained">Login</Button>
                 </Link>
                 <Link to={ROUTES.REGISTER}>
                   <Button variant="outlined">Register</Button>
                 </Link>
-              </>
+              </Box>
             )}
-          </nav>
+          </Box>
         </Toolbar>
       </AppBar>
       <Toolbar />

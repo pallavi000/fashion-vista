@@ -58,6 +58,7 @@ const authSlice = createSlice({
     builder.addCase(loginUser.rejected, (state, action) => {
       return {
         ...state,
+
         isLoading: false,
         error: action.error.message || "",
       };
@@ -80,6 +81,7 @@ const authSlice = createSlice({
     builder.addCase(registerUser.rejected, (state, action) => {
       return {
         ...state,
+
         isLoading: false,
         error: action.error.message || "",
       };
@@ -88,6 +90,7 @@ const authSlice = createSlice({
     builder.addCase(getCurrentUser.pending, (state, action) => {
       return {
         ...state,
+
         isLoading: true,
         error: null,
       };
@@ -95,6 +98,7 @@ const authSlice = createSlice({
     builder.addCase(getCurrentUser.fulfilled, (state, action) => {
       return {
         ...state,
+
         user: action.payload,
         isLoading: false,
         error: null,
@@ -105,6 +109,7 @@ const authSlice = createSlice({
         ...state,
         access_token: null,
         refresh_token: null,
+
         isLoading: false,
         error: null,
       };

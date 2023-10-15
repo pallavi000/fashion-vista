@@ -66,6 +66,8 @@ function AdminUserEditModal({
     control,
     setValue,
     reset,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm<RegisterInputs>({
     resolver: yupResolver(validationSchema),
@@ -108,7 +110,12 @@ function AdminUserEditModal({
               padding: "2rem 0rem",
             }}
           >
-            <UserForm control={control} errors={errors} />
+            <UserForm
+              control={control}
+              errors={errors}
+              setError={setError}
+              clearErrors={clearErrors}
+            />
           </Box>
         </DialogContent>
         <DialogActions>

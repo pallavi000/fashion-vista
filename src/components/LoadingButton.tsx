@@ -7,12 +7,18 @@ type LoadingButtonProps = {
   isLoading: boolean;
   color: ColorVariant;
   title: string;
+  isDisabled?: boolean;
 };
 
-function LoadingButton({ isLoading, color, title }: LoadingButtonProps) {
+function LoadingButton({
+  isLoading,
+  color,
+  title,
+  isDisabled = false,
+}: LoadingButtonProps) {
   return (
     <Button
-      disabled={isLoading}
+      disabled={isLoading || isDisabled}
       variant="contained"
       color={color}
       type="submit"

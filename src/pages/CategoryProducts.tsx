@@ -29,11 +29,11 @@ import Product from "../components/Product";
 import BreadCrumb from "../components/Breadcrumb";
 import SidebarFilter from "../components/SidebarFilter";
 import SkeletonProductCard from "../components/skeleton/SkeletonProductCard";
+import BannerContainer from "../components/BannerContainer";
 
 // icons
 import GridViewIcon from "@mui/icons-material/GridView";
 import { ArrowLeft, ArrowRight } from "@mui/icons-material";
-import BannerContainer from "../components/BannerContainer";
 
 function CategoryProducts() {
   const { id } = useParams();
@@ -93,7 +93,7 @@ function CategoryProducts() {
   };
 
   return (
-    <Container maxWidth="xl" sx={{ padding: "0rem 0rem 2rem 0rem " }}>
+    <Container maxWidth="xl" sx={{ padding: "2rem 1rem" }}>
       <BannerContainer />
       <Box sx={{ margin: "2rem 0rem" }}>
         <BreadCrumb label={category?.name || ""} />
@@ -132,7 +132,7 @@ function CategoryProducts() {
                   value={limit.toString()}
                   onChange={handleChange}
                 >
-                  <MenuItem value={limit}>{limit}</MenuItem>
+                  <MenuItem value={12}>12</MenuItem>
                   <MenuItem value={20}>20</MenuItem>
                   <MenuItem value={30}>30</MenuItem>
                 </Select>

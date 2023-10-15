@@ -64,6 +64,8 @@ export default function AdminUserAddModal({
     control,
     reset,
     setValue,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm<RegisterInputs>({
     resolver: yupResolver(validationSchema),
@@ -100,7 +102,12 @@ export default function AdminUserAddModal({
               padding: "2rem 0rem",
             }}
           >
-            <UserForm control={control} errors={errors} />
+            <UserForm
+              control={control}
+              errors={errors}
+              setError={setError}
+              clearErrors={clearErrors}
+            />
           </Box>
         </DialogContent>
         <DialogActions>

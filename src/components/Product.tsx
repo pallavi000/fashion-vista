@@ -15,7 +15,7 @@ type ProductProps = { product: TProduct };
 
 function Product({ product }: ProductProps) {
   return (
-    <Grid item xs={12} sm={6} md={3}>
+    <Grid item xs={12} sm={6} md={4} lg={3}>
       <Box sx={{ height: "412px" }}>
         <Link to={`/product-detail/${product.id}`}>
           <img

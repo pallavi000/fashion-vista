@@ -84,7 +84,7 @@ function AdminOrders() {
           }}
           onChange={handleFilterByOrderId}
         />
-        <TableContainer sx={{ minWidth: 800 }}>
+        <TableContainer>
           <Table>
             <TableHead>
               <TableRow>

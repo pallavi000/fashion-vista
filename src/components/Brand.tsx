@@ -6,11 +6,11 @@ type BrandProps = { brand: string; index: number };
 
 function Brand({ brand, index }: BrandProps) {
   return (
-    <Grid item xs={6} sm={4} md={2}>
+    <Grid item xs={12} sm={6} md={3} lg={2}>
       <Box sx={{ cursor: "pointer", height: "168px", width: "168px" }}>
         <img
-          src={brand}
           alt={`brand_img_${index}`}
+          src={brand}
           height={"100%"}
           width={"100%"}
         />

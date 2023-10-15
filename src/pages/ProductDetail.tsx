@@ -123,7 +123,7 @@ function ProductDetail() {
   };
 
   return (
-    <Container maxWidth={"xl"} sx={{ padding: "2rem 0rem" }}>
+    <Container maxWidth={"xl"} sx={{ padding: "2rem 1rem 0rem 1rem" }}>
       {isLoading && !product ? (
         <SkeletonProductDetail />
       ) : (
@@ -274,7 +274,7 @@ function ProductDetail() {
       >
         Related Products
       </Typography>
-      <Grid container spacing={6} columns={12}>
+      <Grid container columnSpacing={6} rowSpacing={0} columns={12}>
         {products.slice(0, 4).map((product: TProduct) => {
           return <Product key={product.id} product={product} />;
         })}

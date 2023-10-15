@@ -1,5 +1,11 @@
 import React from "react";
-import { Controller, Control, FieldErrors } from "react-hook-form";
+import {
+  Controller,
+  Control,
+  FieldErrors,
+  UseFormSetError,
+  UseFormClearErrors,
+} from "react-hook-form";
 
 // MUI
 import {
@@ -14,13 +20,42 @@ import {
 // types
 import { RegisterInputs } from "../@types/user";
 
+// axios
+import axiosInstance from "../utils/AxiosInstance";
+
 // component props type
 type UserFormProps = {
   control: Control<RegisterInputs, any>;
   errors: FieldErrors<RegisterInputs>;
+  setError: UseFormSetError<RegisterInputs>;
+  clearErrors: UseFormClearErrors<RegisterInputs>;
 };
 
-function UserForm({ control, errors }: UserFormProps) {
+function UserForm({ control, errors, setError, clearErrors }: UserFormProps) {
+  // is email available?
+  const handleEmailValidation = async (
+    e: React.FocusEvent<HTMLInputElement>
+  ) => {
+    if (!e.target.value) return;
+    try {
+      const data = { email: e.target.value };
+      const response = await axiosInstance.post("/users/is-available", data);
+      if (!response.data.isAvailable) {
+        setError("email", {
+          type: "manual",
+          message: "Email is already taken.",
+        });
+      } else {
+        clearErrors("email");
+      }
+    } catch (error) {
+      setError("email", {
+        type: "manual",
+        message: "Email is already taken.",
+      });
+    }
+  };
+
   return (
     <>
       <Controller
@@ -42,6 +77,7 @@ function UserForm({ control, errors }: UserFormProps) {
         render={({ field }) => (
           <TextField
             {...field}
+            onBlur={handleEmailValidation}
             label="Email"
             variant="outlined"
             error={Boolean(errors.email)}

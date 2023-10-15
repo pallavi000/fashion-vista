@@ -27,13 +27,10 @@ import Product from "../components/Product";
 import BreadCrumb from "../components/Breadcrumb";
 import SidebarFilter from "../components/SidebarFilter";
 import SkeletonProductCard from "../components/skeleton/SkeletonProductCard";
-
-// images
-import BannerImg from "../images/category.png";
+import BannerContainer from "../components/BannerContainer";
 
 // reducers
 import { fetchSearchProducts } from "../redux/reducers/productsReducer";
-import BannerContainer from "../components/BannerContainer";
 
 function SearchResult() {
   const location = useLocation();
@@ -99,7 +96,7 @@ function SearchResult() {
   };
 
   return (
-    <Container maxWidth="xl" sx={{ padding: "2rem 0rem" }}>
+    <Container maxWidth="xl" sx={{ padding: "2rem 1rem" }}>
       <BannerContainer />
       <Box sx={{ margin: "2rem 0rem" }}>
         <BreadCrumb label={"products"} />
@@ -138,7 +135,7 @@ function SearchResult() {
                   value={limit.toString()}
                   onChange={handleChange}
                 >
-                  <MenuItem value={limit}>{limit}</MenuItem>
+                  <MenuItem value={12}>12</MenuItem>
                   <MenuItem value={20}>20</MenuItem>
                   <MenuItem value={30}>30</MenuItem>
                 </Select>

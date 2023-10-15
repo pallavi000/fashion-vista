@@ -21,16 +21,16 @@ function Footer() {
         color="text.primary"
         justifyContent="space-between"
         padding={"2rem 2rem"}
-        marginTop={"8rem"}
+        marginTop={"4rem"}
       >
-        <Grid item xs={12} sm={6} md={6}>
+        <Grid item xs={12} sm={12} md={6}>
           <Grid
             container
             spacing={3}
             columns={12}
             justifyContent="space-between"
           >
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid item xs={12} sm={4} md={4}>
               <Typography variant="h6" gutterBottom>
                 Company
               </Typography>
@@ -39,7 +39,7 @@ function Footer() {
               <Typography variant="body1">Career</Typography>
               <Typography variant="body1">Press</Typography>
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid item xs={12} sm={4} md={4}>
               <Typography variant="h6" gutterBottom>
                 Help & Support
               </Typography>
@@ -47,7 +47,7 @@ function Footer() {
               <Typography variant="body1">Knowledge Center</Typography>
               <Typography variant="body1">FAQ</Typography>
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid item xs={12} sm={4} md={4}>
               <Typography variant="h6" gutterBottom>
                 Legal
               </Typography>
@@ -59,14 +59,13 @@ function Footer() {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} sm={6} md={6}>
+        <Grid item xs={12} sm={12} md={6}>
           <Box
             sx={{
               display: "flex",
               flexDirection: "column",
               gap: "1rem",
-
-              alignItems: "flex-end",
+              alignItems: { sm: "center", md: "flex-end" },
             }}
           >
             <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>

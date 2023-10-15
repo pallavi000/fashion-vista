@@ -6,6 +6,7 @@ import { AppState } from "../redux/store";
 // MUI
 import {
   Alert,
+  Paper,
   Table,
   TableBody,
   TableCell,
@@ -27,7 +28,7 @@ function Orders() {
   return (
     <>
       {orders.length ? (
-        <TableContainer>
+        <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow>

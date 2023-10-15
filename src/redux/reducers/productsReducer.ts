@@ -132,6 +132,7 @@ export const fetchFilterProducts = createAsyncThunk(
     }
   }
 );
+
 export const fetchSearchProducts = createAsyncThunk(
   "fetchSearchProducts",
   async ({

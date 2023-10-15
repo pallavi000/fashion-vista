@@ -64,7 +64,7 @@ function SidebarFilter({
   };
 
   return (
-    <div>
+    <Box>
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -106,17 +106,19 @@ function SidebarFilter({
         <Typography variant="h6" marginBottom={"1rem 0rem"}>
           Price
         </Typography>
-        <Slider
-          getAriaLabel={() => "Price range"}
-          value={value}
-          onChangeCommitted={handlePriceRangeChangeCommited}
-          onChange={handlePriceRangeChange}
-          valueLabelDisplay="auto"
-          getAriaValueText={valueToText}
-          max={5000}
-        />
+        <Box sx={{ px: 1 }}>
+          <Slider
+            getAriaLabel={() => "Price range"}
+            value={value}
+            onChangeCommitted={handlePriceRangeChangeCommited}
+            onChange={handlePriceRangeChange}
+            valueLabelDisplay="auto"
+            getAriaValueText={valueToText}
+            max={5000}
+          />
+        </Box>
       </Box>
-    </div>
+    </Box>
   );
 }
 

@@ -12,28 +12,53 @@ import {
 } from "@mui/material";
 
 // icons
-import { Search } from "@mui/icons-material";
+import { Search, Menu as MenuIcon } from "@mui/icons-material";
 
 // components
 import ThemeModeSwitch from "../../ThemeModeSwitch";
 import NotificationsPopover from "./NotificationPopover";
 import AccountPopover from "./AccountPopover";
 
-function TopBar() {
+// context
+import { useThemeContext } from "../../../context/ThemeContext";
+
+// utils
+import { ADMIN_SIDEBAR_WIDTH } from "../../../utils/constants";
+
+// component props type
+type TopBarProps = {
+  handleSideBarOpen: Function;
+};
+
+function TopBar({ handleSideBarOpen }: TopBarProps) {
+  const { theme } = useThemeContext();
   return (
     <AppBar
       sx={{
         boxShadow: "none",
         backgroundColor: "background.default",
-        width: `calc(100% - ${280 + 1}px)`,
         color: "text.primary",
+        [theme.breakpoints.up("lg")]: {
+          width: `calc(100% - ${ADMIN_SIDEBAR_WIDTH + 1}px)`,
+        },
       }}
     >
       <Toolbar>
-        <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search" />
+        <IconButton
+          onClick={() => handleSideBarOpen()}
+          sx={{
+            mr: 1,
+            color: "text.primary",
+            display: { lg: "none" },
+          }}
+        >
+          <MenuIcon />
+        </IconButton>
+
+        {/* <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search" />
         <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
           <Search />
-        </IconButton>
+        </IconButton> */}
 
         <Box sx={{ flexGrow: 1 }} />
         <Stack

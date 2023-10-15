@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
@@ -44,6 +44,8 @@ function Register() {
   // app dispatch
   const dispatch = useAppDispatch();
 
+  const [isEmailAvailable, setIsEmailAvailable] = useState(false);
+
   // auth states
   const { user, isLoading } = useSelector((state: AppState) => ({
     user: state.auth.user,
@@ -62,6 +64,9 @@ function Register() {
     handleSubmit,
     control,
     setValue,
+    setError,
+    clearErrors,
+    getValues,
     formState: { errors },
   } = useForm<RegisterInputs>({
     resolver: yupResolver(validationSchema),
@@ -71,6 +76,13 @@ function Register() {
     // demo avatar link set
     setValue("avatar", "https://i.imgur.com/fpT4052.jpeg");
   }, []);
+
+  useEffect(() => {
+    if (getValues("email") && !errors.email) {
+      console.log("ooooo");
+      setIsEmailAvailable(true);
+    }
+  }, [errors, getValues]);
 
   // form submit handler
   const onSubmit: SubmitHandler<RegisterInputs> = async (data) => {
@@ -92,9 +104,15 @@ function Register() {
         </Typography>
 
         <Box sx={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-          <UserForm control={control} errors={errors} />
+          <UserForm
+            control={control}
+            errors={errors}
+            setError={setError}
+            clearErrors={clearErrors}
+          />
           <LoadingButton
             isLoading={isLoading}
+            isDisabled={!isEmailAvailable}
             color="success"
             title="Register"
           />

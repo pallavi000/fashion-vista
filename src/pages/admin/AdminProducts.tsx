@@ -207,7 +207,7 @@ function AdminProducts() {
           }}
           onChange={handleFilterByName}
         />
-        <TableContainer sx={{ minWidth: 800 }}>
+        <TableContainer>
           <Table>
             <TableHead>
               <TableRow>

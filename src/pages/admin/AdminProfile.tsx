@@ -44,6 +44,8 @@ function AdminProfile() {
     handleSubmit,
     control,
     setValue,
+    setError,
+    clearErrors,
     reset,
     formState: { errors },
   } = useForm<RegisterInputs>({
@@ -87,7 +89,12 @@ function AdminProfile() {
               padding: "2rem 0rem",
             }}
           >
-            <UserForm control={control} errors={errors} />
+            <UserForm
+              control={control}
+              errors={errors}
+              setError={setError}
+              clearErrors={clearErrors}
+            />
           </Box>
           <Button type="submit" variant="contained">
             Update

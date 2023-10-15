@@ -52,6 +52,7 @@ export default function AddressForm({ handleNext }: AddressFormProps) {
             render={({ field }) => (
               <TextField
                 {...field}
+                fullWidth
                 label="First Name"
                 variant="outlined"
                 error={Boolean(errors.firstName)}
@@ -67,6 +68,7 @@ export default function AddressForm({ handleNext }: AddressFormProps) {
             render={({ field }) => (
               <TextField
                 {...field}
+                fullWidth
                 label="Last Name"
                 variant="outlined"
                 error={Boolean(errors.lastName)}
@@ -99,6 +101,7 @@ export default function AddressForm({ handleNext }: AddressFormProps) {
             render={({ field }) => (
               <TextField
                 {...field}
+                fullWidth
                 label="City"
                 variant="outlined"
                 error={Boolean(errors.city)}
@@ -114,6 +117,7 @@ export default function AddressForm({ handleNext }: AddressFormProps) {
             render={({ field }) => (
               <TextField
                 {...field}
+                fullWidth
                 label="State/Province/Region"
                 variant="outlined"
                 error={Boolean(errors.state)}
@@ -129,6 +133,7 @@ export default function AddressForm({ handleNext }: AddressFormProps) {
             render={({ field }) => (
               <TextField
                 {...field}
+                fullWidth
                 label="Zip / Postal code"
                 variant="outlined"
                 error={Boolean(errors.zip)}
@@ -144,6 +149,7 @@ export default function AddressForm({ handleNext }: AddressFormProps) {
             render={({ field }) => (
               <TextField
                 {...field}
+                fullWidth
                 label="Country"
                 variant="outlined"
                 error={Boolean(errors.country)}

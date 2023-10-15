@@ -60,7 +60,6 @@ function ThemeContextProvider({ children }: React.PropsWithChildren) {
     }),
     [theme, themeMode, onThemeModeChange]
   );
-
   return (
     <ThemeContext.Provider value={values}>
       <ThemeProvider theme={theme}>

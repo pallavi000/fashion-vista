@@ -67,6 +67,7 @@ function Home() {
           sx={{
             width: "100%",
             height: "auto",
+            marginBottom: "2rem",
           }}
         >
           <img src={BannerImg} alt="hero_img" height={"auto"} width={"100%"} />
@@ -76,7 +77,7 @@ function Home() {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            margin: "3rem 0rem",
+            margin: "2rem 0rem",
           }}
         >
           <Typography variant="h4">New Arrivals</Typography>
@@ -84,7 +85,7 @@ function Home() {
             <Link to="/products">View All</Link>
           </Button>
         </Box>
-        <Grid container spacing={6} columns={12}>
+        <Grid container columnSpacing={6} rowSpacing={0} columns={12}>
           {isLoading && !products?.length
             ? [...Array(5)].map((_, index) => (
                 <SkeletonProductCard key={index} />
@@ -94,21 +95,17 @@ function Home() {
               })}
         </Grid>
       </Container>
-      <Box
-        bgcolor={"background.neutral"}
-        color="text.primary"
-        padding={"2rem 2rem 6rem 2rem"}
-      >
+      <Box bgcolor={"background.neutral"} color="text.primary" padding={"2rem"}>
         <Typography variant="h4" padding={"2rem 0rem"}>
           HandPicked Collection
         </Typography>
-        <Grid container spacing={6} columns={12}>
+        <Grid container columnSpacing={6} rowSpacing={3} columns={12}>
           {categories.slice(0, 4).map((category, index) => {
             return <Category category={category} key={category.id} />;
           })}
         </Grid>
       </Box>
-      <Box padding={"4rem 2rem"}>
+      <Box padding={"2rem"}>
         <Typography variant="h4" padding={"2rem 0rem"}>
           Shop By Brand
         </Typography>

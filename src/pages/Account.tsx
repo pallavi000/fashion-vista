@@ -28,7 +28,7 @@ function Account() {
   return (
     <Container>
       <Grid container spacing={4}>
-        <Grid item sm={12} md={4}>
+        <Grid item sm={12} md={4} sx={{ width: "100%" }}>
           <Card>
             <List disablePadding>
               <ListItemButton
@@ -73,7 +73,7 @@ function Account() {
             </List>
           </Card>
         </Grid>
-        <Grid item xs={8}>
+        <Grid item sm={12} md={8} width={"100%"}>
           {page && page === "orders" ? <Orders /> : <UserProfile />}
         </Grid>
       </Grid>
