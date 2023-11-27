@@ -123,7 +123,7 @@ export const fetchFilterProducts = createAsyncThunk(
   }) => {
     try {
       const result = await axiosInstance.get(
-        `/products?offset=${offset}&limit=${limit}&price_min=${price_min}&price_max=${price_max}&categoryId=${categoryId}`
+        `/products?pageNo=${offset}&perPage=${limit}&minPrice=${price_min}&maxPrice=${price_max}&categoryId=${categoryId}`
       );
       return result.data;
     } catch (e) {
