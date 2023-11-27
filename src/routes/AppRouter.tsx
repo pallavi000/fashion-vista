@@ -29,7 +29,7 @@ function AppRouter() {
 
   // layout for our app
   const Layout =
-    user?.role && user?.role === "admin" ? AdminDashboardLayout : AppLayout;
+    user?.role && user?.role === "ADMIN" ? AdminDashboardLayout : AppLayout;
 
   return (
     <Routes>
@@ -40,12 +40,12 @@ function AppRouter() {
               key={router.path}
               path={router.path}
               element={
-                router.role === "admin" ? (
+                router.role === "ADMIN" ? (
                   <AdminRoute
                     Component={router.Component}
                     userRole={user?.role ?? null}
                   />
-                ) : router.role === "customer" ? (
+                ) : router.role === "USER" ? (
                   <UserRoute
                     Component={router.Component}
                     userRole={user?.role ?? null}

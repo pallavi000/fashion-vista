@@ -145,8 +145,8 @@ function AdminUsers() {
   };
 
   // search filter hanlder
-  const filteredUsers = users.filter((u) =>
-    u.name.toLocaleLowerCase().includes(filterName.toLocaleLowerCase())
+  const filteredUsers = users.filter((u: TUser) =>
+    u.firstName.toLocaleLowerCase().includes(filterName.toLocaleLowerCase())
   );
   const isNotFound = !filteredUsers.length && !!filterName;
 

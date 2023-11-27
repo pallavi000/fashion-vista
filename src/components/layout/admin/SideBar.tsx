@@ -121,7 +121,7 @@ function SideBar({ isOpen, handleClose }: SideBarProps) {
 
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: "text.primary" }}>
-                {user?.name}
+                {user?.firstName} {user?.lastName}
               </Typography>
 
               <Typography variant="body2" sx={{ color: "text.secondary" }}>

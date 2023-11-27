@@ -39,15 +39,8 @@ function UserForm({ control, errors, setError, clearErrors }: UserFormProps) {
     if (!e.target.value) return;
     try {
       const data = { email: e.target.value };
-      const response = await axiosInstance.post("/users/is-available", data);
-      if (!response.data.isAvailable) {
-        setError("email", {
-          type: "manual",
-          message: "Email is already taken.",
-        });
-      } else {
-        clearErrors("email");
-      }
+
+      clearErrors("email");
     } catch (error) {
       setError("email", {
         type: "manual",
@@ -59,15 +52,28 @@ function UserForm({ control, errors, setError, clearErrors }: UserFormProps) {
   return (
     <>
       <Controller
-        name="name"
+        name="firstName"
         control={control}
         render={({ field }) => (
           <TextField
             {...field}
-            label="Full name"
+            label="First name"
             variant="outlined"
-            error={Boolean(errors.name)}
-            helperText={errors.name?.message}
+            error={Boolean(errors.firstName)}
+            helperText={errors.firstName?.message}
+          />
+        )}
+      />
+      <Controller
+        name="lastName"
+        control={control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            label="Last name"
+            variant="outlined"
+            error={Boolean(errors.lastName)}
+            helperText={errors.lastName?.message}
           />
         )}
       />
@@ -112,8 +118,8 @@ function UserForm({ control, errors, setError, clearErrors }: UserFormProps) {
               variant="outlined"
               error={Boolean(errors.role)}
             >
-              <MenuItem value="customer">Customer</MenuItem>
-              <MenuItem value="admin">Admin</MenuItem>
+              <MenuItem value="USER">USER</MenuItem>
+              <MenuItem value="ADMIN">ADMIN</MenuItem>
             </Select>
             {errors.role?.message ? (
               <FormHelperText>{errors.role?.message}</FormHelperText>

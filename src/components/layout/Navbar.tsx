@@ -60,6 +60,8 @@ export default function Navbar() {
     user: state.auth.user,
   }));
 
+  console.log(user, "app user");
+
   // cart state
   const cartItem = useSelector((state: AppState) => state.cart);
 
@@ -216,10 +218,10 @@ export default function Navbar() {
                   </Badge>
                 </IconButton>
 
-                <Tooltip title={user.name}>
+                <Tooltip title={user.firstName}>
                   <IconButton onClick={handleMenu}>
                     <Avatar
-                      alt={user.name}
+                      alt={user.firstName}
                       src={user.avatar}
                       sx={{ width: 32, height: 32 }}
                     />

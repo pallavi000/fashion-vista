@@ -128,6 +128,7 @@ export const loginUser = createAsyncThunk(
         email,
         password,
       });
+
       showCustomToastr("Login successfull.", "success");
       return result.data;
     } catch (e) {
@@ -142,7 +143,7 @@ export const registerUser = createAsyncThunk(
   "registerUser",
   async (data: RegisterInputs) => {
     try {
-      const result = await axiosInstance.post("/users", data);
+      const result = await axiosInstance.post("/auth/register", data);
       return result.data;
     } catch (e) {
       const error = e as AxiosError;
@@ -166,6 +167,7 @@ export const getCurrentUser = createAsyncThunk(
           Authorization: `Bearer ${accessToken}`,
         },
       });
+      console.log(result, "resultttttttttttt");
       const { password, ...userData } = result.data;
       return userData;
     } catch (e) {

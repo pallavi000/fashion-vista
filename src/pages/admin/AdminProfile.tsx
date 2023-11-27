@@ -20,7 +20,8 @@ import { updateUser } from "../../redux/reducers/admin/adminUserReducer";
 
 // yup validation schema
 const validationSchema = yup.object().shape({
-  name: yup.string().required("Name is required"),
+  firstName: yup.string().required("firstName is required"),
+  lastName: yup.string().required("lastName is required"),
   email: yup
     .string()
     .email("Invalid email address")
@@ -29,7 +30,7 @@ const validationSchema = yup.object().shape({
     .string()
     .min(8, "Password must be at least 8 characters")
     .required("Password is required"),
-  role: yup.string().oneOf(["admin", "customer"]).required("Role is required"),
+  role: yup.string().oneOf(["ADMIN", "USER"]).required("Role is required"),
   avatar: yup.string().required("Avatar is required"),
 });
 
@@ -56,9 +57,10 @@ function AdminProfile() {
   React.useEffect(() => {
     if (user) {
       setValue("email", user.email);
-      setValue("name", user.name);
+      setValue("firstName", user.firstName);
+      setValue("lastName", user.lastName);
       setValue("avatar", user.avatar);
-      setValue("role", user.role || "customer");
+      setValue("role", user.role || "USER");
     }
   }, [user]);
 

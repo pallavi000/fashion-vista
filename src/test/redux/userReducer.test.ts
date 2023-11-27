@@ -17,18 +17,20 @@ describe("user reducers", () => {
 
   test("should register new user", async () => {
     const data: RegisterInputs = {
-      name: "test user",
+      firstName: "test",
+      lastName: "user",
       email: "test@gmail.com",
       password: "12345",
-      role: "customer",
+      role: "USER",
       avatar: "https://api.lorem.space/image/face?w=640&h=480&r=6355",
     };
     const res = await store.dispatch(addNewUser(data));
     expect(res.meta.arg).toMatchObject({
-      name: "test user",
+      firstName: "test",
+      lastName: "user",
       email: "test@gmail.com",
       password: "12345",
-      role: "customer",
+      role: "USER",
       avatar: "https://api.lorem.space/image/face?w=640&h=480&r=6355",
     });
   });
@@ -37,20 +39,22 @@ describe("user reducers", () => {
     const data: TUser = {
       id: 2,
       email: "test@mail.com",
-      name: "Maria",
-      role: "customer",
+      firstName: "Maria",
+      lastName: "stha",
+      role: "USER",
       avatar: "https://i.imgur.com/00qWleT.jpeg",
-      creationAt: "2023-10-03T19:00:54.000Z",
+      createdAt: "2023-10-03T19:00:54.000Z",
       updatedAt: "2023-10-03T19:00:54.000Z",
     };
     const res = await store.dispatch(updateUser(data));
     expect(res.meta.arg).toMatchObject({
       id: 2,
       email: "test@mail.com",
-      name: "Maria",
-      role: "customer",
+      firstName: "Maria",
+      lastName: "stha",
+      role: "USER",
       avatar: "https://i.imgur.com/00qWleT.jpeg",
-      creationAt: "2023-10-03T19:00:54.000Z",
+      createdAt: "2023-10-03T19:00:54.000Z",
       updatedAt: "2023-10-03T19:00:54.000Z",
     });
   });

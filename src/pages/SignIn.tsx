@@ -65,7 +65,7 @@ function SignIn() {
   // redirect after login success
   React.useEffect(() => {
     if (user) {
-      user.role && user.role === "admin"
+      user.role && user.role === "ADMIN"
         ? navigate(ROUTES.ADMIN_DASHBOARD)
         : navigate(ROUTES.HOME);
     }

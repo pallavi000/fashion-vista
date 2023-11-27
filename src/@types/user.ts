@@ -4,20 +4,22 @@ export interface LoginInputs {
 }
 
 export interface RegisterInputs extends LoginInputs {
-  name: string;
-  role: "customer" | "admin";
+  firstName: string;
+  lastName: string;
+  role: "USER" | "ADMIN";
   avatar: string;
 }
 
-export type TUserRole = "customer" | "admin";
+export type TUserRole = "USER" | "ADMIN";
 
 export type TUser = {
   id: number;
   email: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   role: TUserRole | null;
   avatar: string;
-  creationAt: string;
+  createdAt: string;
   updatedAt: string;
 };
 

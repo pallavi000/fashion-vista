@@ -8,7 +8,7 @@ import { TRouteProps } from "../@types/routers";
 import { ROUTES } from "./routers";
 
 function AdminRoute({ Component, userRole, ...rest }: TRouteProps) {
-  return userRole === "admin" ? (
+  return userRole === "ADMIN" ? (
     <Component {...rest} />
   ) : (
     // Permission denied. Forbidden page maybe?

@@ -38,7 +38,7 @@ function UserProfile() {
             marginBottom: 0,
           }}
         >
-          {user?.name}
+          {user?.firstName} {user?.lastName}
         </h3>
       </CardContent>
       <Typography variant="h6" sx={{ textAlign: "left", padding: "0rem 3rem" }}>
@@ -72,7 +72,7 @@ function UserProfile() {
               fontWeight: "500",
             }}
           >
-            {user?.name}
+            {user?.firstName} {user?.lastName}
           </Typography>
         </Box>
         <Box>

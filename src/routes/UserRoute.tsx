@@ -9,7 +9,7 @@ import { ROUTES } from "./routers";
 
 function UserRoute({ Component, userRole, ...rest }: TRouteProps) {
   // showing user side page to admins too
-  return userRole === "customer" || userRole === "admin" ? (
+  return userRole === "USER" || userRole === "ADMIN" ? (
     <Component {...rest} />
   ) : (
     <Navigate to={ROUTES.SIGN_IN} replace />

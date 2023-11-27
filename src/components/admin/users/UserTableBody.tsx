@@ -49,9 +49,9 @@ function UserTableBody({
         </TableCell>
         <TableCell component="th" scope="row" padding="none">
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar alt={user.name} src={user.avatar} />
+            <Avatar alt={user.firstName} src={user.avatar} />
             <Typography variant="body1" noWrap>
-              {user.name}
+              {user.firstName} {user.lastName}
             </Typography>
           </Stack>
         </TableCell>
@@ -74,7 +74,7 @@ function UserTableBody({
           </Typography>
         </TableCell>
         <TableCell align="left">
-          <Chip size="small" label={user.creationAt} />
+          <Chip size="small" label={user.createdAt} />
         </TableCell>
         <TableCell align="right">
           <IconButton
