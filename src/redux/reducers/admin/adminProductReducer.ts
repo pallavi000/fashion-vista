@@ -76,7 +76,7 @@ const adminProductsSlice = createSlice({
     });
     builder.addCase(updateAdminProduct.fulfilled, (state, action) => {
       const productIndex = state.data.findIndex(
-        (c) => c.id === action.payload.id
+        (c) => c._id === action.payload.id
       );
       if (productIndex !== -1) {
         state.data[productIndex] = action.payload;
@@ -103,7 +103,7 @@ const adminProductsSlice = createSlice({
         ...state,
         isLoading: false,
         error: null,
-        data: state.data.filter((cat) => cat.id !== action.payload),
+        data: state.data.filter((cat) => cat._id !== action.payload),
       };
     });
     builder.addCase(deleteAdminProduct.rejected, (state, action) => {
@@ -152,7 +152,7 @@ export const updateAdminProduct = createAsyncThunk(
   "updateAdminProduct",
   async (data: ProductInputsData) => {
     try {
-      const response = await axiosInstance.put(`/products/${data.id}`, data);
+      const response = await axiosInstance.put(`/products/${data._id}`, data);
       showCustomToastr("Product updated successfully.", "success");
       return response.data;
     } catch (e) {

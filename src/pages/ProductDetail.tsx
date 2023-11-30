@@ -58,6 +58,7 @@ function ProductDetail() {
 
   // current product id
   const productId = Number(params.id);
+  console.log(params.id, "idddddddddddddddddddddddddd");
 
   // current product state
   const {
@@ -81,11 +82,12 @@ function ProductDetail() {
   // cart state
   const cartItem = useSelector((state: AppState) => state.cart);
   const isAlreadyInCart = cartItem.items.find(
-    (item) => item.product.id === product?.id && item.userId === user?.id
+    (item) => item.product._id === product?._id && item.userId === user?.id
   );
 
   // get current product
   useEffect(() => {
+    console.log(productId, "productId");
     dispatch(fetchProductById({ id: productId }));
   }, [productId]);
 
@@ -128,7 +130,7 @@ function ProductDetail() {
         <SkeletonProductDetail />
       ) : (
         <Box>
-          <BreadCrumb label={product?.title || "Product Detail"} />
+          <BreadCrumb label={product?.name || "Product Detail"} />
           <Grid container marginTop={0} spacing={6}>
             <Grid item xs={12} md={6} lg={6}>
               <Box
@@ -142,7 +144,7 @@ function ProductDetail() {
                 <Box sx={{ height: "500px" }}>
                   <img
                     src={product?.images[0]}
-                    alt={`product_${product?.id}`}
+                    alt={`product_${product?._id}`}
                     style={{
                       height: "100%",
                       width: "100%",
@@ -158,7 +160,7 @@ function ProductDetail() {
                 sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}
               >
                 <Box>
-                  <Typography variant="h4">{product?.title}</Typography>
+                  <Typography variant="h4">{product?.name}</Typography>
                   <Chip
                     label={product?.category.name}
                     size="small"
@@ -276,7 +278,7 @@ function ProductDetail() {
       </Typography>
       <Grid container columnSpacing={6} rowSpacing={0} columns={12}>
         {products.slice(0, 4).map((product: TProduct) => {
-          return <Product key={product.id} product={product} />;
+          return <Product key={product._id} product={product} />;
         })}
       </Grid>
     </Container>

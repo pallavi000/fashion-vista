@@ -76,7 +76,7 @@ function CategoryProducts() {
   // set current category
   React.useEffect(() => {
     if (categories.length) {
-      const foundCategory = categories.find((cat) => cat.id === Number(id));
+      const foundCategory = categories.find((cat) => cat._id === Number(id));
       if (foundCategory) dispatch(setCategory(foundCategory));
     }
   }, [categories, id]);
@@ -145,7 +145,7 @@ function CategoryProducts() {
                   <SkeletonProductCard key={index} />
                 ))
               : products.map((product) => {
-                  return <Product key={product.id} product={product} />;
+                  return <Product key={product._id} product={product} />;
                 })}
           </Grid>
           <ButtonGroup sx={{ float: "right" }}>

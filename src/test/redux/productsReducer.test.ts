@@ -24,7 +24,7 @@ describe("product reducers", () => {
     await store.dispatch(fetchProductById({ id: 9 }));
     expect(store.getState().product.data).toMatchObject({
       id: 9,
-      title: "Bespoke Wooden Shirt",
+      name: "Bespoke Wooden Shirt",
       price: 551,
       description:
         "The automobile layout consists of a front-engine design, with transaxle-type transmissions mounted at the rear of the engine and four wheel drive",
@@ -43,8 +43,8 @@ describe("product reducers", () => {
 
   test("should add new product", async () => {
     let data = {
-      id: 100,
-      title: "new product",
+      _id: 100,
+      name: "new product",
       price: 123,
       description: "it is a new product",
       categoryId: 1,
@@ -53,8 +53,8 @@ describe("product reducers", () => {
     };
     const res = await store.dispatch(addNewProduct(data));
     expect(res.meta.arg).toMatchObject({
-      id: 100,
-      title: "new product",
+      _id: 100,
+      name: "new product",
       price: 123,
       description: "it is a new product",
       categoryId: 1,
@@ -65,8 +65,8 @@ describe("product reducers", () => {
 
   test("should update product data", async () => {
     let data = {
-      id: 9,
-      title: "new product",
+      _id: 9,
+      name: "new product",
       price: 123,
       description: "it is a new product",
       categoryId: 1,
@@ -76,8 +76,8 @@ describe("product reducers", () => {
 
     const res = store.dispatch(updateAdminProduct(data));
     expect(res.arg).toMatchObject({
-      id: 9,
-      title: "new product",
+      _id: 9,
+      name: "new product",
       price: 123,
       description: "it is a new product",
       categoryId: 1,

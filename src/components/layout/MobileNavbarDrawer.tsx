@@ -138,11 +138,11 @@ function MobileNavbarDrawer(props: MobileNavbarDrawerProps) {
           />
           <List>
             {categories.map((category) => (
-              <ListItem key={category.id} disablePadding>
+              <ListItem key={category._id} disablePadding>
                 <ListItemButton
                   LinkComponent={Link}
                   sx={{ textAlign: "center" }}
-                  onClick={() => navigate(`/category/${category.id}/products`)}
+                  onClick={() => navigate(`/category/${category._id}/products`)}
                 >
                   <ListItemText primary={category.name} />
                 </ListItemButton>

@@ -91,7 +91,7 @@ function Home() {
                 <SkeletonProductCard key={index} />
               ))
             : products?.slice(0, 8).map((product: TProduct) => {
-                return <Product key={product.id} product={product} />;
+                return <Product key={product._id} product={product} />;
               })}
         </Grid>
       </Container>
@@ -101,7 +101,7 @@ function Home() {
         </Typography>
         <Grid container columnSpacing={6} rowSpacing={3} columns={12}>
           {categories.slice(0, 4).map((category, index) => {
-            return <Category category={category} key={category.id} />;
+            return <Category category={category} key={category._id} />;
           })}
         </Grid>
       </Box>

@@ -38,7 +38,7 @@ import LoadingButton from "../../LoadingButton";
 
 // yup validation schema
 const validationSchema = yup.object().shape({
-  title: yup.string().required("Name is required"),
+  name: yup.string().required("Name is required"),
   price: yup.number().required("Price is required"),
   description: yup.string().required("Description is required"),
   categoryId: yup.number().required("Category is required"),
@@ -77,7 +77,7 @@ export default function AdminProductAddModal({
   const onSubmit = async (data: ProductInputs) => {
     const productData: ProductInputsData = {
       ...data,
-      id: 0,
+      _id: 0,
       images: [data.image],
     };
     await dispatch(addNewProduct(productData));
@@ -105,15 +105,15 @@ export default function AdminProductAddModal({
             }}
           >
             <Controller
-              name="title"
+              name="name"
               control={control}
               render={({ field }) => (
                 <TextField
                   {...field}
                   label="Title"
                   variant="outlined"
-                  error={Boolean(errors.title)}
-                  helperText={errors.title?.message}
+                  error={Boolean(errors.name)}
+                  helperText={errors.name?.message}
                 />
               )}
             />
@@ -170,7 +170,7 @@ export default function AdminProductAddModal({
                   >
                     {categories.map((category) => {
                       return (
-                        <MenuItem key={category.id} value={category.id}>
+                        <MenuItem key={category._id} value={category._id}>
                           {category.name}
                         </MenuItem>
                       );

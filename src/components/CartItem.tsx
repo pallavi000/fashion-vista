@@ -50,7 +50,7 @@ function CartItem({ item }: CartItemProps) {
   };
 
   return (
-    <TableRow key={item.product.id}>
+    <TableRow key={item.product._id}>
       <TableCell component="th" scope="row">
         <Box display={"flex"} alignItems={"center"}>
           <Box width={80} height={80}>
@@ -60,7 +60,7 @@ function CartItem({ item }: CartItemProps) {
                 height: "100%",
                 objectFit: "contain",
               }}
-              alt={item.product.title}
+              alt={item.product.name}
               src={item.product.images[0]}
             />
           </Box>
@@ -72,7 +72,7 @@ function CartItem({ item }: CartItemProps) {
                 margin: "0 0 8px 0",
               }}
             >
-              {item.product.title}
+              {item.product.name}
             </p>
             <div
               style={{

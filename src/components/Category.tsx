@@ -14,7 +14,7 @@ function Category({ category }: CategoryProps) {
   return (
     <Grid item xs={12} sm={6} md={3}>
       <Box sx={{ height: "100%", position: "relative" }}>
-        <Link to={`/category/${category.id}/products`}>
+        <Link to={`/category/${category._id}/products`}>
           <img
             src={category.image}
             alt={category.name}

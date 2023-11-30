@@ -76,7 +76,7 @@ const adminCategorySlice = createSlice({
     });
     builder.addCase(updateAdminCategory.fulfilled, (state, action) => {
       const categoryIndex = state.data.findIndex(
-        (c) => c.id === action.payload.id
+        (c) => c._id === action.payload.id
       );
       if (categoryIndex !== -1) {
         state.data[categoryIndex] = action.payload;
@@ -103,7 +103,7 @@ const adminCategorySlice = createSlice({
         ...state,
         isLoading: false,
         error: null,
-        data: state.data.filter((cat) => cat.id !== action.payload),
+        data: state.data.filter((cat) => cat._id !== action.payload),
       };
     });
     builder.addCase(deleteAdminCategory.rejected, (state, action) => {
@@ -152,7 +152,7 @@ export const updateAdminCategory = createAsyncThunk(
   "updateAdminCategory",
   async (data: TCategory) => {
     try {
-      const response = await axiosInstance.put(`/categories/${data.id}`, data);
+      const response = await axiosInstance.put(`/categories/${data._id}`, data);
       showCustomToastr("Category updated successfully.", "success");
       return response.data;
     } catch (e) {

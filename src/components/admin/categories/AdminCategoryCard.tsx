@@ -56,7 +56,7 @@ function AdminCategoryCard({ category }: AdminCategoryCardProps) {
   // handle category delete submit
   const handleCategoryDelete = async () => {
     setIsloading(true);
-    await dispatch(deleteAdminCategory({ id: category.id }));
+    await dispatch(deleteAdminCategory({ id: category._id }));
     setIsDeleteModalOpen(false);
     setIsloading(false);
   };

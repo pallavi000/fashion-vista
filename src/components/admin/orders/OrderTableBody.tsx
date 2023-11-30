@@ -20,7 +20,7 @@ function OrderTableBody({ order }: OrderTableBodyProps) {
         {order.items.map((item) => {
           return (
             <Box
-              key={`${order.orderId}-${item.product.id}`}
+              key={`${order.orderId}-${item.product._id}`}
               display={"flex"}
               alignItems={"center"}
               sx={{ marginBottom: "0.5rem" }}
@@ -33,7 +33,7 @@ function OrderTableBody({ order }: OrderTableBodyProps) {
                     height: "100%",
                     objectFit: "contain",
                   }}
-                  alt={item.product.title}
+                  alt={item.product.name}
                   src={item.product.images[0]}
                 />
               </Box>
@@ -50,7 +50,7 @@ function OrderTableBody({ order }: OrderTableBodyProps) {
                   fontSize={14}
                   noWrap
                 >
-                  {item.product.title}
+                  {item.product.name}
                 </Typography>
               </div>
             </Box>

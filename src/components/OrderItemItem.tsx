@@ -18,8 +18,8 @@ function OrderItemItem({ order, item }: OrderItemItemProps) {
   return (
     <TableRow>
       <TableCell component="th" scope="row">
-        <Tooltip title={item.product.title}>
-          <Link to={`/product-detail/${item.product.id}`}>
+        <Tooltip title={item.product.name}>
+          <Link to={`/product-detail/${item.product._id}`}>
             <Box width={40} height={40}>
               <img
                 style={{
@@ -27,7 +27,7 @@ function OrderItemItem({ order, item }: OrderItemItemProps) {
                   height: "100%",
                   objectFit: "contain",
                 }}
-                alt={item.product.title}
+                alt={item.product.name}
                 src={item.product.images[0]}
               />
             </Box>

@@ -17,10 +17,10 @@ function Product({ product }: ProductProps) {
   return (
     <Grid item xs={12} sm={6} md={4} lg={3}>
       <Box sx={{ height: "412px" }}>
-        <Link to={`/product-detail/${product.id}`}>
+        <Link to={`/product-detail/${product._id}`}>
           <img
             src={product.images[0]}
-            alt={product.title}
+            alt={product.name}
             height={250}
             style={{
               objectFit: "cover",
@@ -36,7 +36,7 @@ function Product({ product }: ProductProps) {
             }}
           >
             <Box>
-              <Typography variant="body1">{product.title}</Typography>
+              <Typography variant="body1">{product.name}</Typography>
               <Typography variant="body2" color={"#626262"}>
                 {product.category?.name}
               </Typography>

@@ -23,7 +23,7 @@ function OrderItem({ order }: OrderItemProps) {
       {order.items.map((item) => {
         return (
           <OrderItemItem
-            key={`${order.orderId}-${item.product.id}`}
+            key={`${order.orderId}-${item.product._id}`}
             order={order}
             item={item}
           />

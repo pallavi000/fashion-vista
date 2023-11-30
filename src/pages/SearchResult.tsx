@@ -148,7 +148,7 @@ function SearchResult() {
                   <SkeletonProductCard key={index} />
                 ))
               : products?.slice(offset, offset + limit).map((product) => {
-                  return <Product key={product.id} product={product} />;
+                  return <Product key={product._id} product={product} />;
                 })}
           </Grid>
 

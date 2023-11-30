@@ -70,7 +70,7 @@ export default function AdminCategoryEditModal({
 
   // form submit handler
   const onSubmit = async (data: CategoryInputs) => {
-    const categoryData: TCategory = { ...data, id: category.id };
+    const categoryData: TCategory = { ...data, _id: category._id };
     await dispatch(updateAdminCategory(categoryData));
     setIsOpen(false);
   };

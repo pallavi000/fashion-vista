@@ -87,7 +87,7 @@ function AdminProducts() {
   // handle checkbox all click
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = products.map((u) => u.id);
+      const newSelecteds = products.map((u) => u._id);
       setSelectedProducts(newSelecteds);
       return;
     }
@@ -150,13 +150,13 @@ function AdminProducts() {
 
   const handleProductDeleteClick = async () => {
     if (activeProduct)
-      await dispatch(deleteAdminProduct({ id: activeProduct.id }));
+      await dispatch(deleteAdminProduct({ id: activeProduct._id }));
     handlePopoverClose();
   };
 
   // serach/filter products
   const filterProducts = products.filter((u) =>
-    u.title.toLocaleLowerCase().includes(filterName.toLocaleLowerCase())
+    u.name.toLocaleLowerCase().includes(filterName.toLocaleLowerCase())
   );
   const isNotFound = !filterProducts.length && !!filterName;
 
@@ -237,7 +237,7 @@ function AdminProducts() {
                 .map((product) => {
                   return (
                     <ProductTableBody
-                      key={product.id}
+                      key={product._id}
                       product={product}
                       selectedProducts={selectedProducts}
                       handleSelectClick={handleSelectClick}

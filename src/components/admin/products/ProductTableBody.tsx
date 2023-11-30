@@ -33,11 +33,11 @@ function ProductTableBody({
   handlePopoverOpen,
 }: ProductTableBodyProps) {
   // is this table row selected?
-  const selectedProduct = selectedProducts.indexOf(product.id) !== -1;
+  const selectedProduct = selectedProducts.indexOf(product._id) !== -1;
   return (
     <TableRow
       hover
-      key={product.id}
+      key={product._id}
       tabIndex={-1}
       role="checkbox"
       selected={selectedProduct}
@@ -45,14 +45,14 @@ function ProductTableBody({
       <TableCell padding="checkbox">
         <Checkbox
           checked={selectedProduct}
-          onChange={(event) => handleSelectClick(event, product.id)}
+          onChange={(event) => handleSelectClick(event, product._id)}
         />
       </TableCell>
       <TableCell component="th" scope="row" padding="none">
         <Stack direction="row" alignItems="center" spacing={2}>
-          <Avatar alt={product.title} src={product.images[0]} />
+          <Avatar alt={product.name} src={product.images[0]} />
           <Typography variant="body1" noWrap>
-            {product.title}
+            {product.name}
           </Typography>
         </Stack>
       </TableCell>

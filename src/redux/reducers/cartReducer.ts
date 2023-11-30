@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { persistReducer } from "redux-persist";
 import { cartPersistConfig } from "../../utils/reduxPersistConfig";
 
@@ -6,6 +6,9 @@ import { cartPersistConfig } from "../../utils/reduxPersistConfig";
 import { CartState } from "../../@types/reduxState";
 import { TCart } from "../../@types/cart";
 import { TProduct } from "../../@types/product";
+import axiosInstance from "../../utils/AxiosInstance";
+import { showApiErrorToastr, showCustomToastr } from "../../utils/helper";
+import { AxiosError } from "axios";
 
 // initial states
 const initialState: CartState = {
@@ -24,7 +27,7 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action: PayloadAction<TCart>) => {
       const productIndex = state.items.findIndex(
-        (item) => item.product.id === action.payload.product.id
+        (item) => item.product._id === action.payload.product._id
       );
       if (productIndex !== -1) {
         state.items[productIndex].quantity += action.payload.quantity;
@@ -38,7 +41,7 @@ const cartSlice = createSlice({
 
     removeFromCart: (state, action: PayloadAction<TProduct>) => {
       const productIndex = state.items.findIndex(
-        (item) => item.product.id === action.payload.id
+        (item) => item.product._id === action.payload._id
       );
       if (productIndex !== -1) {
         state.totalQuantity =
@@ -52,7 +55,7 @@ const cartSlice = createSlice({
     },
     increaseCartItemQuantity: (state, action: PayloadAction<TCart>) => {
       const productIndex = state.items.findIndex(
-        (item) => item.product.id === action.payload.product.id
+        (item) => item.product._id === action.payload.product._id
       );
       if (productIndex !== -1) {
         state.items[productIndex].quantity++;
@@ -62,7 +65,7 @@ const cartSlice = createSlice({
     },
     decreaseCartItemQuantity: (state, action: PayloadAction<TCart>) => {
       const productIndex = state.items.findIndex(
-        (item) => item.product.id === action.payload.product.id
+        (item) => item.product._id === action.payload.product._id
       );
       if (productIndex !== -1) {
         state.items[productIndex].quantity--;
@@ -83,6 +86,21 @@ const cartSlice = createSlice({
     },
   },
 });
+
+export const addNewCart = createAsyncThunk(
+  "addNewCart",
+  async (data: TCart) => {
+    try {
+      const response = await axiosInstance.post("/carts", data);
+      showCustomToastr("Cart Added successfully.", "success");
+      return response.data;
+    } catch (e) {
+      const error = e as AxiosError;
+      showApiErrorToastr(error);
+      throw error;
+    }
+  }
+);
 
 // actions
 export const {

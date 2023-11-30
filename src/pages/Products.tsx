@@ -51,6 +51,10 @@ function Products() {
     products: state.products.data,
     isLoading: state.products.isLoading,
   }));
+  console.log(
+    products,
+    "product page consoleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+  );
 
   // current category state
   const { category } = useSelector((state: AppState) => ({
@@ -139,7 +143,7 @@ function Products() {
                   <SkeletonProductCard key={index} />
                 ))
               : products.map((product) => {
-                  return <Product key={product.id} product={product} />;
+                  return <Product key={product._id} product={product} />;
                 })}
           </Grid>
           <ButtonGroup sx={{ float: "right" }}>

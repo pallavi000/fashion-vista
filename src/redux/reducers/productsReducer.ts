@@ -125,6 +125,7 @@ export const fetchFilterProducts = createAsyncThunk(
       const result = await axiosInstance.get(
         `/products?pageNo=${offset}&perPage=${limit}&minPrice=${price_min}&maxPrice=${price_max}&categoryId=${categoryId}`
       );
+      console.log(result.data, "productssssssssssssssssssss");
       return result.data;
     } catch (e) {
       const error = e as AxiosError;

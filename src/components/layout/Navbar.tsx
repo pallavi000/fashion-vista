@@ -145,8 +145,8 @@ export default function Navbar() {
               return (
                 <Link
                   color="text.primary"
-                  to={`/category/${category.id}/products`}
-                  key={category.id}
+                  to={`/category/${category._id}/products`}
+                  key={category._id}
                 >
                   <Typography variant="body1" fontWeight={"500"}>
                     {category.name}

@@ -24,7 +24,7 @@ const App = () => {
 
   // Get current user
   useEffect(() => {
-    if (access_token && user) {
+    if (access_token && !user) {
       dispatch(getCurrentUser());
     }
   }, [access_token, user, dispatch]);

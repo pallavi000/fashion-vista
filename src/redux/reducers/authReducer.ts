@@ -50,8 +50,8 @@ const authSlice = createSlice({
       return {
         ...state,
         isLoading: false,
-        access_token: action.payload.access_token,
-        refresh_token: action.payload.refresh_token,
+        access_token: action.payload.accessToken,
+        refresh_token: action.payload.refreshToken,
         error: null,
       };
     });
@@ -128,7 +128,6 @@ export const loginUser = createAsyncThunk(
         email,
         password,
       });
-
       showCustomToastr("Login successfull.", "success");
       return result.data;
     } catch (e) {

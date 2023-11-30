@@ -66,7 +66,7 @@ function AdminCategories() {
               </Grid>
             ))
           : categories.map((category) => (
-              <Grid key={category.id} item xs={6} sm={4} md={3}>
+              <Grid key={category._id} item xs={6} sm={4} md={3}>
                 <AdminCategoryCard category={category} />
               </Grid>
             ))}

@@ -73,7 +73,7 @@ function Cart() {
                 </TableHead>
                 <TableBody>
                   {items.map((item: TCart) => (
-                    <CartItem key={item.product.id} item={item} />
+                    <CartItem key={item.product._id} item={item} />
                   ))}
                 </TableBody>
               </Table>

@@ -23,7 +23,7 @@ export const categoriesHandlers = [
     "https://api.escuelajs.co/api/v1/categories/:id",
     async (req, res, ctx) => {
       const { id } = req.params;
-      const findIndex = categoryData.findIndex((c) => c.id === Number(id));
+      const findIndex = categoryData.findIndex((c) => c._id === Number(id));
       if (findIndex !== -1) {
         const data = await req.json();
         const updatedProduct = { ...categoryData[findIndex], ...data };
@@ -36,7 +36,7 @@ export const categoriesHandlers = [
     "https://api.escuelajs.co/api/v1/categories/:id",
     async (req, res, ctx) => {
       const { id } = req.params;
-      const findIndex = categoryData.findIndex((c) => c.id === Number(id));
+      const findIndex = categoryData.findIndex((c) => c._id === Number(id));
       if (findIndex !== -1) {
         return res(ctx.json(id));
       }

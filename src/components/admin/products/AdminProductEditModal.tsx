@@ -42,7 +42,7 @@ import LoadingButton from "../../LoadingButton";
 
 // yup validation schema
 const validationSchema = yup.object().shape({
-  title: yup.string().required("Name is required"),
+  name: yup.string().required("Name is required"),
   price: yup.number().required("Price is required"),
   description: yup.string().required("Description is required"),
   categoryId: yup.number().required("Category is required"),
@@ -83,9 +83,9 @@ function AdminProductEditModal({
 
   // set default values
   React.useEffect(() => {
-    setValue("title", product.title);
+    setValue("name", product.name);
     setValue("price", product.price);
-    setValue("categoryId", product.category.id);
+    setValue("categoryId", product.category._id);
     setValue("description", product.description);
     setValue("image", product.images[0]);
   }, [product]);
@@ -94,7 +94,7 @@ function AdminProductEditModal({
   const onSubmit = async (data: ProductInputs) => {
     const productData: ProductInputsData = {
       ...data,
-      id: product.id,
+      _id: product._id,
       images: [data.image, ...product.images],
     };
     await dispatch(updateAdminProduct(productData));
@@ -122,15 +122,15 @@ function AdminProductEditModal({
             }}
           >
             <Controller
-              name="title"
+              name="name"
               control={control}
               render={({ field }) => (
                 <TextField
                   {...field}
                   label="Title"
                   variant="outlined"
-                  error={Boolean(errors.title)}
-                  helperText={errors.title?.message}
+                  error={Boolean(errors.name)}
+                  helperText={errors.name?.message}
                 />
               )}
             />
@@ -187,7 +187,7 @@ function AdminProductEditModal({
                   >
                     {categories.map((category) => {
                       return (
-                        <MenuItem key={category.id} value={category.id}>
+                        <MenuItem key={category._id} value={category._id}>
                           {category.name}
                         </MenuItem>
                       );

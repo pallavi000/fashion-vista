@@ -90,8 +90,8 @@ function SidebarFilter({
               {categories.map((category) => {
                 return (
                   <FormControlLabel
-                    key={category.id}
-                    value={category.id}
+                    key={category._id}
+                    value={category._id}
                     control={<Radio />}
                     label={category.name}
                     onChange={handleChangeCategory}
