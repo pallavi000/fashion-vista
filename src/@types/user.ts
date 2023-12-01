@@ -13,7 +13,7 @@ export interface RegisterInputs extends LoginInputs {
 export type TUserRole = "USER" | "ADMIN";
 
 export type TUser = {
-  id: number;
+  _id: string;
   email: string;
   firstName: string;
   lastName: string;

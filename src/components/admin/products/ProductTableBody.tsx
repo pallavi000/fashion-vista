@@ -21,7 +21,7 @@ import { TProduct } from "../../../@types/product";
 // component props type
 type ProductTableBodyProps = {
   product: TProduct;
-  selectedProducts: number[];
+  selectedProducts: string[];
   handleSelectClick: Function;
   handlePopoverOpen: Function;
 };

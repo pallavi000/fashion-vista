@@ -37,7 +37,7 @@ describe("user reducers", () => {
 
   test("should update user data", async () => {
     const data: TUser = {
-      id: 2,
+      _id: "2",
       email: "test@mail.com",
       firstName: "Maria",
       lastName: "stha",
@@ -48,7 +48,7 @@ describe("user reducers", () => {
     };
     const res = await store.dispatch(updateUser(data));
     expect(res.meta.arg).toMatchObject({
-      id: 2,
+      _id: "2",
       email: "test@mail.com",
       firstName: "Maria",
       lastName: "stha",
@@ -60,7 +60,7 @@ describe("user reducers", () => {
   });
 
   test("should delete product by id", async () => {
-    const res = store.dispatch(deleteUser({ id: 1 }));
+    const res = store.dispatch(deleteUser({ id: "1" }));
     expect(res.arg.id).toBe(1);
   });
 });

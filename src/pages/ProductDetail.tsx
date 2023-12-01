@@ -57,8 +57,7 @@ function ProductDetail() {
   const dispatch = useAppDispatch();
 
   // current product id
-  const productId = Number(params.id);
-  console.log(params.id, "idddddddddddddddddddddddddd");
+  const productId = params.id;
 
   // current product state
   const {
@@ -82,12 +81,11 @@ function ProductDetail() {
   // cart state
   const cartItem = useSelector((state: AppState) => state.cart);
   const isAlreadyInCart = cartItem.items.find(
-    (item) => item.product._id === product?._id && item.userId === user?.id
+    (item) => item.product._id === product?._id && item.user === user?._id
   );
 
   // get current product
   useEffect(() => {
-    console.log(productId, "productId");
     dispatch(fetchProductById({ id: productId }));
   }, [productId]);
 
@@ -110,7 +108,8 @@ function ProductDetail() {
       const cartItem: TCart = {
         product,
         quantity: quantityCount,
-        userId: user.id,
+        user: user._id,
+        total: product.price * quantityCount,
       };
       dispatch(addToCart(cartItem));
       // 1 second of dummy animation api call

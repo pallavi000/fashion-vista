@@ -41,7 +41,7 @@ describe("Category reducer: DELETE, PUT, POST", () => {
   });
 
   test("should delete product by id", async () => {
-    const res = store.dispatch(deleteAdminCategory({ id: 1 }));
+    const res = store.dispatch(deleteAdminCategory({ id: "1" }));
     expect(res.arg.id).toBe(1);
   });
 });

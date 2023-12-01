@@ -18,7 +18,7 @@ export const handlers = [
     "https://api.escuelajs.co/api/v1/users/:id",
     async (req, res, ctx) => {
       const { id } = req.params;
-      const findIndex = userData.findIndex((u) => u.id === Number(id));
+      const findIndex = userData.findIndex((u) => u._id === id);
       if (findIndex !== -1) {
         const data = await req.json();
         const updatedUser = { ...userData[findIndex], ...data };
@@ -31,7 +31,7 @@ export const handlers = [
     "https://api.escuelajs.co/api/v1/users/:id",
     async (req, res, ctx) => {
       const { id } = req.params;
-      const findIndex = userData.findIndex((u) => u.id === Number(id));
+      const findIndex = userData.findIndex((u) => u._id === id);
       if (findIndex !== -1) {
         return res(ctx.json(id));
       }

@@ -11,7 +11,7 @@ export const productsHandlers = [
   rest.get(`https://api.escuelajs.co/api/v1/products/:id`, (req, res, ctx) => {
     const { id } = req.params;
     const foundIndex = productsData.findIndex(
-      (item: TProduct) => item._id === Number(id)
+      (item: TProduct) => item._id === id
     );
     if (foundIndex !== -1) {
       return res(ctx.json(productsData[foundIndex]));
@@ -28,7 +28,7 @@ rest.post("https://api.escuelajs.co/api/v1/products", async (req, res, ctx) => {
 
 rest.put("/products/:id", async (req, res, ctx) => {
   const { id } = req.params;
-  const findIndex = productsData.findIndex((p) => p._id === Number(id));
+  const findIndex = productsData.findIndex((p) => p._id === id);
   if (findIndex !== -1) {
     const data = await req.json();
     const updatedProduct = { ...productsData[findIndex], ...data };
@@ -38,7 +38,7 @@ rest.put("/products/:id", async (req, res, ctx) => {
 
 rest.delete("/products/:id", async (req, res, ctx) => {
   const { id } = req.params;
-  const findIndex = productsData.findIndex((p) => p._id === Number(id));
+  const findIndex = productsData.findIndex((p) => p._id === id);
   if (findIndex !== -1) {
     return res(ctx.json(true));
   }

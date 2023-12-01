@@ -45,7 +45,7 @@ const validationSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
   price: yup.number().required("Price is required"),
   description: yup.string().required("Description is required"),
-  categoryId: yup.number().required("Category is required"),
+  categoryId: yup.string().required("Category is required"),
   image: yup.string().required("Image is required"),
 });
 

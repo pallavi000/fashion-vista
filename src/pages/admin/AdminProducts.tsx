@@ -51,7 +51,7 @@ function AdminProducts() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   // filter states
-  const [selectedProducts, setSelectedProducts] = React.useState<number[]>([]);
+  const [selectedProducts, setSelectedProducts] = React.useState<string[]>([]);
   const [filterName, setFilterName] = React.useState("");
 
   // popover control states
@@ -97,7 +97,7 @@ function AdminProducts() {
   // handle single checkbox click
   const handleSelectClick = (
     event: React.ChangeEvent<HTMLInputElement>,
-    id: number
+    id: string
   ) => {
     if (selectedProducts.includes(id)) {
       const filterdSelectedUsers = selectedProducts.filter((s) => s !== id);

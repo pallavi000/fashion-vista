@@ -3,5 +3,13 @@ import { TProduct } from "./product";
 export type TCart = {
   product: TProduct;
   quantity: number;
-  userId: number;
+  user: string;
+  total: number;
+};
+
+export type TCartInput = {
+  product: string;
+  quantity: number;
+  user: string;
+  total: number;
 };

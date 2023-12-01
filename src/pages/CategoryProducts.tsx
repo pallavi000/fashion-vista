@@ -76,7 +76,7 @@ function CategoryProducts() {
   // set current category
   React.useEffect(() => {
     if (categories.length) {
-      const foundCategory = categories.find((cat) => cat._id === Number(id));
+      const foundCategory = categories.find((cat) => cat._id === id);
       if (foundCategory) dispatch(setCategory(foundCategory));
     }
   }, [categories, id]);

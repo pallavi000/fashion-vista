@@ -165,7 +165,7 @@ export const updateAdminProduct = createAsyncThunk(
 
 export const deleteAdminProduct = createAsyncThunk(
   "deleteAdminProduct",
-  async ({ id }: { id: number }) => {
+  async ({ id }: { id: string }) => {
     try {
       await axiosInstance.delete(`/products/${id}`);
       showCustomToastr("Product removed successfully.", "success");

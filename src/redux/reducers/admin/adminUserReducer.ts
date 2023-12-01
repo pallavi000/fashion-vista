@@ -78,7 +78,7 @@ const adminUserSlice = createSlice({
       updateUser.fulfilled,
       (state, action: PayloadAction<TUser>) => {
         const userIndex = state.data.findIndex(
-          (c) => c.id === action.payload.id
+          (c) => c._id === action.payload._id
         );
         if (userIndex !== -1) {
           state.data[userIndex] = action.payload;
@@ -106,7 +106,7 @@ const adminUserSlice = createSlice({
         ...state,
         isLoading: false,
         error: null,
-        data: state.data.filter((user) => user.id !== action.payload),
+        data: state.data.filter((user) => user._id !== action.payload),
       };
     });
     builder.addCase(deleteUser.rejected, (state, action) => {
@@ -152,7 +152,7 @@ export const updateUser = createAsyncThunk(
   "updateUser",
   async (data: TUser) => {
     try {
-      const result = await axiosInstance.put(`/users/${data.id}`, data);
+      const result = await axiosInstance.put(`/users/${data._id}`, data);
       showCustomToastr("User updated successfully.", "success");
       return result.data;
     } catch (e) {
@@ -165,7 +165,7 @@ export const updateUser = createAsyncThunk(
 
 export const deleteUser = createAsyncThunk(
   "deleteUser",
-  async ({ id }: { id: number }) => {
+  async ({ id }: { id: string }) => {
     try {
       showCustomToastr("User deleted successfully.", "success");
       return id;

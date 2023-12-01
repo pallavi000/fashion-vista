@@ -25,19 +25,19 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addToCart: (state, action: PayloadAction<TCart>) => {
-      const productIndex = state.items.findIndex(
-        (item) => item.product._id === action.payload.product._id
-      );
-      if (productIndex !== -1) {
-        state.items[productIndex].quantity += action.payload.quantity;
-      } else {
-        state.items.push(action.payload);
-      }
-      state.totalQuantity += action.payload.quantity;
-      state.totalPrice +=
-        action.payload.product.price * action.payload.quantity;
-    },
+    // addToCart: (state, action: PayloadAction<TCart>) => {
+    //   const productIndex = state.items.findIndex(
+    //     (item) => item.product._id === action.payload.product._id
+    //   );
+    //   if (productIndex !== -1) {
+    //     state.items[productIndex].quantity += action.payload.quantity;
+    //   } else {
+    //     state.items.push(action.payload);
+    //   }
+    //   state.totalQuantity += action.payload.quantity;
+    //   state.totalPrice +=
+    //     action.payload.product.price * action.payload.quantity;
+    // },
 
     removeFromCart: (state, action: PayloadAction<TProduct>) => {
       const productIndex = state.items.findIndex(
@@ -85,26 +85,53 @@ const cartSlice = createSlice({
       };
     },
   },
+
+  extraReducers: (builder) => {
+    builder.addCase(addToCart.pending, (state, action) => {
+      return {
+        ...state,
+        isLoading: true,
+      };
+    });
+    builder.addCase(addToCart.fulfilled, (state, action) => {
+      return {
+        ...state,
+        isLoading: false,
+        error: null,
+        data: action.payload,
+      };
+    });
+    builder.addCase(addToCart.rejected, (state, action) => {
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error.message || "",
+      };
+    });
+  },
 });
 
-export const addNewCart = createAsyncThunk(
-  "addNewCart",
-  async (data: TCart) => {
-    try {
-      const response = await axiosInstance.post("/carts", data);
-      showCustomToastr("Cart Added successfully.", "success");
-      return response.data;
-    } catch (e) {
-      const error = e as AxiosError;
-      showApiErrorToastr(error);
-      throw error;
-    }
+export const addToCart = createAsyncThunk("addToCart", async (data: TCart) => {
+  try {
+    const cartInput = {
+      ...data,
+      product: data.product._id,
+    };
+    console.log(cartInput, "cartInput");
+    const response = await axiosInstance.post("/carts", cartInput);
+    showCustomToastr("Cart Added successfully.", "success");
+    return response.data;
+  } catch (e) {
+    const error = e as AxiosError;
+    console.log(error, "error");
+    showApiErrorToastr(error);
+    throw error;
   }
-);
+});
 
 // actions
 export const {
-  addToCart,
+  // addToCart,
   removeFromCart,
   emptyCart,
   increaseCartItemQuantity,

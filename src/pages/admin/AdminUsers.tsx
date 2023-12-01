@@ -48,7 +48,7 @@ function AdminUsers() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   // filter states
-  const [selectedUsers, setSelectedUsers] = React.useState<number[]>([]);
+  const [selectedUsers, setSelectedUsers] = React.useState<string[]>([]);
   const [filterName, setFilterName] = React.useState("");
 
   // popover menu states
@@ -78,7 +78,7 @@ function AdminUsers() {
   // handle checkbox all click
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = users.map((u) => u.id);
+      const newSelecteds = users.map((u) => u._id);
       setSelectedUsers(newSelecteds);
       return;
     }
@@ -88,7 +88,7 @@ function AdminUsers() {
   // handle single checkbox click
   const handleSelectClick = (
     event: React.ChangeEvent<HTMLInputElement>,
-    id: number
+    id: string
   ) => {
     if (selectedUsers.includes(id)) {
       const filterdSelectedUsers = selectedUsers.filter((s) => s !== id);
@@ -140,7 +140,7 @@ function AdminUsers() {
   };
 
   const handleUserDeleteClick = () => {
-    if (activeUser) dispatch(deleteUser({ id: activeUser.id }));
+    if (activeUser) dispatch(deleteUser({ id: activeUser._id }));
     handlePopoverClose();
   };
 
@@ -227,7 +227,7 @@ function AdminUsers() {
                   .map((user: TUser) => {
                     return (
                       <UserTableBody
-                        key={user.id}
+                        key={user._id}
                         user={user}
                         selectedUsers={selectedUsers}
                         handleSelectClick={handleSelectClick}

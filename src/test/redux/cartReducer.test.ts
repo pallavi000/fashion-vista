@@ -25,7 +25,8 @@ describe("cart reducers", () => {
     const cartItem: TCart = {
       product: productsData[0],
       quantity: 1,
-      userId: userData[0].id,
+      user: userData[0]._id,
+      total: productsData[0].price * 1,
     };
     store.dispatch(addToCart(cartItem));
     expect(store.getState().cart.items[0]).toMatchObject({
@@ -38,7 +39,8 @@ describe("cart reducers", () => {
     const cartItem = {
       product: productsData[0],
       quantity: 1,
-      userId: userData[0].id,
+      user: userData[0]._id,
+      total: productsData[0].price * 1,
     };
     store.dispatch(increaseCartItemQuantity(cartItem));
     expect(store.getState().cart.totalQuantity).toBe(2);
@@ -48,7 +50,8 @@ describe("cart reducers", () => {
     const cartItem = {
       product: productsData[0],
       quantity: 1,
-      userId: userData[0].id,
+      user: userData[0]._id,
+      total: productsData[0].price * 1,
     };
     store.dispatch(decreaseCartItemQuantity(cartItem));
     expect(store.getState().cart.totalQuantity).toBe(1);

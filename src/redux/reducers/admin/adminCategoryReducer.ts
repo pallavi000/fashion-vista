@@ -165,7 +165,7 @@ export const updateAdminCategory = createAsyncThunk(
 
 export const deleteAdminCategory = createAsyncThunk(
   "deleteAdminCategory",
-  async ({ id }: { id: number }) => {
+  async ({ id }: { id: string }) => {
     try {
       await axiosInstance.delete(`/categories/${id}`);
       showCustomToastr("Category removed successfully.", "success");

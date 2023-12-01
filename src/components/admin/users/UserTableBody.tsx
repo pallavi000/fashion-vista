@@ -19,7 +19,7 @@ import { TUser } from "../../../@types/user";
 // component props type
 type UserTableBodyProps = {
   user: TUser;
-  selectedUsers: number[];
+  selectedUsers: string[];
   handleSelectClick: Function;
   handlePopoverOpen: Function;
 };
@@ -31,12 +31,12 @@ function UserTableBody({
   handlePopoverOpen,
 }: UserTableBodyProps) {
   // is this row selected?
-  const selectedUser = selectedUsers.indexOf(user.id) !== -1;
+  const selectedUser = selectedUsers.indexOf(user._id) !== -1;
   return (
     <>
       <TableRow
         hover
-        key={user.id}
+        key={user._id}
         tabIndex={-1}
         role="checkbox"
         selected={selectedUser}
@@ -44,7 +44,7 @@ function UserTableBody({
         <TableCell padding="checkbox">
           <Checkbox
             checked={selectedUser}
-            onChange={(event) => handleSelectClick(event, user.id)}
+            onChange={(event) => handleSelectClick(event, user._id)}
           />
         </TableCell>
         <TableCell component="th" scope="row" padding="none">

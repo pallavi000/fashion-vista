@@ -2,7 +2,7 @@ import { TUser } from "../../@types/user";
 
 export const userData: TUser[] = [
   {
-    id: 1,
+    _id: "1",
     email: "john@mail.com",
     firstName: "Jhon",
     lastName: "stha",
@@ -12,7 +12,7 @@ export const userData: TUser[] = [
     updatedAt: "2023-10-03T19:00:54.000Z",
   },
   {
-    id: 2,
+    _id: "2",
     email: "maria@mail.com",
     firstName: "Maria",
     lastName: "stha",
@@ -22,7 +22,7 @@ export const userData: TUser[] = [
     updatedAt: "2023-10-03T19:00:54.000Z",
   },
   {
-    id: 3,
+    _id: "3",
     email: "admin@mail.com",
     firstName: "Admin",
     lastName: "stha",

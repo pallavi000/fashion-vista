@@ -41,7 +41,7 @@ const validationSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
   price: yup.number().required("Price is required"),
   description: yup.string().required("Description is required"),
-  categoryId: yup.number().required("Category is required"),
+  categoryId: yup.string().required("Category is required"),
   image: yup.string().required("Image is required"),
 });
 
@@ -77,7 +77,7 @@ export default function AdminProductAddModal({
   const onSubmit = async (data: ProductInputs) => {
     const productData: ProductInputsData = {
       ...data,
-      _id: 0,
+      _id: "0",
       images: [data.image],
     };
     await dispatch(addNewProduct(productData));
@@ -168,7 +168,7 @@ export default function AdminProductAddModal({
                     variant="outlined"
                     error={Boolean(errors.categoryId)}
                   >
-                    {categories.map((category) => {
+                    {categories.map((category: TCategory) => {
                       return (
                         <MenuItem key={category._id} value={category._id}>
                           {category.name}

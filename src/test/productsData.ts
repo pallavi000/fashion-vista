@@ -2,7 +2,7 @@ import { TProduct } from "../@types/product";
 
 export const productsData: TProduct[] = [
   {
-    _id: 540,
+    _id: "540",
     name: "Люк класс шузы",
     price: 10,
     description: "носят тотлько не гомосекчуалисты и undefined",
@@ -12,13 +12,13 @@ export const productsData: TProduct[] = [
     creationAt: "2023-10-04T08:39:27.000Z",
     updatedAt: "2023-10-04T08:39:27.000Z",
     category: {
-      _id: 27,
+      _id: "27",
       name: "Ishake",
       image: "https://placeimg.com/640/480/any",
     },
   },
   {
-    _id: 541,
+    _id: "541",
     name: "Раб для вас",
     price: 100,
     description: "Сделает все,но некторое только с доплатой",
@@ -28,7 +28,7 @@ export const productsData: TProduct[] = [
     creationAt: "2023-10-04T08:41:15.000Z",
     updatedAt: "2023-10-04T08:41:15.000Z",
     category: {
-      _id: 27,
+      _id: "27",
       name: "Ishake",
       image: "https://placeimg.com/640/480/any",
     },

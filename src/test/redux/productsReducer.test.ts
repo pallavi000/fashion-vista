@@ -21,15 +21,15 @@ describe("product reducers", () => {
   });
 
   test("should fetch single product", async () => {
-    await store.dispatch(fetchProductById({ id: 9 }));
+    await store.dispatch(fetchProductById({ id: "9" }));
     expect(store.getState().product.data).toMatchObject({
-      id: 9,
+      id: "9",
       name: "Bespoke Wooden Shirt",
       price: 551,
       description:
         "The automobile layout consists of a front-engine design, with transaxle-type transmissions mounted at the rear of the engine and four wheel drive",
       category: {
-        id: 5,
+        id: "5",
         name: "Others",
         image: "https://placeimg.com/640/480/any?r=0.591926261873231",
       },
@@ -43,21 +43,21 @@ describe("product reducers", () => {
 
   test("should add new product", async () => {
     let data = {
-      _id: 100,
+      _id: "100",
       name: "new product",
       price: 123,
       description: "it is a new product",
-      categoryId: 1,
+      categoryId: "1",
       image: "https://www.google.com",
       images: ["https://www.google.com"],
     };
     const res = await store.dispatch(addNewProduct(data));
     expect(res.meta.arg).toMatchObject({
-      _id: 100,
+      _id: "100",
       name: "new product",
       price: 123,
       description: "it is a new product",
-      categoryId: 1,
+      categoryId: "1",
       image: "https://www.google.com",
       images: ["https://www.google.com"],
     });
@@ -65,29 +65,29 @@ describe("product reducers", () => {
 
   test("should update product data", async () => {
     let data = {
-      _id: 9,
+      _id: "9",
       name: "new product",
       price: 123,
       description: "it is a new product",
-      categoryId: 1,
+      categoryId: "1",
       image: "https://www.google.com",
       images: ["https://www.google.com"],
     };
 
     const res = store.dispatch(updateAdminProduct(data));
     expect(res.arg).toMatchObject({
-      _id: 9,
+      _id: "9",
       name: "new product",
       price: 123,
       description: "it is a new product",
-      categoryId: 1,
+      categoryId: "1",
       image: "https://www.google.com",
       images: ["https://www.google.com"],
     });
   });
 
   test("should delete product by id", async () => {
-    const res = store.dispatch(deleteAdminProduct({ id: 9 }));
+    const res = store.dispatch(deleteAdminProduct({ id: "9" }));
     expect(res.arg.id).toBe(9);
   });
 });

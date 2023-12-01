@@ -49,7 +49,7 @@ const productSlice = createSlice({
 // ==============================================
 export const fetchProductById = createAsyncThunk(
   "fetchProductById",
-  async ({ id }: { id: number }) => {
+  async ({ id }: { id: string | undefined }) => {
     try {
       const result = await axiosInstance.get(`/products/${id}`);
       return result.data;

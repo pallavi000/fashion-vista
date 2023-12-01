@@ -1,7 +1,7 @@
 import { TCategory } from "./category";
 
 export type TProduct = {
-  _id: number;
+  _id: string;
   name: string;
   price: number;
   description: string;
@@ -15,11 +15,11 @@ export interface ProductInputs {
   name: string;
   price: number;
   description: string;
-  categoryId: number;
+  categoryId: string;
   image: string;
 }
 
 export interface ProductInputsData extends ProductInputs {
-  _id: number;
+  _id: string;
   images: string[];
 }
