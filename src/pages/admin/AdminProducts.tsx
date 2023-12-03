@@ -42,6 +42,7 @@ import AdminProductAddModal from "../../components/admin/products/AdminProductAd
 
 // types
 import { TProduct } from "../../@types/product";
+import { fetchAdminSizes } from "../../redux/reducers/admin/adminSizeReducer";
 
 function AdminProducts() {
   const dispatch = useAppDispatch();
@@ -77,11 +78,17 @@ function AdminProducts() {
     (state: AppState) => state.adminCategories.data
   );
 
+  // categories
+  const sizes = useSelector((state: AppState) => state.adminSizes.data);
+
   // fetch categories & products
   useEffect(() => {
     dispatch(fetchAdminAllProducts());
     // categories for adding and editing products
     dispatch(fetchAdminCategories());
+
+    // sizes for adding and editing products
+    dispatch(fetchAdminSizes());
   }, []);
 
   // handle checkbox all click
@@ -181,12 +188,14 @@ function AdminProducts() {
 
       <AdminProductAddModal
         categories={categories}
+        sizes={sizes}
         isOpen={isAddModalOpen}
         setIsOpen={setIsAddModalOpen}
       />
       {products.length ? (
         <AdminProductEditModal
           categories={categories}
+          sizes={sizes}
           isOpen={isEditModalOpen}
           setIsOpen={setIsEditModalOpen}
           product={activeProduct || products[0]}

@@ -1,4 +1,5 @@
 import { TCategory } from "./category";
+import { TSize } from "./size";
 
 export type TProduct = {
   _id: string;
@@ -6,6 +7,7 @@ export type TProduct = {
   price: number;
   description: string;
   category: TCategory;
+  size: TSize;
   images: string[];
   creationAt?: string;
   updatedAt?: string;
@@ -18,7 +20,7 @@ export interface ProductInputs {
   categoryId: string;
   image: string;
   stock: number;
-  sizes: string[];
+  sizeId: string;
 }
 
 export interface ProductInputsData extends ProductInputs {

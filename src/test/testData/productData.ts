@@ -17,6 +17,10 @@ export const productsData: TProduct[] = [
       "https://placeimg.com/640/480/any?r=0.9300320592588625",
       "https://placeimg.com/640/480/any?r=0.8807778235430017",
     ],
+    size: {
+      _id: "1",
+      name: "large",
+    },
   },
   {
     _id: "9",
@@ -34,6 +38,10 @@ export const productsData: TProduct[] = [
       "https://placeimg.com/640/480/any?r=0.9300320592588625",
       "https://placeimg.com/640/480/any?r=0.8807778235430017",
     ],
+    size: {
+      _id: "1",
+      name: "large",
+    },
   },
   {
     _id: "10",
@@ -51,5 +59,9 @@ export const productsData: TProduct[] = [
       "https://placeimg.com/640/480/any?r=0.9300320592588625",
       "https://placeimg.com/640/480/any?r=0.8807778235430017",
     ],
+    size: {
+      _id: "1",
+      name: "large",
+    },
   },
 ];

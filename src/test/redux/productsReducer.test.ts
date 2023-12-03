@@ -38,6 +38,10 @@ describe("product reducers", () => {
         "https://placeimg.com/640/480/any?r=0.9300320592588625",
         "https://placeimg.com/640/480/any?r=0.8807778235430017",
       ],
+      size: {
+        _id: "1",
+        name: "large",
+      },
     });
   });
 
@@ -51,7 +55,7 @@ describe("product reducers", () => {
       image: "https://www.google.com",
       images: ["https://www.google.com"],
       stock: 11,
-      sizes: ["1"],
+      sizeId: "1",
     };
     const res = await store.dispatch(addNewProduct(data));
     expect(res.meta.arg).toMatchObject({
@@ -63,7 +67,7 @@ describe("product reducers", () => {
       image: "https://www.google.com",
       images: ["https://www.google.com"],
       stock: 11,
-      sizes: ["1"],
+      sizeId: "1",
     });
   });
 
@@ -77,7 +81,7 @@ describe("product reducers", () => {
       image: "https://www.google.com",
       images: ["https://www.google.com"],
       stock: 11,
-      sizes: ["1"],
+      sizeId: "1",
     };
 
     const res = store.dispatch(updateAdminProduct(data));
@@ -87,10 +91,10 @@ describe("product reducers", () => {
       price: 123,
       description: "it is a new product",
       categoryId: "1",
+      sizeId: "1",
       image: "https://www.google.com",
       images: ["https://www.google.com"],
       stock: 11,
-      sizes: ["1"],
     });
   });
 

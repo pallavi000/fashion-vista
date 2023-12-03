@@ -16,6 +16,10 @@ export const productsData: TProduct[] = [
       name: "Ishake",
       image: "https://placeimg.com/640/480/any",
     },
+    size: {
+      _id: "1",
+      name: "large",
+    },
   },
   {
     _id: "541",
@@ -31,6 +35,10 @@ export const productsData: TProduct[] = [
       _id: "27",
       name: "Ishake",
       image: "https://placeimg.com/640/480/any",
+    },
+    size: {
+      _id: "1",
+      name: "large",
     },
   },
 ];

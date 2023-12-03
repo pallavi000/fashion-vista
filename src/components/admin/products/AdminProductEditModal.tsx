@@ -39,6 +39,7 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
 // components
 import LoadingButton from "../../LoadingButton";
+import { TSize } from "../../../@types/size";
 
 // yup validation schema
 const validationSchema = yup.object().shape({
@@ -48,16 +49,14 @@ const validationSchema = yup.object().shape({
   categoryId: yup.string().required("Category is required"),
   image: yup.string().required("Image is required"),
   stock: yup.number().required("Stock is required"),
-  sizes: yup
-    .array()
-    .of(yup.string().required("Size is required"))
-    .required("Sizes are required"),
+  sizeId: yup.string().required("Size is required"),
 });
 
 // component props type
 type AdminProductEditModalProps = {
   product: TProduct;
   categories: TCategory[];
+  sizes: TSize[];
   isOpen: boolean;
   setIsOpen: Function;
 };
@@ -65,6 +64,7 @@ type AdminProductEditModalProps = {
 function AdminProductEditModal({
   product,
   categories,
+  sizes,
   isOpen,
   setIsOpen,
 }: AdminProductEditModalProps) {
@@ -91,6 +91,7 @@ function AdminProductEditModal({
     setValue("name", product.name);
     setValue("price", product.price);
     setValue("categoryId", product.category._id);
+    setValue("sizeId", product.size._id);
     setValue("description", product.description);
     setValue("image", product.images[0]);
   }, [product]);
@@ -207,6 +208,34 @@ function AdminProductEditModal({
               )}
             />
 
+            <Controller
+              name="sizeId"
+              control={control}
+              render={({ field }) => (
+                <FormControl error={Boolean(errors.sizeId)}>
+                  <InputLabel id="demo-simple-select-label">
+                    Select a Size
+                  </InputLabel>
+                  <Select
+                    {...field}
+                    label="Select a size"
+                    variant="outlined"
+                    error={Boolean(errors.sizeId)}
+                  >
+                    {sizes.map((size: TSize) => {
+                      return (
+                        <MenuItem key={size._id} value={size._id}>
+                          {size.name}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                  {errors.sizeId?.message ? (
+                    <FormHelperText>{errors.sizeId?.message}</FormHelperText>
+                  ) : null}
+                </FormControl>
+              )}
+            />
             <Controller
               name="image"
               control={control}
