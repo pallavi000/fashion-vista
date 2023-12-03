@@ -2,6 +2,7 @@ import { TCart } from "./cart";
 import { TCategory } from "./category";
 import { TOrder } from "./order";
 import { TProduct } from "./product";
+import { TSize } from "./size";
 import { TUser } from "./user";
 
 export type ProductState = {
@@ -25,6 +26,18 @@ export type CategoriesState = {
 export type CategoryState = {
   data: TCategory | null;
   products: TProduct[];
+  isLoading: boolean;
+  error: string | null;
+};
+
+export type SizesState = {
+  data: TSize[];
+  isLoading: boolean;
+  error: string | null;
+};
+
+export type SizeState = {
+  data: TSize | null;
   isLoading: boolean;
   error: string | null;
 };

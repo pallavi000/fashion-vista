@@ -17,6 +17,8 @@ export interface ProductInputs {
   description: string;
   categoryId: string;
   image: string;
+  stock: number;
+  sizes: string[];
 }
 
 export interface ProductInputsData extends ProductInputs {

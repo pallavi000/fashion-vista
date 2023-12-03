@@ -22,6 +22,7 @@ const App = () => {
     user: state.auth.user,
   }));
 
+  console.log(user, "state user");
   // Get current user
   useEffect(() => {
     if (access_token && !user) {

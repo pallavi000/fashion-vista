@@ -3,14 +3,16 @@ export type SidebarTitle =
   | "Users"
   | "Categories"
   | "Products"
-  | "Orders";
+  | "Orders"
+  | "Sizes";
 
 export type SidebarPath =
   | "/admin/dashboard"
   | "/admin/users"
   | "/admin/categories"
   | "/admin/products"
-  | "/admin/orders";
+  | "/admin/orders"
+  | "/admin/sizes";
 
 export type SidebarItem = {
   title: SidebarTitle;

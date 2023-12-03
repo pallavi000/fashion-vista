@@ -50,6 +50,8 @@ describe("product reducers", () => {
       categoryId: "1",
       image: "https://www.google.com",
       images: ["https://www.google.com"],
+      stock: 11,
+      sizes: ["1"],
     };
     const res = await store.dispatch(addNewProduct(data));
     expect(res.meta.arg).toMatchObject({
@@ -60,6 +62,8 @@ describe("product reducers", () => {
       categoryId: "1",
       image: "https://www.google.com",
       images: ["https://www.google.com"],
+      stock: 11,
+      sizes: ["1"],
     });
   });
 
@@ -72,6 +76,8 @@ describe("product reducers", () => {
       categoryId: "1",
       image: "https://www.google.com",
       images: ["https://www.google.com"],
+      stock: 11,
+      sizes: ["1"],
     };
 
     const res = store.dispatch(updateAdminProduct(data));
@@ -83,6 +89,8 @@ describe("product reducers", () => {
       categoryId: "1",
       image: "https://www.google.com",
       images: ["https://www.google.com"],
+      stock: 11,
+      sizes: ["1"],
     });
   });
 

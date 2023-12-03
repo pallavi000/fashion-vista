@@ -47,6 +47,11 @@ const validationSchema = yup.object().shape({
   description: yup.string().required("Description is required"),
   categoryId: yup.string().required("Category is required"),
   image: yup.string().required("Image is required"),
+  stock: yup.number().required("Stock is required"),
+  sizes: yup
+    .array()
+    .of(yup.string().required("Size is required"))
+    .required("Sizes are required"),
 });
 
 // component props type

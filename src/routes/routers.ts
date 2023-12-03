@@ -22,6 +22,7 @@ import AdminProfile from "../pages/admin/AdminProfile";
 
 // types
 import { Routers, TROUTES } from "../@types/routers";
+import AdminSizes from "../pages/admin/AdminSizes";
 
 // routes
 export const ROUTES: TROUTES = {
@@ -42,6 +43,7 @@ export const ROUTES: TROUTES = {
   ADMIN_PRODUCTS: "/admin/products",
   ADMIN_ORDERS: "/admin/orders",
   ADMIN_PROFILE: "/admin/profile",
+  ADMIN_SIZES: "/admin/sizes",
   NOT_FOUND: "*",
 };
 
@@ -72,5 +74,6 @@ export const routers: Routers[] = [
   { path: ROUTES.ADMIN_PRODUCTS, Component: AdminProducts, role: "ADMIN" },
   { path: ROUTES.ADMIN_ORDERS, Component: AdminOrders, role: "ADMIN" },
   { path: ROUTES.ADMIN_PROFILE, Component: AdminProfile, role: "ADMIN" },
+  { path: ROUTES.ADMIN_SIZES, Component: AdminSizes, role: "ADMIN" },
   { path: ROUTES.NOT_FOUND, Component: NotFound, role: "public" },
 ];

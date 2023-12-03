@@ -166,7 +166,6 @@ export const getCurrentUser = createAsyncThunk(
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      console.log(result, "resultttttttttttt");
       const { password, ...userData } = result.data;
       return userData;
     } catch (e) {

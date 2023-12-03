@@ -65,6 +65,11 @@ const sidebarItems: SidebarItem[] = [
     path: "/admin/orders",
     icon: <Money />,
   },
+  {
+    title: "Sizes",
+    path: "/admin/sizes",
+    icon: <Category />,
+  },
 ];
 
 // component props type
