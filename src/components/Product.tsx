@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 // MUI
-import { Box, Grid, Typography } from "@mui/material";
+import { Avatar, Box, Grid, Typography } from "@mui/material";
 
 // icons
 import { FavoriteBorder } from "@mui/icons-material";
@@ -18,8 +18,15 @@ function Product({ product }: ProductProps) {
     <Grid item xs={12} sm={6} md={4} lg={3}>
       <Box sx={{ height: "412px" }}>
         <Link to={`/product-detail/${product._id}`}>
-          <img
-            src={product.images[0]}
+          <Avatar
+            src={product.image}
+            alt={product.name}
+            variant="square"
+            sx={{ height: 250, width: "auto" }}
+          />
+
+          {/* <img
+            src={product.image}
             alt={product.name}
             height={250}
             style={{
@@ -27,7 +34,8 @@ function Product({ product }: ProductProps) {
               width: "100%",
               borderRadius: "0.5rem",
             }}
-          />
+          /> */}
+
           <Box
             sx={{
               display: "flex",

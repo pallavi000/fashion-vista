@@ -32,7 +32,7 @@ function AdminCategories() {
   // fetch categories
   useEffect(() => {
     dispatch(fetchAdminCategories());
-  }, []);
+  }, [dispatch]);
 
   return (
     <Container>

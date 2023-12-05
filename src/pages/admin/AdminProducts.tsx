@@ -165,6 +165,8 @@ function AdminProducts() {
   const filterProducts = products.filter((u) =>
     u.name.toLocaleLowerCase().includes(filterName.toLocaleLowerCase())
   );
+
+  console.log(filterProducts, "filterproduct");
   const isNotFound = !filterProducts.length && !!filterName;
 
   return (
@@ -241,19 +243,20 @@ function AdminProducts() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {filterProducts
-                .slice(page * rowsPerPage, rowsPerPage + page * rowsPerPage)
-                .map((product) => {
-                  return (
-                    <ProductTableBody
-                      key={product._id}
-                      product={product}
-                      selectedProducts={selectedProducts}
-                      handleSelectClick={handleSelectClick}
-                      handlePopoverOpen={handlePopoverOpen}
-                    />
-                  );
-                })}
+              {filterProducts &&
+                filterProducts
+                  .slice(page * rowsPerPage, rowsPerPage + page * rowsPerPage)
+                  .map((product) => {
+                    return (
+                      <ProductTableBody
+                        key={product._id}
+                        product={product}
+                        selectedProducts={selectedProducts}
+                        handleSelectClick={handleSelectClick}
+                        handlePopoverOpen={handlePopoverOpen}
+                      />
+                    );
+                  })}
             </TableBody>
 
             {isLoading && !products.length && (

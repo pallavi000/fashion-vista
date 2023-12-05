@@ -14,13 +14,13 @@ type OrderTableBodyProps = {
 function OrderTableBody({ order }: OrderTableBodyProps) {
   return (
     <TableRow>
-      <TableCell>{order.orderId}</TableCell>
+      <TableCell>{order._id}</TableCell>
 
       <TableCell component="th" scope="row">
-        {order.items.map((item) => {
+        {order.products.map((product) => {
           return (
             <Box
-              key={`${order.orderId}-${item.product._id}`}
+              key={`${order._id}-${product._id}`}
               display={"flex"}
               alignItems={"center"}
               sx={{ marginBottom: "0.5rem" }}
@@ -33,8 +33,8 @@ function OrderTableBody({ order }: OrderTableBodyProps) {
                     height: "100%",
                     objectFit: "contain",
                   }}
-                  alt={item.product.name}
-                  src={item.product.images[0]}
+                  alt={product.name}
+                  src={product.image}
                 />
               </Box>
               <div
@@ -50,7 +50,7 @@ function OrderTableBody({ order }: OrderTableBodyProps) {
                   fontSize={14}
                   noWrap
                 >
-                  {item.product.name}
+                  {product.name}
                 </Typography>
               </div>
             </Box>
@@ -59,16 +59,16 @@ function OrderTableBody({ order }: OrderTableBodyProps) {
       </TableCell>
       <TableCell>
         <Typography variant="caption" fontWeight={"400"} color={"text.primary"}>
-          {order.orderDate}
+          {order._id}
         </Typography>
       </TableCell>
       <TableCell>
         <Typography variant="caption" fontWeight={"400"} color={"text.primary"}>
-          {order.paymentMethod}
+          {order.payment.method}
         </Typography>
       </TableCell>
       <TableCell>
-        <Chip color="success" size="small" label={`${order.deliveryStatus}`} />
+        <Chip color="success" size="small" label={`${order.payment.status}`} />
       </TableCell>
       <TableCell>${order.total}</TableCell>
     </TableRow>

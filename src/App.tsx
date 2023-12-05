@@ -11,22 +11,30 @@ import AppRouter from "./routes/AppRouter";
 
 // components
 import ScrollToTop from "./components/ScrollToTop";
+import { getCartItems } from "./redux/reducers/cartReducer";
 
 const App = () => {
   // App Dispatch
   const dispatch = useAppDispatch();
 
   // Auth States
-  const { access_token, user } = useSelector((state: AppState) => ({
+  const { access_token, user, cart } = useSelector((state: AppState) => ({
     access_token: state.auth.access_token,
     user: state.auth.user,
+    cart: state.cart.items,
   }));
+  console.log(cart, "cartItems");
 
-  console.log(user, "state user");
   // Get current user
   useEffect(() => {
     if (access_token && !user) {
       dispatch(getCurrentUser());
+    }
+  }, [access_token, user, dispatch]);
+
+  useEffect(() => {
+    if (access_token || user) {
+      dispatch(getCartItems());
     }
   }, [access_token, user, dispatch]);
 

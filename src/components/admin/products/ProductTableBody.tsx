@@ -50,7 +50,7 @@ function ProductTableBody({
       </TableCell>
       <TableCell component="th" scope="row" padding="none">
         <Stack direction="row" alignItems="center" spacing={2}>
-          <Avatar alt={product.name} src={product.images[0]} />
+          <Avatar alt={product.name} src={product.image} />
           <Typography variant="body1" noWrap>
             {product.name}
           </Typography>

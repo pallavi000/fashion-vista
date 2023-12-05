@@ -25,7 +25,7 @@ import {
 
 // types
 import { TCategory } from "../../../@types/category";
-import { ProductInputs, ProductInputsData } from "../../../@types/product";
+import { ProductInputs } from "../../../@types/product";
 
 // icons
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
@@ -42,10 +42,10 @@ const validationSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
   price: yup.number().required("Price is required"),
   description: yup.string().required("Description is required"),
-  categoryId: yup.string().required("Category is required"),
+  category: yup.string().required("Category is required"),
   image: yup.string().required("Image is required"),
   stock: yup.number().required("Stock is required"),
-  sizeId: yup.string().required("Size is required"),
+  size: yup.string().required("Size is required"),
 });
 
 // component props type
@@ -80,10 +80,8 @@ export default function AdminProductAddModal({
 
   // form submit handler
   const onSubmit = async (data: ProductInputs) => {
-    const productData: ProductInputsData = {
+    const productData: ProductInputs = {
       ...data,
-      _id: "0",
-      images: [data.image],
     };
     await dispatch(addNewProduct(productData));
     reset();
@@ -160,10 +158,10 @@ export default function AdminProductAddModal({
             />
 
             <Controller
-              name="categoryId"
+              name="category"
               control={control}
               render={({ field }) => (
-                <FormControl error={Boolean(errors.categoryId)}>
+                <FormControl error={Boolean(errors.category)}>
                   <InputLabel id="demo-simple-select-label">
                     Select a category
                   </InputLabel>
@@ -171,7 +169,7 @@ export default function AdminProductAddModal({
                     {...field}
                     label="Select a category"
                     variant="outlined"
-                    error={Boolean(errors.categoryId)}
+                    error={Boolean(errors.category)}
                   >
                     {categories.map((category: TCategory) => {
                       return (
@@ -181,20 +179,18 @@ export default function AdminProductAddModal({
                       );
                     })}
                   </Select>
-                  {errors.categoryId?.message ? (
-                    <FormHelperText>
-                      {errors.categoryId?.message}
-                    </FormHelperText>
+                  {errors.category?.message ? (
+                    <FormHelperText>{errors.category?.message}</FormHelperText>
                   ) : null}
                 </FormControl>
               )}
             />
 
             <Controller
-              name="sizeId"
+              name="size"
               control={control}
               render={({ field }) => (
-                <FormControl error={Boolean(errors.sizeId)}>
+                <FormControl error={Boolean(errors.size)}>
                   <InputLabel id="demo-simple-select-label">
                     Select a Size
                   </InputLabel>
@@ -202,7 +198,7 @@ export default function AdminProductAddModal({
                     {...field}
                     label="Select a size"
                     variant="outlined"
-                    error={Boolean(errors.sizeId)}
+                    error={Boolean(errors.size)}
                   >
                     {sizes.map((size: TSize) => {
                       return (
@@ -212,8 +208,8 @@ export default function AdminProductAddModal({
                       );
                     })}
                   </Select>
-                  {errors.sizeId?.message ? (
-                    <FormHelperText>{errors.sizeId?.message}</FormHelperText>
+                  {errors.size?.message ? (
+                    <FormHelperText>{errors.size?.message}</FormHelperText>
                   ) : null}
                 </FormControl>
               )}

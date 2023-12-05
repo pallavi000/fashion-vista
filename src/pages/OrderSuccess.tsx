@@ -28,7 +28,7 @@ function OrderSuccess() {
   // redirect if order id doesn't exist in orders
   useEffect(() => {
     if (orderId && orders.length) {
-      const order = orders.find((o) => o.orderId === orderId);
+      const order = orders.find((o) => o._id === orderId);
       if (!order) navigate("/not-found");
     }
   }, [orderId, orders]);

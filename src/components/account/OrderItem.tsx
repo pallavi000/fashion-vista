@@ -4,7 +4,7 @@ import React from "react";
 import { TableCell, TableRow, Chip } from "@mui/material";
 
 // type
-import { TOrder } from "../@types/order";
+import { TOrder } from "../../@types/order";
 
 // components
 import OrderItemItem from "./OrderItemItem";
@@ -16,16 +16,16 @@ function OrderItem({ order }: OrderItemProps) {
   return (
     <>
       <TableRow>
-        <TableCell rowSpan={order.items.length + 1}>
-          <Chip label={`#${order.orderId}`} />
+        <TableCell rowSpan={order.products.length + 1}>
+          <Chip label={`#${order._id}`} />
         </TableCell>
       </TableRow>
-      {order.items.map((item) => {
+      {order.products.map((product) => {
         return (
           <OrderItemItem
-            key={`${order.orderId}-${item.product._id}`}
+            key={`${order._id}-${product._id}`}
             order={order}
-            item={item}
+            product={product}
           />
         );
       })}

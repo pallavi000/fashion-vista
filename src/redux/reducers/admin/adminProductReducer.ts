@@ -6,7 +6,11 @@ import axiosInstance from "../../../utils/AxiosInstance";
 
 // types
 import { ProductsState } from "../../../@types/reduxState";
-import { ProductInputsData } from "../../../@types/product";
+import {
+  ProductInputs,
+  ProductInputsData,
+  TProduct,
+} from "../../../@types/product";
 
 // helpers
 import { showApiErrorToastr, showCustomToastr } from "../../../utils/helper";
@@ -121,7 +125,7 @@ const adminProductsSlice = createSlice({
 // ==============================================
 export const addNewProduct = createAsyncThunk(
   "addNewProduct",
-  async (data: ProductInputsData) => {
+  async (data: ProductInputs) => {
     try {
       const response = await axiosInstance.post(`/products`, data);
       showCustomToastr("Product created successfully.", "success");
@@ -152,6 +156,7 @@ export const updateAdminProduct = createAsyncThunk(
   "updateAdminProduct",
   async (data: ProductInputsData) => {
     try {
+      console.log(data, "editReducerproduct");
       const response = await axiosInstance.put(`/products/${data._id}`, data);
       showCustomToastr("Product updated successfully.", "success");
       return response.data;

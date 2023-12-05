@@ -19,8 +19,17 @@ export type TUser = {
   lastName: string;
   role: TUserRole | null;
   avatar: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
+};
+export type TUserEditInput = {
+  _id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: TUserRole | null;
+  avatar: string;
+  password: string;
 };
 
 export type UserAddressInputs = {

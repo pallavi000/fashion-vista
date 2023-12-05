@@ -11,6 +11,7 @@ import {
   Typography,
   Button,
   ButtonGroup,
+  Avatar,
 } from "@mui/material";
 
 //icons
@@ -23,11 +24,7 @@ import { TCart } from "../@types/cart";
 import { TProduct } from "../@types/product";
 
 // reducers
-import {
-  decreaseCartItemQuantity,
-  increaseCartItemQuantity,
-  removeFromCart,
-} from "../redux/reducers/cartReducer";
+import { removeFromCart, updateCartItem } from "../redux/reducers/cartReducer";
 
 // helpers
 import { showCustomToastr } from "../utils/helper";
@@ -35,35 +32,36 @@ import { showCustomToastr } from "../utils/helper";
 type CartItemProps = { item: TCart };
 
 function CartItem({ item }: CartItemProps) {
+  const [isQuantityUpdating, setIsQuantityUpdating] = useState(false);
+  const [isItemRemoving, setIsItemRemoving] = useState(false);
+
   const dispatch = useAppDispatch();
 
   // Quantity change handler
-  const handleQuantityChange = (action: "increase" | "decrease") => {
-    if (action === "increase") dispatch(increaseCartItemQuantity(item));
-    if (action === "decrease") dispatch(decreaseCartItemQuantity(item));
+  const handleQuantityChange = async (action: "increase" | "decrease") => {
+    setIsQuantityUpdating(true);
+    await dispatch(updateCartItem({ cartId: item._id, action }));
+    setIsQuantityUpdating(false);
   };
 
   // remove item from cart handler
-  const handleRemoveCart = async (product: TProduct) => {
-    dispatch(removeFromCart(product));
-    showCustomToastr("Item removed from the cart.", "success");
+  const handleRemoveCart = async () => {
+    setIsItemRemoving(true);
+    await dispatch(removeFromCart(item._id));
+    setIsItemRemoving(false);
   };
 
   return (
     <TableRow key={item.product._id}>
       <TableCell component="th" scope="row">
         <Box display={"flex"} alignItems={"center"}>
-          <Box width={80} height={80}>
-            <img
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-              }}
-              alt={item.product.name}
-              src={item.product.images[0]}
-            />
-          </Box>
+          <Avatar
+            alt={item.product.name}
+            src={item.product.image}
+            variant="square"
+            sx={{ width: 75, height: 75 }}
+          />
+
           <Box ml={2}>
             <p
               style={{
@@ -88,12 +86,11 @@ function CartItem({ item }: CartItemProps) {
           </Box>
         </Box>
       </TableCell>
-      <TableCell>{item.product.category.name}</TableCell>
       <TableCell align="center">
         <ButtonGroup size="small" variant="contained" disableElevation>
           <Button
             color="inherit"
-            disabled={item.quantity <= 1 ? true : false}
+            disabled={item.quantity <= 1 || isQuantityUpdating ? true : false}
             onClick={() => handleQuantityChange("decrease")}
           >
             <Remove fontSize="small" />
@@ -101,6 +98,7 @@ function CartItem({ item }: CartItemProps) {
           <Button disabled>{item.quantity}</Button>
           <Button
             color="inherit"
+            disabled={isQuantityUpdating}
             onClick={() => handleQuantityChange("increase")}
           >
             <Add fontSize="small" />
@@ -108,12 +106,14 @@ function CartItem({ item }: CartItemProps) {
         </ButtonGroup>
       </TableCell>
       <TableCell>${item.product.price}</TableCell>
+      <TableCell>${item.product.price * item.quantity}</TableCell>
       <TableCell>
         <Fab
-          onClick={() => handleRemoveCart(item.product)}
+          onClick={() => handleRemoveCart()}
           size="small"
           color="error"
           disableRipple
+          disabled={isItemRemoving}
         >
           <Close />
         </Fab>

@@ -6,6 +6,7 @@ import { AppState, useAppDispatch } from "../redux/store";
 
 // MUI
 import {
+  Avatar,
   Box,
   Button,
   ButtonGroup,
@@ -26,7 +27,7 @@ import CheckIcon from "@mui/icons-material/CheckCircle";
 // types
 import { TProduct } from "../@types/product";
 import { ProductState } from "../@types/reduxState";
-import { TCart } from "../@types/cart";
+import { TCart, TCartInput } from "../@types/cart";
 
 // components
 import Product from "../components/Product";
@@ -51,7 +52,6 @@ function ProductDetail() {
   const navigate = useNavigate();
   const [quantityCount, setQuantityCount] = useState<number>(1);
   const [isAddingToCart, setIsAddingToCart] = useState<boolean>(false);
-  const timer = useRef<number>();
 
   // app dispatch
   const dispatch = useAppDispatch();
@@ -81,7 +81,7 @@ function ProductDetail() {
   // cart state
   const cartItem = useSelector((state: AppState) => state.cart);
   const isAlreadyInCart = cartItem.items.find(
-    (item) => item.product._id === product?._id && item.user === user?._id
+    (item) => item.product._id === product?._id && item.user?._id === user?._id
   );
 
   // get current product
@@ -96,28 +96,18 @@ function ProductDetail() {
       setQuantityCount((prev) => prev - 1);
   };
 
-  useEffect(() => {
-    return () => {
-      clearTimeout(timer.current);
-    };
-  }, []);
-
   // handle add to cart
-  const handleCart = () => {
+  const handleCart = async () => {
     if (user && product) {
-      const cartItem: TCart = {
-        product,
+      const cartItem: TCartInput = {
+        product: product._id,
         quantity: quantityCount,
         user: user._id,
         total: product.price * quantityCount,
       };
-      dispatch(addToCart(cartItem));
-      // 1 second of dummy animation api call
       setIsAddingToCart(true);
-      timer.current = window.setTimeout(() => {
-        setIsAddingToCart(false);
-        showCustomToastr("Item added to cart.", "success");
-      }, 1000);
+      await dispatch(addToCart(cartItem));
+      setIsAddingToCart(false);
     } else {
       navigate(ROUTES.SIGN_IN);
     }
@@ -141,8 +131,14 @@ function ProductDetail() {
                 }}
               >
                 <Box sx={{ height: "500px" }}>
-                  <img
-                    src={product?.images[0]}
+                  <Avatar
+                    src={product?.image}
+                    alt={product?.name}
+                    variant="square"
+                    sx={{ height: "100%", width: "100%" }}
+                  />
+                  {/* <img
+                    src={product?.image}
                     alt={`product_${product?._id}`}
                     style={{
                       height: "100%",
@@ -150,7 +146,7 @@ function ProductDetail() {
                       objectFit: "cover",
                       borderRadius: "1rem",
                     }}
-                  />
+                  /> */}
                 </Box>
               </Box>
             </Grid>
@@ -165,7 +161,6 @@ function ProductDetail() {
                     size="small"
                     sx={{ marginTop: "0.5rem", marginBottom: "1rem" }}
                   />
-
                   <Typography variant="h6">{product?.description}</Typography>
                 </Box>
 

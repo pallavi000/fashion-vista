@@ -13,7 +13,7 @@ import { Box, Button, Container, Typography } from "@mui/material";
 import UserForm from "../../components/UserForm";
 
 // types
-import { RegisterInputs, TUser } from "../../@types/user";
+import { RegisterInputs, TUser, TUserEditInput } from "../../@types/user";
 
 // reducers
 import { updateUser } from "../../redux/reducers/admin/adminUserReducer";
@@ -67,7 +67,7 @@ function AdminProfile() {
   // form submit handler
   const onSubmit = async (data: RegisterInputs) => {
     if (!user) return;
-    const userData: TUser = { ...user, ...data };
+    const userData: TUserEditInput = { ...user, ...data };
     await dispatch(updateUser(userData));
     reset();
   };

@@ -152,7 +152,14 @@ export const updateAdminCategory = createAsyncThunk(
   "updateAdminCategory",
   async (data: TCategory) => {
     try {
-      const response = await axiosInstance.put(`/categories/${data._id}`, data);
+      const newData = {
+        name: data.name,
+        image: data.image,
+      };
+      const response = await axiosInstance.put(
+        `/categories/${data._id}`,
+        newData
+      );
       showCustomToastr("Category updated successfully.", "success");
       return response.data;
     } catch (e) {

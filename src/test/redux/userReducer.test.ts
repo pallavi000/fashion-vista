@@ -1,4 +1,4 @@
-import { RegisterInputs, TUser } from "../../@types/user";
+import { RegisterInputs, TUser, TUserEditInput } from "../../@types/user";
 import {
   addNewUser,
   deleteUser,
@@ -43,8 +43,6 @@ describe("user reducers", () => {
       lastName: "stha",
       role: "USER",
       avatar: "https://i.imgur.com/00qWleT.jpeg",
-      createdAt: "2023-10-03T19:00:54.000Z",
-      updatedAt: "2023-10-03T19:00:54.000Z",
     };
     const res = await store.dispatch(updateUser(data));
     expect(res.meta.arg).toMatchObject({
@@ -54,8 +52,6 @@ describe("user reducers", () => {
       lastName: "stha",
       role: "USER",
       avatar: "https://i.imgur.com/00qWleT.jpeg",
-      createdAt: "2023-10-03T19:00:54.000Z",
-      updatedAt: "2023-10-03T19:00:54.000Z",
     });
   });
 

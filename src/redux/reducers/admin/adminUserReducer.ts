@@ -6,7 +6,7 @@ import axiosInstance from "../../../utils/AxiosInstance";
 
 // types
 import { UserStates } from "../../../@types/reduxState";
-import { RegisterInputs, TUser } from "../../../@types/user";
+import { RegisterInputs, TUser, TUserEditInput } from "../../../@types/user";
 
 // helpers
 import { showApiErrorToastr, showCustomToastr } from "../../../utils/helper";
@@ -152,7 +152,14 @@ export const updateUser = createAsyncThunk(
   "updateUser",
   async (data: TUser) => {
     try {
-      const result = await axiosInstance.put(`/users/${data._id}`, data);
+      const newData = {
+        email: data.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        avatar: data.avatar,
+        role: data.role,
+      };
+      const result = await axiosInstance.put(`/users/${data._id}`, newData);
       showCustomToastr("User updated successfully.", "success");
       return result.data;
     } catch (e) {

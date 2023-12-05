@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 // redux
 import { useSelector } from "react-redux";
 import { AppState, useAppDispatch } from "../redux/store";
@@ -32,6 +32,7 @@ import { TCart } from "../@types/cart";
 import CartItem from "../components/CartItem";
 
 function Cart() {
+  const navigate = useNavigate();
   // cart items state
   const cart = useSelector((state: AppState) => state.cart);
   const { items } = cart;
@@ -43,15 +44,15 @@ function Cart() {
           <Typography variant={"h4"} gutterBottom>
             Shopping Cart
           </Typography>
-          <Link to="/checkout">
-            <Button
-              variant="contained"
-              disabled={!Boolean(items.length)}
-              endIcon={<KeyboardArrowRight />}
-            >
-              Checkout
-            </Button>
-          </Link>
+          <Button
+            size="medium"
+            onClick={() => navigate("/checkout")}
+            variant="contained"
+            disabled={!Boolean(items.length)}
+            endIcon={<KeyboardArrowRight />}
+          >
+            Checkout
+          </Button>
         </Box>
         {items.length ? (
           <>
@@ -65,9 +66,9 @@ function Cart() {
                 <TableHead>
                   <TableRow>
                     <TableCell>Product</TableCell>
-                    <TableCell>Category</TableCell>
                     <TableCell align="center">Quantity</TableCell>
                     <TableCell>Price</TableCell>
+                    <TableCell>Total</TableCell>
                     <TableCell>Action</TableCell>
                   </TableRow>
                 </TableHead>

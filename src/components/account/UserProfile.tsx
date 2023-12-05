@@ -1,7 +1,7 @@
 import React from "react";
 // redux
 import { useSelector } from "react-redux";
-import { AppState } from "../redux/store";
+import { AppState } from "../../redux/store";
 
 // MUI
 import {

@@ -33,11 +33,8 @@ describe("product reducers", () => {
         name: "Others",
         image: "https://placeimg.com/640/480/any?r=0.591926261873231",
       },
-      images: [
-        "https://placeimg.com/640/480/any?r=0.9178516507833767",
-        "https://placeimg.com/640/480/any?r=0.9300320592588625",
-        "https://placeimg.com/640/480/any?r=0.8807778235430017",
-      ],
+      image: "https://placeimg.com/640/480/any?r=0.9178516507833767",
+
       size: {
         _id: "1",
         name: "large",
@@ -51,11 +48,10 @@ describe("product reducers", () => {
       name: "new product",
       price: 123,
       description: "it is a new product",
-      categoryId: "1",
+      category: "1",
       image: "https://www.google.com",
-      images: ["https://www.google.com"],
       stock: 11,
-      sizeId: "1",
+      size: "1",
     };
     const res = await store.dispatch(addNewProduct(data));
     expect(res.meta.arg).toMatchObject({
@@ -63,11 +59,10 @@ describe("product reducers", () => {
       name: "new product",
       price: 123,
       description: "it is a new product",
-      categoryId: "1",
+      category: "1",
       image: "https://www.google.com",
-      images: ["https://www.google.com"],
       stock: 11,
-      sizeId: "1",
+      size: "1",
     });
   });
 
@@ -77,11 +72,10 @@ describe("product reducers", () => {
       name: "new product",
       price: 123,
       description: "it is a new product",
-      categoryId: "1",
+      category: "1",
       image: "https://www.google.com",
-      images: ["https://www.google.com"],
       stock: 11,
-      sizeId: "1",
+      size: "1",
     };
 
     const res = store.dispatch(updateAdminProduct(data));
@@ -90,10 +84,9 @@ describe("product reducers", () => {
       name: "new product",
       price: 123,
       description: "it is a new product",
-      categoryId: "1",
-      sizeId: "1",
+      category: "1",
+      size: "1",
       image: "https://www.google.com",
-      images: ["https://www.google.com"],
       stock: 11,
     });
   });

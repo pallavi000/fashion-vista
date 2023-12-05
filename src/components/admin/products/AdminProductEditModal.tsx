@@ -46,10 +46,10 @@ const validationSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
   price: yup.number().required("Price is required"),
   description: yup.string().required("Description is required"),
-  categoryId: yup.string().required("Category is required"),
+  category: yup.string().required("Category is required"),
   image: yup.string().required("Image is required"),
   stock: yup.number().required("Stock is required"),
-  sizeId: yup.string().required("Size is required"),
+  size: yup.string().required("Size is required"),
 });
 
 // component props type
@@ -90,19 +90,20 @@ function AdminProductEditModal({
   React.useEffect(() => {
     setValue("name", product.name);
     setValue("price", product.price);
-    setValue("categoryId", product.category._id);
-    setValue("sizeId", product.size._id);
+    setValue("category", product.category._id);
+    setValue("size", product?.size._id);
     setValue("description", product.description);
-    setValue("image", product.images[0]);
+    setValue("image", product.image);
   }, [product]);
 
   // form submit handler
   const onSubmit = async (data: ProductInputs) => {
+    console.log(data, "oneditproduct");
     const productData: ProductInputsData = {
       ...data,
       _id: product._id,
-      images: [data.image, ...product.images],
     };
+    console.log(productData, "producteditdata");
     await dispatch(updateAdminProduct(productData));
     reset();
     setIsOpen(false);
@@ -178,10 +179,10 @@ function AdminProductEditModal({
             />
 
             <Controller
-              name="categoryId"
+              name="category"
               control={control}
               render={({ field }) => (
-                <FormControl error={Boolean(errors.categoryId)}>
+                <FormControl error={Boolean(errors.category)}>
                   <InputLabel id="demo-simple-select-label">
                     Select a category
                   </InputLabel>
@@ -189,9 +190,9 @@ function AdminProductEditModal({
                     {...field}
                     label="Select a category"
                     variant="outlined"
-                    error={Boolean(errors.categoryId)}
+                    error={Boolean(errors.category)}
                   >
-                    {categories.map((category) => {
+                    {categories.map((category: TCategory) => {
                       return (
                         <MenuItem key={category._id} value={category._id}>
                           {category.name}
@@ -199,20 +200,18 @@ function AdminProductEditModal({
                       );
                     })}
                   </Select>
-                  {errors.categoryId?.message ? (
-                    <FormHelperText>
-                      {errors.categoryId?.message}
-                    </FormHelperText>
+                  {errors.category?.message ? (
+                    <FormHelperText>{errors.category?.message}</FormHelperText>
                   ) : null}
                 </FormControl>
               )}
             />
 
             <Controller
-              name="sizeId"
+              name="size"
               control={control}
               render={({ field }) => (
-                <FormControl error={Boolean(errors.sizeId)}>
+                <FormControl error={Boolean(errors.size)}>
                   <InputLabel id="demo-simple-select-label">
                     Select a Size
                   </InputLabel>
@@ -220,7 +219,7 @@ function AdminProductEditModal({
                     {...field}
                     label="Select a size"
                     variant="outlined"
-                    error={Boolean(errors.sizeId)}
+                    error={Boolean(errors.size)}
                   >
                     {sizes.map((size: TSize) => {
                       return (
@@ -230,8 +229,8 @@ function AdminProductEditModal({
                       );
                     })}
                   </Select>
-                  {errors.sizeId?.message ? (
-                    <FormHelperText>{errors.sizeId?.message}</FormHelperText>
+                  {errors.size?.message ? (
+                    <FormHelperText>{errors.size?.message}</FormHelperText>
                   ) : null}
                 </FormControl>
               )}

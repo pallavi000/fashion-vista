@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 //redux
 import { useSelector } from "react-redux";
-import { AppState } from "../redux/store";
+import { AppState, useAppDispatch } from "../../redux/store";
 
 // MUI
 import {
@@ -19,10 +19,16 @@ import {
 import OrderItem from "./OrderItem";
 
 // types
-import { TOrder } from "../@types/order";
+import { TOrder } from "../../@types/order";
+import { getOrders } from "../../redux/reducers/orderReducer";
 
 function Orders() {
+  const dispatch = useAppDispatch();
+
   // orders state
+  useEffect(() => {
+    dispatch(getOrders());
+  }, []);
   const orders = useSelector((state: AppState) => state.orders.data);
 
   return (
@@ -44,7 +50,7 @@ function Orders() {
             </TableHead>
             <TableBody>
               {orders.map((order: TOrder) => {
-                return <OrderItem key={order.orderId} order={order} />;
+                return <OrderItem key={order._id} order={order} />;
               })}
             </TableBody>
           </Table>

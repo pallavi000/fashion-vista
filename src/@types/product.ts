@@ -8,7 +8,7 @@ export type TProduct = {
   description: string;
   category: TCategory;
   size: TSize;
-  images: string[];
+  image: string;
   creationAt?: string;
   updatedAt?: string;
 };
@@ -17,13 +17,12 @@ export interface ProductInputs {
   name: string;
   price: number;
   description: string;
-  categoryId: string;
+  category: string;
   image: string;
   stock: number;
-  sizeId: string;
+  size: string;
 }
 
 export interface ProductInputsData extends ProductInputs {
   _id: string;
-  images: string[];
 }

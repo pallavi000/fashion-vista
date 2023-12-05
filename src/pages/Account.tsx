@@ -14,16 +14,31 @@ import {
 // icons
 import UserIcon from "@mui/icons-material/AccountCircle";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import AddressIcon from "@mui/icons-material/LocationOn";
+import PasswordIcon from "@mui/icons-material/Password";
 
 // types
-import UserProfile from "../components/UserProfile";
-import Orders from "../components/Orders";
+import UserProfile from "../components/account/UserProfile";
+import Orders from "../components/account/Orders";
+import Address from "../components/account/Address";
+import ChangePassword from "../components/account/ChangePassword";
 
+const sidebars = [
+  { label: "Account", icon: <UserIcon />, to: "/account/profile" },
+  { label: "Address", icon: <AddressIcon />, to: "/account/address" },
+  { label: "Orders", icon: <ShoppingCartIcon />, to: "/account/orders" },
+  {
+    label: "Change Password",
+    icon: <PasswordIcon />,
+    to: "/account/change-password",
+  },
+];
+
+type TPage = "orders" | "address" | "profile" | "change-password";
 function Account() {
   const navigate = useNavigate();
 
-  // page | "orders" | null
-  const { page } = useParams();
+  const { page } = useParams() as { page: TPage };
 
   return (
     <Container>
@@ -31,50 +46,41 @@ function Account() {
         <Grid item sm={12} md={4} sx={{ width: "100%" }}>
           <Card>
             <List disablePadding>
-              <ListItemButton
-                component={NavLink}
-                to="/account/profile"
-                sx={{
-                  position: "relative",
-                  textTransform: "capitalize",
-                  color: "text.secondary",
-                  "&.active": {
-                    color: "text.primary",
-                    bgcolor: "action.selected",
-                    fontWeight: "bold",
-                  },
-                }}
-              >
-                <ListItemIcon>
-                  <UserIcon />
-                </ListItemIcon>
-                <ListItemText primary="Account" />
-              </ListItemButton>
-
-              <ListItemButton
-                component={NavLink}
-                to="/account/orders"
-                sx={{
-                  position: "relative",
-                  textTransform: "capitalize",
-                  color: "text.secondary",
-                  "&.active": {
-                    color: "text.primary",
-                    bgcolor: "action.selected",
-                    fontWeight: "bold",
-                  },
-                }}
-              >
-                <ListItemIcon>
-                  <ShoppingCartIcon />
-                </ListItemIcon>
-                <ListItemText primary="Orders" />
-              </ListItemButton>
+              {sidebars.map((sidebar) => {
+                return (
+                  <ListItemButton
+                    key={sidebar.label}
+                    component={NavLink}
+                    to={sidebar.to}
+                    sx={{
+                      position: "relative",
+                      textTransform: "capitalize",
+                      color: "text.secondary",
+                      "&.active": {
+                        color: "text.primary",
+                        bgcolor: "action.selected",
+                        fontWeight: "bold",
+                      },
+                    }}
+                  >
+                    <ListItemIcon>{sidebar.icon}</ListItemIcon>
+                    <ListItemText primary={sidebar.label} />
+                  </ListItemButton>
+                );
+              })}
             </List>
           </Card>
         </Grid>
         <Grid item sm={12} md={8} width={"100%"}>
-          {page && page === "orders" ? <Orders /> : <UserProfile />}
+          {page === "orders" ? (
+            <Orders />
+          ) : page === "address" ? (
+            <Address />
+          ) : page === "change-password" ? (
+            <ChangePassword />
+          ) : (
+            <UserProfile />
+          )}
         </Grid>
       </Grid>
     </Container>

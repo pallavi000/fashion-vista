@@ -4,11 +4,24 @@ import { cartPersistConfig } from "../../utils/reduxPersistConfig";
 
 // types
 import { CartState } from "../../@types/reduxState";
-import { TCart } from "../../@types/cart";
+import { TCart, TCartInput } from "../../@types/cart";
 import { TProduct } from "../../@types/product";
 import axiosInstance from "../../utils/AxiosInstance";
 import { showApiErrorToastr, showCustomToastr } from "../../utils/helper";
 import { AxiosError } from "axios";
+
+//get Total amount of cartItems
+function calculateTotalPrice(items: TCart[]) {
+  return items.reduce((accumulator, item) => {
+    return accumulator + item.total;
+  }, 0);
+}
+
+function calculateTotalQuantity(items: TCart[]) {
+  return items.reduce((accumulator, item) => {
+    return accumulator + item.quantity;
+  }, 0);
+}
 
 // initial states
 const initialState: CartState = {
@@ -25,54 +38,6 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    // addToCart: (state, action: PayloadAction<TCart>) => {
-    //   const productIndex = state.items.findIndex(
-    //     (item) => item.product._id === action.payload.product._id
-    //   );
-    //   if (productIndex !== -1) {
-    //     state.items[productIndex].quantity += action.payload.quantity;
-    //   } else {
-    //     state.items.push(action.payload);
-    //   }
-    //   state.totalQuantity += action.payload.quantity;
-    //   state.totalPrice +=
-    //     action.payload.product.price * action.payload.quantity;
-    // },
-
-    removeFromCart: (state, action: PayloadAction<TProduct>) => {
-      const productIndex = state.items.findIndex(
-        (item) => item.product._id === action.payload._id
-      );
-      if (productIndex !== -1) {
-        state.totalQuantity =
-          state.totalQuantity - state.items[productIndex].quantity;
-        state.totalPrice =
-          state.totalPrice -
-          state.items[productIndex].product.price *
-            state.items[productIndex].quantity;
-        state.items.splice(productIndex, 1);
-      }
-    },
-    increaseCartItemQuantity: (state, action: PayloadAction<TCart>) => {
-      const productIndex = state.items.findIndex(
-        (item) => item.product._id === action.payload.product._id
-      );
-      if (productIndex !== -1) {
-        state.items[productIndex].quantity++;
-        state.totalQuantity++;
-        state.totalPrice += action.payload.product.price;
-      }
-    },
-    decreaseCartItemQuantity: (state, action: PayloadAction<TCart>) => {
-      const productIndex = state.items.findIndex(
-        (item) => item.product._id === action.payload.product._id
-      );
-      if (productIndex !== -1) {
-        state.items[productIndex].quantity--;
-        state.totalQuantity--;
-        state.totalPrice -= action.payload.product.price;
-      }
-    },
     emptyCart: (state) => {
       return {
         ...state,
@@ -93,15 +58,111 @@ const cartSlice = createSlice({
         isLoading: true,
       };
     });
-    builder.addCase(addToCart.fulfilled, (state, action) => {
+    builder.addCase(
+      addToCart.fulfilled,
+      (state, action: PayloadAction<TCart>) => {
+        const cartItems = [...state.items, action.payload];
+        return {
+          ...state,
+          isLoading: false,
+          error: null,
+          items: cartItems,
+          totalPrice: calculateTotalPrice(cartItems),
+          totalQuantity: calculateTotalQuantity(cartItems),
+        };
+      }
+    );
+    builder.addCase(addToCart.rejected, (state, action) => {
       return {
         ...state,
         isLoading: false,
-        error: null,
-        data: action.payload,
+        error: action.error.message || "",
       };
     });
-    builder.addCase(addToCart.rejected, (state, action) => {
+
+    builder.addCase(getCartItems.pending, (state, action) => {
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+      };
+    });
+    builder.addCase(
+      getCartItems.fulfilled,
+      (state, action: PayloadAction<TCart[]>) => {
+        return {
+          ...state,
+          items: action.payload,
+          isLoading: false,
+          error: null,
+          totalPrice: calculateTotalPrice(action.payload),
+          totalQuantity: calculateTotalQuantity(action.payload),
+        };
+      }
+    );
+    builder.addCase(getCartItems.rejected, (state, action) => {
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error.message || "",
+      };
+    });
+
+    builder.addCase(updateCartItem.pending, (state, action) => {
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+      };
+    });
+    builder.addCase(
+      updateCartItem.fulfilled,
+      (state, action: PayloadAction<TCart>) => {
+        const itemIndex = state.items.findIndex(
+          (item) => item._id === action.payload._id
+        );
+        if (itemIndex !== -1) {
+          state.items[itemIndex] = action.payload;
+        }
+        state.totalPrice = calculateTotalPrice(state.items);
+        state.totalQuantity = calculateTotalQuantity(state.items);
+        state.isLoading = false;
+        state.error = null;
+        return state;
+      }
+    );
+    builder.addCase(updateCartItem.rejected, (state, action) => {
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error.message || "",
+      };
+    });
+
+    builder.addCase(removeFromCart.pending, (state, action) => {
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+      };
+    });
+    builder.addCase(
+      removeFromCart.fulfilled,
+      (state, action: PayloadAction<string>) => {
+        const cartItems = state.items.filter(
+          (item) => item._id !== action.payload
+        );
+        return {
+          ...state,
+          items: cartItems,
+          isLoading: false,
+          error: null,
+          totalPrice: calculateTotalPrice(cartItems),
+          totalQuantity: calculateTotalQuantity(cartItems),
+        };
+      }
+    );
+    builder.addCase(removeFromCart.rejected, (state, action) => {
       return {
         ...state,
         isLoading: false,
@@ -111,31 +172,61 @@ const cartSlice = createSlice({
   },
 });
 
-export const addToCart = createAsyncThunk("addToCart", async (data: TCart) => {
+export const addToCart = createAsyncThunk(
+  "addToCart",
+  async (data: TCartInput) => {
+    try {
+      const response = await axiosInstance.post("/carts", data);
+      showCustomToastr("Cart Added successfully.", "success");
+      return response.data;
+    } catch (e) {
+      const error = e as AxiosError;
+      console.log(error, "error");
+      showApiErrorToastr(error);
+      throw error;
+    }
+  }
+);
+
+export const getCartItems = createAsyncThunk("getCartItems", async () => {
   try {
-    const cartInput = {
-      ...data,
-      product: data.product._id,
-    };
-    console.log(cartInput, "cartInput");
-    const response = await axiosInstance.post("/carts", cartInput);
-    showCustomToastr("Cart Added successfully.", "success");
-    return response.data;
+    const result = await axiosInstance.get("/carts");
+    return result.data;
   } catch (e) {
     const error = e as AxiosError;
-    console.log(error, "error");
-    showApiErrorToastr(error);
     throw error;
   }
 });
 
+export const updateCartItem = createAsyncThunk(
+  "updateCartItem",
+  async ({ cartId, action }: { cartId: string; action: string }) => {
+    try {
+      const data = { action };
+      const response = await axiosInstance.put(`/carts/${cartId}`, data);
+      return response.data;
+    } catch (e) {
+      const error = e as AxiosError;
+      throw error;
+    }
+  }
+);
+
+export const removeFromCart = createAsyncThunk(
+  "removeFromCart",
+  async (itemId: string) => {
+    try {
+      await axiosInstance.delete(`/carts/${itemId}`);
+      showCustomToastr("Item removed from the cart.", "success");
+      return itemId;
+    } catch (e) {
+      const error = e as AxiosError;
+      throw error;
+    }
+  }
+);
+
 // actions
-export const {
-  // addToCart,
-  removeFromCart,
-  emptyCart,
-  increaseCartItemQuantity,
-  decreaseCartItemQuantity,
-} = cartSlice.actions;
+export const { emptyCart } = cartSlice.actions;
 // redux persist reducer
 export default persistReducer(cartPersistConfig, cartSlice.reducer);

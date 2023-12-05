@@ -21,7 +21,7 @@ import { emptyCart } from "../redux/reducers/cartReducer";
 import { addOrder } from "../redux/reducers/orderReducer";
 
 // types
-import { TOrder } from "../@types/order";
+import { TOrder, TOrderInput } from "../@types/order";
 import { CartState } from "../@types/reduxState";
 
 // helpers
@@ -78,17 +78,18 @@ function PaymentHandler({ cart }: { cart: CartState }) {
     }
     const { error } = await elements.submit();
     if (!error) {
-      const orderData: TOrder = {
-        orderId: getOrderId(),
-        total: cart.totalPrice,
-        orderDate: getOrderDate(),
-        paymentMethod: "COD",
-        deliveryStatus: "Completed",
-        items: items,
-      };
-      dispatch(addOrder(orderData));
-      dispatch(emptyCart());
-      navigate(`/order-success/${orderData.orderId}`);
+      // TODO:: create order api call
+      // const orderData: TOrderInput = {
+      //   orderId: getOrderId(),
+      //   total: cart.totalPrice,
+      //   orderDate: getOrderDate(),
+      //   paymentMethod: "COD",
+      //   deliveryStatus: "Completed",
+      //   items: items,
+      // };
+      //dispatch(addOrder(orderData));
+      // dispatch(emptyCart());
+      //navigate(`/order-success/${orderData.orderId}`);
     }
   };
 

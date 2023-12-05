@@ -24,7 +24,7 @@ import UserForm from "../../UserForm";
 import LoadingButton from "../../LoadingButton";
 
 // types
-import { RegisterInputs, TUser } from "../../../@types/user";
+import { RegisterInputs, TUser, TUserEditInput } from "../../../@types/user";
 
 // yup validation schema
 const validationSchema = yup.object().shape({
@@ -88,6 +88,7 @@ function AdminUserEditModal({
   // form submit handler
   const onSubmit = async (data: RegisterInputs) => {
     const userData: TUser = { ...user, ...data };
+    console.log(userData, "userdataaaaaaaaaaaa");
     await dispatch(updateUser(userData));
     reset();
     setIsOpen(false);

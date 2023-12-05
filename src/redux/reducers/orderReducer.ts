@@ -1,10 +1,13 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { persistReducer } from "redux-persist";
 import { orderPersistConfig } from "../../utils/reduxPersistConfig";
 
 // types
 import { OrderState } from "../../@types/reduxState";
 import { TOrder } from "../../@types/order";
+import axiosInstance from "../../utils/AxiosInstance";
+import { AxiosError } from "axios";
+import { showApiErrorToastr } from "../../utils/helper";
 
 // initail state
 const initialState: OrderState = {
@@ -27,9 +30,47 @@ const orderSlice = createSlice({
       };
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(getOrders.pending, (state, action) => {
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+      };
+    });
+    builder.addCase(
+      getOrders.fulfilled,
+      (state, action: PayloadAction<TOrder[]>) => {
+        return {
+          ...state,
+          data: action.payload,
+          isLoading: false,
+          error: null,
+        };
+      }
+    );
+    builder.addCase(getOrders.rejected, (state, action) => {
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error.message || "",
+      };
+    });
+  },
+});
+
+export const getOrders = createAsyncThunk("getOrders", async () => {
+  try {
+    const response = await axiosInstance.get("/orders");
+    return response.data;
+  } catch (e) {
+    const error = e as AxiosError;
+    showApiErrorToastr(error);
+    throw error;
+  }
 });
 
 // actions
 export const { addOrder } = orderSlice.actions;
 // redux persist reducer
-export default persistReducer(orderPersistConfig, orderSlice.reducer);
+export default orderSlice.reducer;
