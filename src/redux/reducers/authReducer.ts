@@ -11,7 +11,7 @@ import axiosInstance from "../../utils/AxiosInstance";
 
 // types
 import { AuthState } from "../../@types/reduxState";
-import { RegisterInputs } from "../../@types/user";
+import { RegisterInputs, TUpdatePasswordInput } from "../../@types/user";
 
 // helper
 import { showApiErrorToastr, showCustomToastr } from "../../utils/helper";
@@ -114,6 +114,26 @@ const authSlice = createSlice({
         error: null,
       };
     });
+    builder.addCase(changePassword.pending, (state, action) => {
+      return {
+        ...state,
+        isLoading: true,
+      };
+    });
+    builder.addCase(changePassword.fulfilled, (state, action) => {
+      return {
+        ...state,
+        isLoading: false,
+        error: null,
+      };
+    });
+    builder.addCase(changePassword.rejected, (state, action) => {
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error.message || "",
+      };
+    });
   },
 });
 
@@ -170,6 +190,21 @@ export const getCurrentUser = createAsyncThunk(
       return userData;
     } catch (e) {
       const error = e as AxiosError;
+      throw error;
+    }
+  }
+);
+
+export const changePassword = createAsyncThunk(
+  "changePassword",
+  async (data: TUpdatePasswordInput) => {
+    try {
+      const result = await axiosInstance.post("/auth/change-password", data);
+      showCustomToastr("Password has been updated.", "success");
+      return result.data;
+    } catch (e) {
+      const error = e as AxiosError;
+      showApiErrorToastr(error);
       throw error;
     }
   }

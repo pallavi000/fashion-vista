@@ -4,7 +4,7 @@ import { orderPersistConfig } from "../../utils/reduxPersistConfig";
 
 // types
 import { OrderState } from "../../@types/reduxState";
-import { TOrder } from "../../@types/order";
+import { TOrder, TOrderData } from "../../@types/order";
 import axiosInstance from "../../utils/AxiosInstance";
 import { AxiosError } from "axios";
 import { showApiErrorToastr } from "../../utils/helper";
@@ -56,6 +56,32 @@ const orderSlice = createSlice({
         error: action.error.message || "",
       };
     });
+
+    builder.addCase(createOrder.pending, (state, action) => {
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+      };
+    });
+    builder.addCase(
+      createOrder.fulfilled,
+      (state, action: PayloadAction<TOrder>) => {
+        return {
+          ...state,
+          data: [action.payload, ...state.data],
+          isLoading: false,
+          error: null,
+        };
+      }
+    );
+    builder.addCase(createOrder.rejected, (state, action) => {
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error.message || "",
+      };
+    });
   },
 });
 
@@ -69,6 +95,20 @@ export const getOrders = createAsyncThunk("getOrders", async () => {
     throw error;
   }
 });
+
+export const createOrder = createAsyncThunk(
+  "createOrder",
+  async (data: TOrderData) => {
+    try {
+      const response = await axiosInstance.post("/orders", data);
+      return response.data;
+    } catch (e) {
+      const error = e as AxiosError;
+      showApiErrorToastr(error);
+      throw error;
+    }
+  }
+);
 
 // actions
 export const { addOrder } = orderSlice.actions;

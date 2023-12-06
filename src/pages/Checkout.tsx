@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 // redux
 import { useSelector } from "react-redux";
-import { AppState } from "../redux/store";
+import { AppState, useAppDispatch } from "../redux/store";
 
 // MUI
 import {
@@ -15,30 +15,57 @@ import {
 } from "@mui/material";
 
 // components
-import AddressForm from "../components/AddressForm";
 import PaymentForm from "../components/PaymentForm";
+import ShippingStep from "../components/checkout/ShippingStep";
+import BillingStep from "../components/checkout/BillingStep";
+import PaymentStep from "../components/checkout/PaymentStep";
+import { TOrderData, TPaymentMethodData } from "../@types/order";
+import { createOrder } from "../redux/reducers/orderReducer";
+import { useNavigate } from "react-router-dom";
+import { emptyCart } from "../redux/reducers/cartReducer";
 
 // form stepper steps
-const steps = ["Shipping Address", "Payment Details"];
+const steps = ["Shipping Address", "Billing Address", "Payment Details"];
 
 function Checkout() {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   // cart items state
-  const cart = useSelector((state: AppState) => state.cart.items);
+  const cart = useSelector((state: AppState) => state.cart);
+  const { items: cartItems } = cart;
 
   // active step
   const [activeStep, setActiveStep] = React.useState(0);
+  // address
+  const [shippingId, setShippingId] = useState<string | null>(null);
+  const [billingId, setBillingId] = useState<string | null>(null);
 
   // handle next step in stepper
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
+  // submit handler
+  const handleSubmit = async (paymentData: TPaymentMethodData) => {
+    if (!shippingId || !billingId) return;
+    const formData: TOrderData = {
+      cart: cartItems.map((c) => c._id),
+      payment: paymentData,
+      shipping: shippingId,
+      billing: billingId,
+      total: cart.totalPrice,
+    };
+    const { payload } = await dispatch(createOrder(formData));
+    dispatch(emptyCart());
+    navigate(`/order-success/${payload._id}`);
+  };
+
   return (
     <Container maxWidth="sm">
-      {cart.length ? (
+      {cartItems.length ? (
         <Box sx={{ width: "100%" }}>
           <Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
-            Checkout
+            Checkout - {steps[activeStep]}
           </Typography>
           <Stepper activeStep={activeStep}>
             {steps.map((label, index) => {
@@ -51,11 +78,22 @@ function Checkout() {
             })}
           </Stepper>
 
-          <Box sx={{ paddingTop: "1.5rem" }}>
+          <Box sx={{ paddingTop: 4 }}>
+            {/* <AddressForm handleNext={handleNext} /> */}
             {activeStep === 0 ? (
-              <AddressForm handleNext={handleNext} />
+              <ShippingStep
+                shippingId={shippingId}
+                setShippingId={setShippingId}
+                handleNext={handleNext}
+              />
+            ) : activeStep === 1 ? (
+              <BillingStep
+                billingId={billingId}
+                setBillingId={setBillingId}
+                handleNext={handleNext}
+              />
             ) : (
-              <PaymentForm handleNext={handleNext} />
+              <PaymentStep handleSubmit={handleSubmit} />
             )}
           </Box>
         </Box>

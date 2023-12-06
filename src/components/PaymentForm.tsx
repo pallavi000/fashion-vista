@@ -21,7 +21,7 @@ import { emptyCart } from "../redux/reducers/cartReducer";
 import { addOrder } from "../redux/reducers/orderReducer";
 
 // types
-import { TOrder, TOrderInput } from "../@types/order";
+import { TOrder, TOrderInput, TPaymentMethodData } from "../@types/order";
 import { CartState } from "../@types/reduxState";
 
 // helpers
@@ -33,7 +33,11 @@ import { useThemeContext } from "../context/ThemeContext";
 // load stripe
 const stripePromise = loadStripe("pk_test_TYooMQauvdEDq54NiTphI7jx");
 
-function PaymentForm({ handleNext }: { handleNext: Function }) {
+function PaymentForm({
+  handleSubmit,
+}: {
+  handleSubmit: (data: TPaymentMethodData) => void;
+}) {
   // context
   const { theme, themeMode } = useThemeContext();
 
@@ -55,14 +59,18 @@ function PaymentForm({ handleNext }: { handleNext: Function }) {
   };
   return (
     <Elements stripe={stripePromise} options={options}>
-      <PaymentHandler cart={cart} />
+      <PaymentHandler cart={cart} handleSubmit={handleSubmit} />
     </Elements>
   );
 }
 
-function PaymentHandler({ cart }: { cart: CartState }) {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+function PaymentHandler({
+  cart,
+  handleSubmit,
+}: {
+  cart: CartState;
+  handleSubmit: (data: TPaymentMethodData) => void;
+}) {
   // cart items
   const { items } = cart;
 
@@ -71,25 +79,19 @@ function PaymentHandler({ cart }: { cart: CartState }) {
   const elements = useElements();
 
   // handle payment form submit
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handlePaymentSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
     event.preventDefault();
     if (!stripe || !elements) {
       return;
     }
     const { error } = await elements.submit();
     if (!error) {
-      // TODO:: create order api call
-      // const orderData: TOrderInput = {
-      //   orderId: getOrderId(),
-      //   total: cart.totalPrice,
-      //   orderDate: getOrderDate(),
-      //   paymentMethod: "COD",
-      //   deliveryStatus: "Completed",
-      //   items: items,
-      // };
-      //dispatch(addOrder(orderData));
-      // dispatch(emptyCart());
-      //navigate(`/order-success/${orderData.orderId}`);
+      handleSubmit({
+        method: "Credit Card",
+        status: "Paid",
+      });
     }
   };
 
@@ -97,7 +99,7 @@ function PaymentHandler({ cart }: { cart: CartState }) {
     <Card
       sx={{ padding: "1rem", marginTop: "1rem" }}
       component={"form"}
-      onSubmit={handleSubmit}
+      onSubmit={handlePaymentSubmit}
     >
       <PaymentElement />
       <Button

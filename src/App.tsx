@@ -23,7 +23,6 @@ const App = () => {
     user: state.auth.user,
     cart: state.cart.items,
   }));
-  console.log(cart, "cartItems");
 
   // Get current user
   useEffect(() => {

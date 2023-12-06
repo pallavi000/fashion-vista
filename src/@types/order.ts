@@ -3,6 +3,9 @@ import { TCart } from "./cart";
 import { TProduct } from "./product";
 import { TUser } from "./user";
 
+export type TPaymentMethod = "Credit Card" | "PayPal" | "Cash";
+export type TPaymentStatus = "Paid" | "Pending" | "Refunded" | "Cancelled";
+
 export type TOrderInput = {
   orderId: string;
   total: number;
@@ -12,14 +15,31 @@ export type TOrderInput = {
   deliveryStatus: string;
 };
 
+export type TOrderData = {
+  cart: string[];
+  shipping: string;
+  billing: string;
+  payment: {
+    method: TPaymentMethod;
+    status: TPaymentStatus;
+  };
+  total: number;
+};
+
 export type TOrder = {
   _id: string;
   user: TUser;
   products: TProduct[];
-  shipping: TAddress;
+  shipping: string;
+  billing: string;
   payment: {
-    method: "Credit Card" | "PayPal" | "Cash";
-    status: "Paid" | "Pending" | "Refunded" | "Cancelled";
+    method: TPaymentMethod;
+    status: TPaymentStatus;
   };
   total: number;
+};
+
+export type TPaymentMethodData = {
+  method: TPaymentMethod;
+  status: TPaymentStatus;
 };

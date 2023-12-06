@@ -4,96 +4,129 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 // MUI
-import { Button, Card, Grid, TextField } from "@mui/material";
+import { Button, Box, Grid, TextField } from "@mui/material";
 
 // types
 import { UserAddressInputs } from "../@types/user";
+import { useDispatch, useSelector } from "react-redux";
+import { AppState, useAppDispatch } from "../redux/store";
+import { TAddress, TAddressInput, TAddressInputData } from "../@types/address";
+import { addNewAddress, updateAddress } from "../redux/reducers/addressReducer";
+import LoadingButton from "./LoadingButton";
 
 // yup validation schema
 const validationSchema = yup.object().shape({
-  firstName: yup.string().required("First name is required"),
-  lastName: yup.string().required("Last name is required"),
-  address: yup.string().required("Address is required"),
+  fullname: yup.string().required("Full Name is required"),
   city: yup.string().required("City is required"),
-  state: yup.string().required("State is required"),
-  zip: yup.string().required("Zip code is required"),
+  street: yup.string().required("Street is required"),
+  zipCode: yup.string().required("Zip code is required"),
   country: yup.string().required("Country is required"),
+  phone: yup.string().required("Phone is required"),
 });
 
 // compoenent props type
-type AddressFormProps = { handleNext: Function };
+type AddressFormProps = {
+  handleNext: Function;
+  buttonText?: string;
+  address?: TAddress | null;
+  type?: "create" | "update";
+};
 
-export default function AddressForm({ handleNext }: AddressFormProps) {
+export default function AddressForm({
+  handleNext,
+  buttonText = "submit",
+  address = null,
+  type = "create",
+}: AddressFormProps) {
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+
   // react hook form with yup validation
   const {
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
-  } = useForm<UserAddressInputs>({
+  } = useForm<TAddressInput>({
     resolver: yupResolver(validationSchema),
   });
 
+  React.useEffect(() => {
+    if (address) {
+      setValue("city", address.city);
+      setValue("country", address.country);
+      setValue("street", address.street);
+      setValue("fullname", address.fullname);
+      setValue("phone", address.phone);
+      setValue("zipCode", address.zipCode);
+    }
+  }, [address]);
+
+  // app dispatch
+  const dispatch = useAppDispatch();
+
+  const { user } = useSelector((state: AppState) => ({
+    user: state.auth.user,
+  }));
+
   // form submit handler
-  const onSubmit = (data: UserAddressInputs) => {
-    //TODO: do something with address data
+  const onSubmit = async (data: TAddressInput) => {
+    if (user) {
+      setIsSubmitting(true);
+      const addressData: TAddressInputData = {
+        ...data,
+        user: user._id,
+      };
+      // create address
+      if (type === "create") {
+        await dispatch(addNewAddress(addressData));
+      }
+      //update address
+      if (type === "update" && address) {
+        await dispatch(
+          updateAddress({ addressId: address._id, data: addressData })
+        );
+      }
+      setIsSubmitting(false);
+    }
     handleNext();
   };
   return (
-    <Card
-      sx={{ padding: "1rem", paddingTop: 0 }}
-      component={"form"}
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <Grid container spacing={3} sx={{ mt: 2, mb: 1 }}>
-        <Grid item xs={12} sm={6}>
+    <Box component={"form"} onSubmit={handleSubmit(onSubmit)}>
+      <Grid container spacing={3} sx={{}}>
+        <Grid item xs={12} sm={12}>
           <Controller
-            name="firstName"
+            name="fullname"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                size="small"
+                fullWidth
+                label="Full name (First and Last name)"
+                variant="outlined"
+                error={Boolean(errors.fullname)}
+                helperText={errors.fullname?.message}
+              />
+            )}
+          />
+        </Grid>
+        <Grid item xs={12} sm={12}>
+          <Controller
+            name="country"
             control={control}
             render={({ field }) => (
               <TextField
                 {...field}
                 fullWidth
-                label="First Name"
+                size="small"
+                label="Country"
                 variant="outlined"
-                error={Boolean(errors.firstName)}
-                helperText={errors.firstName?.message}
+                error={Boolean(errors.country)}
+                helperText={errors.country?.message}
               />
             )}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <Controller
-            name="lastName"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                fullWidth
-                label="Last Name"
-                variant="outlined"
-                error={Boolean(errors.lastName)}
-                helperText={errors.lastName?.message}
-              />
-            )}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Controller
-            name="address"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                fullWidth
-                label="Address"
-                variant="outlined"
-                error={Boolean(errors.address)}
-                helperText={errors.address?.message}
-              />
-            )}
-          />
-        </Grid>
-
         <Grid item xs={12} sm={6}>
           <Controller
             name="city"
@@ -102,6 +135,7 @@ export default function AddressForm({ handleNext }: AddressFormProps) {
               <TextField
                 {...field}
                 fullWidth
+                size="small"
                 label="City"
                 variant="outlined"
                 error={Boolean(errors.city)}
@@ -112,60 +146,63 @@ export default function AddressForm({ handleNext }: AddressFormProps) {
         </Grid>
         <Grid item xs={12} sm={6}>
           <Controller
-            name="state"
+            name="street"
             control={control}
             render={({ field }) => (
               <TextField
                 {...field}
                 fullWidth
-                label="State/Province/Region"
+                label="Street"
+                size="small"
                 variant="outlined"
-                error={Boolean(errors.state)}
-                helperText={errors.state?.message}
+                error={Boolean(errors.street)}
+                helperText={errors.street?.message}
               />
             )}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <Controller
-            name="zip"
+            name="zipCode"
             control={control}
             render={({ field }) => (
               <TextField
                 {...field}
                 fullWidth
+                size="small"
                 label="Zip / Postal code"
                 variant="outlined"
-                error={Boolean(errors.zip)}
-                helperText={errors.zip?.message}
+                error={Boolean(errors.zipCode)}
+                helperText={errors.zipCode?.message}
               />
             )}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <Controller
-            name="country"
+            name="phone"
             control={control}
             render={({ field }) => (
               <TextField
                 {...field}
                 fullWidth
-                label="Country"
+                size="small"
+                label="Mobile number"
                 variant="outlined"
-                error={Boolean(errors.country)}
-                helperText={errors.country?.message}
+                error={Boolean(errors.phone)}
+                helperText={errors.phone?.message}
               />
             )}
           />
         </Grid>
       </Grid>
-      <Button
-        sx={{ marginTop: "1rem", marginBottom: "1rem", float: "right" }}
-        type="submit"
-        variant="contained"
-      >
-        Next
-      </Button>
-    </Card>
+      <Box sx={{ marginTop: 4, marginBottom: 0, float: "right" }}>
+        <LoadingButton
+          isLoading={isSubmitting}
+          color="success"
+          title={buttonText}
+        />
+      </Box>
+    </Box>
   );
 }

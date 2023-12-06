@@ -1,3 +1,4 @@
+import { TAddress } from "./address";
 import { TCart } from "./cart";
 import { TCategory } from "./category";
 import { TOrder } from "./order";
@@ -26,6 +27,18 @@ export type CategoriesState = {
 export type CategoryState = {
   data: TCategory | null;
   products: TProduct[];
+  isLoading: boolean;
+  error: string | null;
+};
+
+export type AddressesState = {
+  data: TAddress[];
+  isLoading: boolean;
+  error: string | null;
+};
+
+export type AddressState = {
+  data: TAddress | null;
   isLoading: boolean;
   error: string | null;
 };

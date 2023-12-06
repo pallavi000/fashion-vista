@@ -41,3 +41,9 @@ export type UserAddressInputs = {
   zip: string;
   country: string;
 };
+
+export type TUpdatePasswordInput = {
+  newPassword: string;
+  currentPassword: string;
+  confirmPassword: string;
+};

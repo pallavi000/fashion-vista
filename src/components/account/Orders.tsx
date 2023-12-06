@@ -25,11 +25,12 @@ import { getOrders } from "../../redux/reducers/orderReducer";
 function Orders() {
   const dispatch = useAppDispatch();
 
+  const orders = useSelector((state: AppState) => state.orders.data);
+
   // orders state
   useEffect(() => {
     dispatch(getOrders());
   }, []);
-  const orders = useSelector((state: AppState) => state.orders.data);
 
   return (
     <>
