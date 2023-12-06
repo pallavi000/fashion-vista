@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 // redux
 import { useSelector } from "react-redux";
@@ -39,22 +39,18 @@ function Products() {
   const dispatch = useAppDispatch();
 
   // pagination states
-  const [offset, setOffset] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(12);
+  const [pageNo, setPageNo] = useState<number>(1);
+  const [perPage, setPerPage] = useState<number>(2);
 
   // products filter states
   const [price, setPrice] = React.useState<number[]>([1, 5000]);
-  const [selectedCategory, setSelectedCategory] = useState<number>(0);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
 
   // products state
   const { products, isLoading } = useSelector((state: AppState) => ({
     products: state.products.data,
     isLoading: state.products.isLoading,
   }));
-  console.log(
-    products,
-    "product page consoleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
-  );
 
   // current category state
   const { category } = useSelector((state: AppState) => ({
@@ -65,23 +61,23 @@ function Products() {
   React.useEffect(() => {
     dispatch(
       fetchFilterProducts({
-        offset,
-        limit,
+        pageNo,
+        perPage,
         price_min: price[0],
         price_max: price[1],
         categoryId: selectedCategory,
       })
     );
-  }, [id, offset, limit, price, selectedCategory]);
+  }, [pageNo, perPage, price, selectedCategory]);
 
   const handlePrevPage = () => {
-    setOffset((prev) => prev - limit);
+    setPageNo((prev) => prev - 1);
   };
   const handleNextPage = () => {
-    setOffset((prev) => prev + limit);
+    setPageNo((prev) => prev + 1);
   };
   const handleChange = (e: SelectChangeEvent) => {
-    setLimit(Number(e.target.value));
+    setPerPage(Number(e.target.value));
   };
 
   return (
@@ -112,7 +108,7 @@ function Products() {
             <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
               <GridViewIcon />
               <Typography variant="h6">
-                Showing {offset} - {offset + limit} items
+                Showing {pageNo} - {pageNo + perPage} items
               </Typography>
             </Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
@@ -121,7 +117,7 @@ function Products() {
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={limit.toString()}
+                  value={perPage.toString()}
                   onChange={handleChange}
                 >
                   <MenuItem value={12}>12</MenuItem>
@@ -139,7 +135,7 @@ function Products() {
             sx={{ marginTop: "2rem" }}
           >
             {isLoading
-              ? [...Array(limit)].map((_, index) => (
+              ? [...Array(perPage)].map((_, index) => (
                   <SkeletonProductCard key={index} />
                 ))
               : products.map((product) => {
@@ -149,7 +145,7 @@ function Products() {
           <ButtonGroup sx={{ float: "right" }}>
             <Button
               variant="contained"
-              disabled={isLoading || !Boolean(offset)}
+              disabled={isLoading || !Boolean(pageNo - 1)}
               startIcon={<ArrowLeft />}
               onClick={handlePrevPage}
             >
@@ -157,12 +153,12 @@ function Products() {
             </Button>
             <Button disabled size="small">
               <Typography variant="body1">
-                {Math.ceil((offset + 1) / limit)}
+                {Math.ceil((pageNo + 1) / perPage)}
               </Typography>
             </Button>
             <Button
               variant="contained"
-              disabled={isLoading || products.length !== limit ? true : false}
+              disabled={isLoading || products.length !== perPage ? true : false}
               endIcon={<ArrowRight />}
               onClick={handleNextPage}
             >

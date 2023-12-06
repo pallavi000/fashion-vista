@@ -64,23 +64,24 @@ export const fetchProductsByCategory = createAsyncThunk(
   "fetchProductsByCategory",
   async ({
     id,
-    offset,
-    limit,
+    pageNo,
+    perPage,
     price_min,
     price_max,
     categoryId,
   }: {
-    id: number;
-    offset: number;
-    limit: number;
+    id: string;
+    pageNo: number;
+    perPage: number;
     price_min: number;
     price_max: number;
-    categoryId: number;
+    categoryId: string;
   }) => {
     try {
       const result = await axiosInstance.get(
-        `/products?offset=${offset}&limit=${limit}&price_min=${price_min}&price_max=${price_max}&categoryId=${id}`
+        `categories/${id}/products?pageNo=${pageNo}&perPage=${perPage}&minPrice=${price_min}&maxPrice=${price_max}`
       );
+      console.log(result.data, "categoryproductsssssssssssssssss");
       return result.data;
     } catch (e) {
       const error = e as AxiosError;

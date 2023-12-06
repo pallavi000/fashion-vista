@@ -6,6 +6,7 @@ import { ProductsState } from "../../@types/reduxState";
 // axios
 import { AxiosError } from "axios";
 import axiosInstance from "../../utils/AxiosInstance";
+import { Hail, NoiseControlOffTwoTone } from "@mui/icons-material";
 
 // initial state
 const initialState: ProductsState = {
@@ -109,23 +110,24 @@ export const fetchAllProducts = createAsyncThunk(
 export const fetchFilterProducts = createAsyncThunk(
   "fetchFilterProducts",
   async ({
-    offset,
-    limit,
+    pageNo,
+    perPage,
     price_min,
     price_max,
     categoryId,
   }: {
-    offset: number;
-    limit: number;
+    pageNo: number;
+    perPage: number;
     price_min: number;
     price_max: number;
-    categoryId: number;
+    categoryId: string;
   }) => {
     try {
       const result = await axiosInstance.get(
-        `/products?pageNo=${offset}&perPage=${limit}&minPrice=${price_min}&maxPrice=${price_max}&categoryId=${categoryId}`
+        `/products?pageNo=${pageNo}&perPage=${perPage}&minPrice=${price_min}&maxPrice=${price_max}${
+          categoryId !== "0" ? "&categoryId=" + categoryId : ""
+        }`
       );
-      console.log(result.data, "productssssssssssssssssssss");
       return result.data;
     } catch (e) {
       const error = e as AxiosError;

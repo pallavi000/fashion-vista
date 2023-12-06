@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 // redux
 import { useSelector } from "react-redux";
@@ -42,15 +42,21 @@ function CategoryProducts() {
   const dispatch = useAppDispatch();
 
   // pagination states
-  const [offset, setOffset] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(12);
+  const [pageNo, setPageNo] = useState<number>(1);
+  const [perPage, setPerPage] = useState<number>(2);
 
   // sidebar filter states
   const [price, setPrice] = React.useState<number[]>([1, 5000]);
-  const [selectedCategory, setSelectedCategory] = useState<number>(Number(id));
+  const [selectedCategory, setSelectedCategory] = useState<string>();
 
   // categoreis states
   const categories = useSelector((state: AppState) => state.categories.data);
+
+  useEffect(() => {
+    if (id) {
+      setSelectedCategory(id);
+    }
+  }, [id]);
 
   // current category and it's products state
   const { category, products, isLoading } = useSelector((state: AppState) => ({
@@ -61,17 +67,19 @@ function CategoryProducts() {
 
   // fetch products of a category
   React.useEffect(() => {
-    dispatch(
-      fetchProductsByCategory({
-        id: selectedCategory,
-        offset,
-        limit,
-        price_min: price[0],
-        price_max: price[1],
-        categoryId: selectedCategory,
-      })
-    );
-  }, [id, offset, limit, price, selectedCategory]);
+    if (selectedCategory) {
+      dispatch(
+        fetchProductsByCategory({
+          id: selectedCategory,
+          pageNo,
+          perPage,
+          price_min: price[0],
+          price_max: price[1],
+          categoryId: selectedCategory,
+        })
+      );
+    }
+  }, [id, pageNo, perPage, price, selectedCategory]);
 
   // set current category
   React.useEffect(() => {
@@ -82,14 +90,14 @@ function CategoryProducts() {
   }, [categories, id]);
 
   const handlePrevPage = () => {
-    setOffset((prev) => prev - limit);
+    setPageNo((prev) => prev - 1);
   };
   const handleNextPage = () => {
-    setOffset((prev) => prev + limit);
+    setPageNo((prev) => prev + 1);
   };
 
   const handleChange = (e: SelectChangeEvent) => {
-    setLimit(Number(e.target.value));
+    setPerPage(Number(e.target.value));
   };
 
   return (
@@ -120,7 +128,7 @@ function CategoryProducts() {
             <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
               <GridViewIcon />
               <Typography variant="h6">
-                Showing {offset} - {offset + limit} items
+                Showing {pageNo} - {pageNo + perPage} items
               </Typography>
             </Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
@@ -129,7 +137,7 @@ function CategoryProducts() {
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={limit.toString()}
+                  value={perPage.toString()}
                   onChange={handleChange}
                 >
                   <MenuItem value={12}>12</MenuItem>
@@ -141,7 +149,7 @@ function CategoryProducts() {
           </Box>
           <Grid container spacing={3} columns={12} sx={{ marginTop: "2rem" }}>
             {isLoading
-              ? [...Array(limit)].map((_, index) => (
+              ? [...Array(perPage)].map((_, index) => (
                   <SkeletonProductCard key={index} />
                 ))
               : products.map((product) => {
@@ -151,7 +159,7 @@ function CategoryProducts() {
           <ButtonGroup sx={{ float: "right" }}>
             <Button
               variant="contained"
-              disabled={isLoading || !Boolean(offset)}
+              disabled={isLoading || !Boolean(pageNo - 1)}
               startIcon={<ArrowLeft />}
               onClick={handlePrevPage}
             >
@@ -159,12 +167,12 @@ function CategoryProducts() {
             </Button>
             <Button disabled size="small">
               <Typography variant="body1">
-                {Math.ceil((offset + 1) / limit)}
+                {Math.ceil((pageNo + 1) / perPage)}
               </Typography>
             </Button>
             <Button
               variant="contained"
-              disabled={isLoading || products.length !== limit ? true : false}
+              disabled={isLoading || products.length !== perPage ? true : false}
               endIcon={<ArrowRight />}
               onClick={handleNextPage}
             >
