@@ -1,4 +1,4 @@
-import { fetchAllProducts } from "../../redux/reducers/productsReducer";
+import { fetchProducts } from "../../redux/reducers/productsReducer";
 import store from "../../redux/store";
 import { fetchProductById } from "../../redux/reducers/productReducer";
 import productsServer from "../../server/productServer";
@@ -16,7 +16,9 @@ afterAll(() => productsServer.close());
 
 describe("product reducers", () => {
   test("should successfully fetch all products", async () => {
-    await store.dispatch(fetchAllProducts({ offset: 0, limit: 10 }));
+    await store.dispatch(
+      fetchProducts({ pageNo: 1, perPage: 10, price_min: 0, price_max: 5000 })
+    );
     expect(store.getState().products.data.length).toBe(3);
   });
 

@@ -18,6 +18,7 @@ import { showApiErrorToastr, showCustomToastr } from "../../../utils/helper";
 // initial states
 const initialState: ProductsState = {
   data: [],
+  totalPages: 0,
   isLoading: false,
   error: null,
 };

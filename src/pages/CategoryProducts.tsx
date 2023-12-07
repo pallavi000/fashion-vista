@@ -7,7 +7,6 @@ import { AppState, useAppDispatch } from "../redux/store";
 // MUI
 import {
   Box,
-  Button,
   Container,
   FormControl,
   Grid,
@@ -15,14 +14,10 @@ import {
   Select,
   SelectChangeEvent,
   Typography,
-  ButtonGroup,
 } from "@mui/material";
 
 // reducers
-import {
-  fetchProductsByCategory,
-  setCategory,
-} from "../redux/reducers/categoryReducer";
+import { setCategory } from "../redux/reducers/categoryReducer";
 
 // components
 import Product from "../components/Product";
@@ -30,10 +25,12 @@ import BreadCrumb from "../components/Breadcrumb";
 import SidebarFilter from "../components/SidebarFilter";
 import SkeletonProductCard from "../components/skeleton/SkeletonProductCard";
 import BannerContainer from "../components/BannerContainer";
+import CustomPagination from "../components/CustomPagination";
 
 // icons
 import GridViewIcon from "@mui/icons-material/GridView";
-import { ArrowLeft, ArrowRight } from "@mui/icons-material";
+
+import { fetchProducts } from "../redux/reducers/productsReducer";
 
 function CategoryProducts() {
   const { id } = useParams();
@@ -58,19 +55,23 @@ function CategoryProducts() {
     }
   }, [id]);
 
-  // current category and it's products state
-  const { category, products, isLoading } = useSelector((state: AppState) => ({
+  // current category and products state
+  const { category } = useSelector((state: AppState) => ({
     category: state.category.data,
-    products: state.category.products,
-    isLoading: state.category.isLoading,
   }));
+  const { products, isLoading, totalPages } = useSelector(
+    (state: AppState) => ({
+      products: state.products.data,
+      isLoading: state.products.isLoading,
+      totalPages: state.products.totalPages,
+    })
+  );
 
   // fetch products of a category
   React.useEffect(() => {
     if (selectedCategory) {
       dispatch(
-        fetchProductsByCategory({
-          id: selectedCategory,
+        fetchProducts({
           pageNo,
           perPage,
           price_min: price[0],
@@ -79,7 +80,7 @@ function CategoryProducts() {
         })
       );
     }
-  }, [id, pageNo, perPage, price, selectedCategory]);
+  }, [pageNo, perPage, price, selectedCategory]);
 
   // set current category
   React.useEffect(() => {
@@ -89,15 +90,15 @@ function CategoryProducts() {
     }
   }, [categories, id]);
 
-  const handlePrevPage = () => {
-    setPageNo((prev) => prev - 1);
-  };
-  const handleNextPage = () => {
-    setPageNo((prev) => prev + 1);
-  };
-
   const handleChange = (e: SelectChangeEvent) => {
     setPerPage(Number(e.target.value));
+  };
+
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setPageNo(value);
   };
 
   return (
@@ -156,29 +157,11 @@ function CategoryProducts() {
                   return <Product key={product._id} product={product} />;
                 })}
           </Grid>
-          <ButtonGroup sx={{ float: "right" }}>
-            <Button
-              variant="contained"
-              disabled={isLoading || !Boolean(pageNo - 1)}
-              startIcon={<ArrowLeft />}
-              onClick={handlePrevPage}
-            >
-              Prev
-            </Button>
-            <Button disabled size="small">
-              <Typography variant="body1">
-                {Math.ceil((pageNo + 1) / perPage)}
-              </Typography>
-            </Button>
-            <Button
-              variant="contained"
-              disabled={isLoading || products.length !== perPage ? true : false}
-              endIcon={<ArrowRight />}
-              onClick={handleNextPage}
-            >
-              Next
-            </Button>
-          </ButtonGroup>
+          <CustomPagination
+            currentPage={pageNo}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+          />
         </Grid>
       </Grid>
     </Container>

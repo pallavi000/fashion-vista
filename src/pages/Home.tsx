@@ -8,7 +8,7 @@ import { AppState, useAppDispatch } from "../redux/store";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
 
 // reducers
-import { fetchAllProducts } from "../redux/reducers/productsReducer";
+import { fetchProducts } from "../redux/reducers/productsReducer";
 
 // images
 import BrandImg1 from "../images/brand1.png";
@@ -41,10 +41,6 @@ function Home() {
   // categories state
   const categories = useSelector((state: AppState) => state.categories.data);
 
-  // products fetch/display limit
-  const offset = 0;
-  const limit = 10;
-
   // brands
   const brands = [
     BrandImg1,
@@ -57,7 +53,9 @@ function Home() {
 
   // fetch products
   useEffect(() => {
-    dispatch(fetchAllProducts({ offset, limit }));
+    dispatch(
+      fetchProducts({ pageNo: 1, perPage: 10, price_min: 0, price_max: 5000 })
+    );
   }, []);
 
   return (

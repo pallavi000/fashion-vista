@@ -14,6 +14,7 @@ export type ProductState = {
 
 export type ProductsState = {
   data: TProduct[];
+  totalPages: number;
   isLoading: boolean;
   error: string | null;
 };
@@ -26,7 +27,6 @@ export type CategoriesState = {
 
 export type CategoryState = {
   data: TCategory | null;
-  products: TProduct[];
   isLoading: boolean;
   error: string | null;
 };

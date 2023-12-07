@@ -11,6 +11,7 @@ import { Hail, NoiseControlOffTwoTone } from "@mui/icons-material";
 // initial state
 const initialState: ProductsState = {
   data: [],
+  totalPages: 0,
   isLoading: false,
   error: null,
 };
@@ -21,65 +22,22 @@ const productsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchAllProducts.pending, (state, action) => {
+    builder.addCase(fetchProducts.pending, (state, action) => {
       return {
         ...state,
         isLoading: true,
       };
     });
-    builder.addCase(fetchAllProducts.fulfilled, (state, action) => {
-      return {
-        ...state,
-        isLoading: false,
-        data: action.payload,
-        error: null,
-      };
-    });
-    builder.addCase(fetchAllProducts.rejected, (state, action) => {
-      return {
-        ...state,
-        isLoading: false,
-        error: action.error.message || "",
-      };
-    });
-
-    builder.addCase(fetchFilterProducts.pending, (state, action) => {
-      return {
-        ...state,
-        isLoading: true,
-      };
-    });
-    builder.addCase(fetchFilterProducts.fulfilled, (state, action) => {
+    builder.addCase(fetchProducts.fulfilled, (state, action) => {
       return {
         ...state,
         isLoading: false,
         error: null,
-        data: action.payload,
+        data: action.payload.products,
+        totalPages: action.payload.totalPages,
       };
     });
-    builder.addCase(fetchFilterProducts.rejected, (state, action) => {
-      return {
-        ...state,
-        isLoading: false,
-        error: action.error.message || "",
-      };
-    });
-
-    builder.addCase(fetchSearchProducts.pending, (state, action) => {
-      return {
-        ...state,
-        isLoading: true,
-      };
-    });
-    builder.addCase(fetchSearchProducts.fulfilled, (state, action) => {
-      return {
-        ...state,
-        isLoading: false,
-        error: null,
-        data: action.payload,
-      };
-    });
-    builder.addCase(fetchSearchProducts.rejected, (state, action) => {
+    builder.addCase(fetchProducts.rejected, (state, action) => {
       return {
         ...state,
         isLoading: false,
@@ -92,40 +50,25 @@ const productsSlice = createSlice({
 // ==============================================
 // API Calls
 // ==============================================
-export const fetchAllProducts = createAsyncThunk(
-  "fetchAllProducts",
-  async ({ offset, limit }: { offset: number; limit: number }) => {
-    try {
-      const result = await axiosInstance.get(
-        `/products?offset=${offset}&limit=${limit}`
-      );
-      return result.data;
-    } catch (e) {
-      const error = e as AxiosError;
-      throw error;
-    }
-  }
-);
-
-export const fetchFilterProducts = createAsyncThunk(
-  "fetchFilterProducts",
+export const fetchProducts = createAsyncThunk(
+  "fetchProducts",
   async ({
     pageNo,
     perPage,
     price_min,
     price_max,
-    categoryId,
+    categoryId = null,
   }: {
     pageNo: number;
     perPage: number;
     price_min: number;
     price_max: number;
-    categoryId: string;
+    categoryId?: string | null;
   }) => {
     try {
       const result = await axiosInstance.get(
         `/products?pageNo=${pageNo}&perPage=${perPage}&minPrice=${price_min}&maxPrice=${price_max}${
-          categoryId !== "0" ? "&categoryId=" + categoryId : ""
+          categoryId && categoryId !== "0" ? "&categoryId=" + categoryId : ""
         }`
       );
       return result.data;
@@ -137,25 +80,26 @@ export const fetchFilterProducts = createAsyncThunk(
 );
 
 export const fetchSearchProducts = createAsyncThunk(
-  "fetchSearchProducts",
+  "fetchProducts",
   async ({
+    pageNo,
+    perPage,
     query,
     price_min,
     price_max,
     categoryId,
   }: {
+    pageNo: number;
+    perPage: number;
     query: string;
     price_min: number;
     price_max: number;
-    categoryId: number;
+    categoryId: string;
   }) => {
     try {
-      let url;
-      if (categoryId) {
-        url = `/products/?title=${query}&price_min=${price_min}&price_max=${price_max}&categoryId=${categoryId}`;
-      } else {
-        url = `/products/?title=${query}&price_min=${price_min}&price_max=${price_max}`;
-      }
+      const url = `/products/search/?title=${query}&price_min=${price_min}&price_max=${price_max}${
+        categoryId && categoryId !== "0" ? "&categoryId=" + categoryId : ""
+      }&pageNo=${pageNo}&perPage=${perPage}`;
       const result = await axiosInstance.get(url);
       return result.data;
     } catch (e) {

@@ -16,6 +16,8 @@ import {
   SelectChangeEvent,
   Typography,
   ButtonGroup,
+  Pagination,
+  PaginationItem,
 } from "@mui/material";
 
 // components
@@ -27,10 +29,10 @@ import BannerContainer from "../components/BannerContainer";
 
 // icons
 import GridViewIcon from "@mui/icons-material/GridView";
-import { ArrowLeft, ArrowRight } from "@mui/icons-material";
 
 // reducers
-import { fetchFilterProducts } from "../redux/reducers/productsReducer";
+import { fetchProducts } from "../redux/reducers/productsReducer";
+import CustomPagination from "../components/CustomPagination";
 
 function Products() {
   const { id } = useParams();
@@ -40,17 +42,20 @@ function Products() {
 
   // pagination states
   const [pageNo, setPageNo] = useState<number>(1);
-  const [perPage, setPerPage] = useState<number>(2);
+  const [perPage, setPerPage] = useState<number>(12);
 
   // products filter states
   const [price, setPrice] = React.useState<number[]>([1, 5000]);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
 
   // products state
-  const { products, isLoading } = useSelector((state: AppState) => ({
-    products: state.products.data,
-    isLoading: state.products.isLoading,
-  }));
+  const { products, isLoading, totalPages } = useSelector(
+    (state: AppState) => ({
+      products: state.products.data,
+      isLoading: state.products.isLoading,
+      totalPages: state.products.totalPages,
+    })
+  );
 
   // current category state
   const { category } = useSelector((state: AppState) => ({
@@ -60,7 +65,7 @@ function Products() {
   // fetch products from api
   React.useEffect(() => {
     dispatch(
-      fetchFilterProducts({
+      fetchProducts({
         pageNo,
         perPage,
         price_min: price[0],
@@ -70,14 +75,15 @@ function Products() {
     );
   }, [pageNo, perPage, price, selectedCategory]);
 
-  const handlePrevPage = () => {
-    setPageNo((prev) => prev - 1);
-  };
-  const handleNextPage = () => {
-    setPageNo((prev) => prev + 1);
-  };
   const handleChange = (e: SelectChangeEvent) => {
     setPerPage(Number(e.target.value));
+  };
+
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setPageNo(value);
   };
 
   return (
@@ -142,29 +148,11 @@ function Products() {
                   return <Product key={product._id} product={product} />;
                 })}
           </Grid>
-          <ButtonGroup sx={{ float: "right" }}>
-            <Button
-              variant="contained"
-              disabled={isLoading || !Boolean(pageNo - 1)}
-              startIcon={<ArrowLeft />}
-              onClick={handlePrevPage}
-            >
-              Prev
-            </Button>
-            <Button disabled size="small">
-              <Typography variant="body1">
-                {Math.ceil((pageNo + 1) / perPage)}
-              </Typography>
-            </Button>
-            <Button
-              variant="contained"
-              disabled={isLoading || products.length !== perPage ? true : false}
-              endIcon={<ArrowRight />}
-              onClick={handleNextPage}
-            >
-              Next
-            </Button>
-          </ButtonGroup>
+          <CustomPagination
+            currentPage={pageNo}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+          />
         </Grid>
       </Grid>
     </Container>

@@ -31,6 +31,7 @@ import BannerContainer from "../components/BannerContainer";
 
 // reducers
 import { fetchSearchProducts } from "../redux/reducers/productsReducer";
+import CustomPagination from "../components/CustomPagination";
 
 function SearchResult() {
   const location = useLocation();
@@ -43,18 +44,21 @@ function SearchResult() {
   const dispatch = useAppDispatch();
 
   // for pagination
-  const [offset, setOffset] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(12);
+  const [pageNo, setPageNo] = useState<number>(1);
+  const [perPage, setPerPage] = useState<number>(12);
 
   // sidebar filter
   const [price, setPrice] = React.useState<number[]>([1, 5000]);
-  const [selectedCategory, setSelectedCategory] = useState<number>(0);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
 
   // products state
-  const { products, isLoading } = useSelector((state: AppState) => ({
-    products: state.products.data,
-    isLoading: state.products.isLoading,
-  }));
+  const { products, isLoading, totalPages } = useSelector(
+    (state: AppState) => ({
+      products: state.products.data,
+      isLoading: state.products.isLoading,
+      totalPages: state.products.totalPages,
+    })
+  );
   // categories states
   const { category } = useSelector((state: AppState) => ({
     category: state.category.data,
@@ -76,6 +80,8 @@ function SearchResult() {
     if (searchQuery) {
       dispatch(
         fetchSearchProducts({
+          pageNo,
+          perPage,
           query: searchQuery,
           price_min: price[0],
           price_max: price[1],
@@ -83,16 +89,17 @@ function SearchResult() {
         })
       );
     }
-  }, [searchQuery, price, selectedCategory]);
+  }, [perPage, pageNo, searchQuery, price, selectedCategory]);
 
-  const handlePrevPage = () => {
-    setOffset((prev) => prev - limit);
-  };
-  const handleNextPage = () => {
-    setOffset((prev) => prev + limit);
-  };
   const handleChange = (e: SelectChangeEvent) => {
-    setLimit(Number(e.target.value));
+    setPerPage(Number(e.target.value));
+  };
+
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setPageNo(value);
   };
 
   return (
@@ -123,7 +130,7 @@ function SearchResult() {
             <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
               <GridViewIcon />
               <Typography variant="h6">
-                Showing {offset} - {offset + limit} items
+                Showing {pageNo} - {pageNo + perPage} items
               </Typography>
             </Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
@@ -132,7 +139,7 @@ function SearchResult() {
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={limit.toString()}
+                  value={perPage.toString()}
                   onChange={handleChange}
                 >
                   <MenuItem value={12}>12</MenuItem>
@@ -144,42 +151,18 @@ function SearchResult() {
           </Box>
           <Grid container spacing={3} columns={12} sx={{ marginTop: "2rem" }}>
             {isLoading
-              ? [...Array(limit)].map((_, index) => (
+              ? [...Array(perPage)].map((_, index) => (
                   <SkeletonProductCard key={index} />
                 ))
-              : products?.slice(offset, offset + limit).map((product) => {
+              : products.map((product) => {
                   return <Product key={product._id} product={product} />;
                 })}
           </Grid>
-
-          <ButtonGroup sx={{ float: "right" }}>
-            <Button
-              variant="contained"
-              disabled={isLoading || !Boolean(offset)}
-              startIcon={<ArrowLeft />}
-              onClick={handlePrevPage}
-            >
-              Prev
-            </Button>
-            <Button disabled size="small">
-              <Typography variant="body1">
-                {Math.ceil((offset + 1) / limit)}
-              </Typography>
-            </Button>
-            <Button
-              variant="contained"
-              disabled={
-                isLoading ||
-                products?.slice(offset, offset + limit).length !== limit
-                  ? true
-                  : false
-              }
-              endIcon={<ArrowRight />}
-              onClick={handleNextPage}
-            >
-              Next
-            </Button>
-          </ButtonGroup>
+          <CustomPagination
+            currentPage={pageNo}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+          />
         </Grid>
       </Grid>
     </Container>

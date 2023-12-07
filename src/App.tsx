@@ -1,5 +1,6 @@
 import { BrowserRouter as Router } from "react-router-dom";
 import { useEffect } from "react";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 // Redux
 import { useSelector } from "react-redux";
@@ -39,8 +40,10 @@ const App = () => {
 
   return (
     <Router>
-      <ScrollToTop />
-      <AppRouter />
+      <GoogleOAuthProvider clientId="636134274529-2qocgmf3ug0qn5pdt3buo4ucd3vlej8v.apps.googleusercontent.com">
+        <ScrollToTop />
+        <AppRouter />
+      </GoogleOAuthProvider>
     </Router>
   );
 };

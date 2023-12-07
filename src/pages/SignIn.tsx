@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { CredentialResponse, useGoogleOneTapLogin } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
 // Redux
 import { AppState, useAppDispatch } from "../redux/store";
 import { useSelector } from "react-redux";
@@ -18,7 +20,7 @@ import {
 } from "@mui/material";
 
 // reducer
-import { loginUser } from "../redux/reducers/authReducer";
+import { loginUser, loginUserGoogle } from "../redux/reducers/authReducer";
 
 // types
 import { LoginInputs } from "../@types/user";
@@ -28,6 +30,7 @@ import LoadingButton from "../components/LoadingButton";
 
 // routes
 import { ROUTES } from "../routes/routers";
+import { showCustomToastr } from "../utils/helper";
 
 // yup validation schema
 const validationSchema = yup.object().shape({
@@ -76,6 +79,22 @@ function SignIn() {
     dispatch(loginUser(data));
   };
 
+  // google login handler
+  const handleGoogleLogin = (credentialResponse: CredentialResponse) => {
+    const data = { id_token: credentialResponse.credential };
+    dispatch(loginUserGoogle(data));
+  };
+
+  // google one tap login
+  useGoogleOneTapLogin({
+    onSuccess: (credentialResponse: CredentialResponse) => {
+      handleGoogleLogin(credentialResponse);
+    },
+    onError: () => {
+      showCustomToastr("Google login failed.", "error");
+    },
+  });
+
   return (
     <Container maxWidth="sm">
       <Card
@@ -121,6 +140,20 @@ function SignIn() {
             isLoading={isLoading}
             color="success"
             title="Sign In"
+          />
+        </Box>
+        <Typography variant="h5" margin={"1rem 0rem"}>
+          OR
+        </Typography>
+
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <GoogleLogin
+            onSuccess={(credentialResponse: CredentialResponse) => {
+              handleGoogleLogin(credentialResponse);
+            }}
+            onError={() => {
+              showCustomToastr("Google login failed.", "error");
+            }}
           />
         </Box>
       </Card>

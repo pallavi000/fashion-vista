@@ -158,6 +158,21 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const loginUserGoogle = createAsyncThunk(
+  "loginUser",
+  async (data: any) => {
+    try {
+      const result = await axiosInstance.post("/auth/login/google", data);
+      showCustomToastr("Login successfull.", "success");
+      return result.data;
+    } catch (e) {
+      const error = e as AxiosError;
+      showApiErrorToastr(error);
+      throw error;
+    }
+  }
+);
+
 export const registerUser = createAsyncThunk(
   "registerUser",
   async (data: RegisterInputs) => {

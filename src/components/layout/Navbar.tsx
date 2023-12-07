@@ -60,8 +60,6 @@ export default function Navbar() {
     user: state.auth.user,
   }));
 
-  console.log(user, "app user");
-
   // cart state
   const cartItem = useSelector((state: AppState) => state.cart);
 
