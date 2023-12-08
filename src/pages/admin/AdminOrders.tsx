@@ -28,11 +28,14 @@ import { Search } from "@mui/icons-material";
 // types
 import { TOrder } from "../../@types/order";
 import OrderTableBody from "../../components/admin/orders/OrderTableBody";
+import { getOrders } from "../../redux/reducers/orderReducer";
 
 function AdminOrders() {
   // pagination states
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const dispatch = useAppDispatch();
 
   // filter states
   const [filterOrderId, setFilterOrderId] = React.useState("");
@@ -62,6 +65,11 @@ function AdminOrders() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  // orders state
+  useEffect(() => {
+    dispatch(getOrders());
+  }, []);
 
   // filter orders
   const filterOrders = orders.filter((u) => u._id.includes(filterOrderId));

@@ -88,7 +88,7 @@ function AdminUserEditModal({
   // form submit handler
   const onSubmit = async (data: RegisterInputs) => {
     const userData: TUser = { ...user, ...data };
-    console.log(userData, "userdataaaaaaaaaaaa");
+
     await dispatch(updateUser(userData));
     reset();
     setIsOpen(false);

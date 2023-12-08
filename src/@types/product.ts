@@ -9,6 +9,7 @@ export type TProduct = {
   category: TCategory;
   size: TSize;
   image: string;
+  stock: number;
   creationAt?: string;
   updatedAt?: string;
 };

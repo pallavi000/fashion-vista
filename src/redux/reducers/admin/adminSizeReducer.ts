@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // axios
 import { AxiosError } from "axios";
@@ -74,16 +74,19 @@ const adminSizeSlice = createSlice({
         isLoading: true,
       };
     });
-    builder.addCase(updateAdminSize.fulfilled, (state, action) => {
-      const sizeIndex = state.data.findIndex(
-        (c) => c._id === action.payload.id
-      );
-      if (sizeIndex !== -1) {
-        state.data[sizeIndex] = action.payload;
+    builder.addCase(
+      updateAdminSize.fulfilled,
+      (state, action: PayloadAction<TSize>) => {
+        const sizeIndex = state.data.findIndex(
+          (c) => c._id === action.payload._id
+        );
+        if (sizeIndex !== -1) {
+          state.data[sizeIndex] = action.payload;
+        }
+        state.isLoading = false;
+        state.error = null;
       }
-      state.isLoading = false;
-      state.error = null;
-    });
+    );
     builder.addCase(updateAdminSize.rejected, (state, action) => {
       return {
         ...state,

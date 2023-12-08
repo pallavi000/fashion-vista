@@ -94,16 +94,17 @@ function AdminProductEditModal({
     setValue("size", product?.size._id);
     setValue("description", product.description);
     setValue("image", product.image);
+    setValue("stock", product.stock);
   }, [product]);
 
   // form submit handler
   const onSubmit = async (data: ProductInputs) => {
     console.log(data, "oneditproduct");
     const productData: ProductInputsData = {
+      ...product,
       ...data,
-      _id: product._id,
     };
-    console.log(productData, "producteditdata");
+
     await dispatch(updateAdminProduct(productData));
     reset();
     setIsOpen(false);
@@ -159,6 +160,27 @@ function AdminProductEditModal({
                   variant="outlined"
                   error={Boolean(errors.price)}
                   helperText={errors.price?.message}
+                />
+              )}
+            />
+            <Controller
+              name="stock"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  type="number"
+                  {...field}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <AttachMoneyIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                  label="stock"
+                  variant="outlined"
+                  error={Boolean(errors.stock)}
+                  helperText={errors.stock?.message}
                 />
               )}
             />

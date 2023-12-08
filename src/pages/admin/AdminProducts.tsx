@@ -71,6 +71,7 @@ function AdminProducts() {
   const { products, isLoading } = useSelector((state: AppState) => ({
     products: state.adminProducts.data,
     isLoading: state.adminProducts.isLoading,
+    totalPages: state.adminProducts.totalPages,
   }));
 
   // categories
@@ -162,7 +163,8 @@ function AdminProducts() {
   };
 
   // serach/filter products
-  const filterProducts = products.filter((u) =>
+  console.log(products);
+  const filterProducts = products?.filter((u) =>
     u.name.toLocaleLowerCase().includes(filterName.toLocaleLowerCase())
   );
 

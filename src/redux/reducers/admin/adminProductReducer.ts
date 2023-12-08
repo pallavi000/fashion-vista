@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // axios
 import { AxiosError } from "axios";
@@ -40,7 +40,7 @@ const adminProductsSlice = createSlice({
         ...state,
         isLoading: false,
         error: null,
-        data: action.payload,
+        data: action.payload.products,
       };
     });
     builder.addCase(fetchAdminAllProducts.rejected, (state, action) => {
@@ -79,16 +79,19 @@ const adminProductsSlice = createSlice({
         isLoading: true,
       };
     });
-    builder.addCase(updateAdminProduct.fulfilled, (state, action) => {
-      const productIndex = state.data.findIndex(
-        (c) => c._id === action.payload.id
-      );
-      if (productIndex !== -1) {
-        state.data[productIndex] = action.payload;
+    builder.addCase(
+      updateAdminProduct.fulfilled,
+      (state, action: PayloadAction<TProduct>) => {
+        const productIndex = state.data.findIndex(
+          (c) => c._id === action.payload._id
+        );
+        if (productIndex !== -1) {
+          state.data[productIndex] = action.payload;
+        }
+        state.isLoading = false;
+        state.error = null;
       }
-      state.isLoading = false;
-      state.error = null;
-    });
+    );
     builder.addCase(updateAdminProduct.rejected, (state, action) => {
       return {
         ...state,

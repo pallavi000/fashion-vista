@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // axios
 import { AxiosError } from "axios";
@@ -74,16 +74,19 @@ const adminCategorySlice = createSlice({
         isLoading: true,
       };
     });
-    builder.addCase(updateAdminCategory.fulfilled, (state, action) => {
-      const categoryIndex = state.data.findIndex(
-        (c) => c._id === action.payload.id
-      );
-      if (categoryIndex !== -1) {
-        state.data[categoryIndex] = action.payload;
+    builder.addCase(
+      updateAdminCategory.fulfilled,
+      (state, action: PayloadAction<TCategory>) => {
+        const categoryIndex = state.data.findIndex(
+          (c) => c._id === action.payload._id
+        );
+        if (categoryIndex !== -1) {
+          state.data[categoryIndex] = action.payload;
+        }
+        state.isLoading = false;
+        state.error = null;
       }
-      state.isLoading = false;
-      state.error = null;
-    });
+    );
     builder.addCase(updateAdminCategory.rejected, (state, action) => {
       return {
         ...state,
