@@ -7,6 +7,8 @@ export type TCart = {
   quantity: number;
   user: TUser;
   total: number;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 export type TCartInput = {

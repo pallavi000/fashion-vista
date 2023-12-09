@@ -10,7 +10,7 @@ export const productsData: TProduct[] = [
     image:
       "https://disgustingmen.com/wp-content/uploads/2016/03/radial-1024x509.png",
 
-    creationAt: "2023-10-04T08:39:27.000Z",
+    createdAt: "2023-10-04T08:39:27.000Z",
     updatedAt: "2023-10-04T08:39:27.000Z",
     category: {
       _id: "27",
@@ -31,7 +31,7 @@ export const productsData: TProduct[] = [
     image:
       "https://upload.wikimedia.org/wikipedia/commons/b/bc/Kenyan_man_2.jpg",
 
-    creationAt: "2023-10-04T08:41:15.000Z",
+    createdAt: "2023-10-04T08:41:15.000Z",
     updatedAt: "2023-10-04T08:41:15.000Z",
     category: {
       _id: "27",

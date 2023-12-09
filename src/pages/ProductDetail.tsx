@@ -114,7 +114,7 @@ function ProductDetail() {
   };
 
   return (
-    <Container maxWidth={"xl"} sx={{ padding: "2rem 1rem 0rem 1rem" }}>
+    <Container maxWidth={"xl"} sx={{ padding: "0rem 1rem 0rem 1rem" }}>
       {isLoading && !product ? (
         <SkeletonProductDetail />
       ) : (

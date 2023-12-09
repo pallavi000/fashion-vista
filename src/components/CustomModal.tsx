@@ -17,6 +17,7 @@ type TCustomModalProps = {
   isOpen: boolean;
   onClose: Function;
   component: React.ReactElement;
+  maxWidth?: "sm" | "md" | "lg";
 };
 
 function CustomModal({
@@ -24,10 +25,16 @@ function CustomModal({
   isOpen,
   onClose,
   component,
+  maxWidth = "sm",
 }: TCustomModalProps) {
   return (
     <React.Fragment>
-      <Dialog fullWidth open={isOpen} onClose={() => onClose()}>
+      <Dialog
+        fullWidth
+        maxWidth={maxWidth}
+        open={isOpen}
+        onClose={() => onClose()}
+      >
         <DialogTitle>{modalTitle}</DialogTitle>
         <IconButton
           aria-label="close"
@@ -48,7 +55,8 @@ function CustomModal({
               display: "flex",
               flexDirection: "column",
               gap: "2rem",
-              padding: "2rem 0rem",
+              padding: "1rem 0rem",
+              paddingTop: 0,
             }}
           >
             {component}

@@ -26,6 +26,7 @@ import adminUserReducer from "./reducers/admin/adminUserReducer";
 import adminProductReducer from "./reducers/admin/adminProductReducer";
 import adminCategoryReducer from "./reducers/admin/adminCategoryReducer";
 import adminSizeReducer from "./reducers/admin/adminSizeReducer";
+import adminPermissionReducer from "./reducers/admin/adminPermissionReducer";
 
 // Redux Store
 const store = configureStore({
@@ -42,6 +43,7 @@ const store = configureStore({
     adminProducts: adminProductReducer,
     adminCategories: adminCategoryReducer,
     adminSizes: adminSizeReducer,
+    adminPermissions: adminPermissionReducer,
   },
   middleware: (getDEfaultMiddleware) =>
     getDEfaultMiddleware({

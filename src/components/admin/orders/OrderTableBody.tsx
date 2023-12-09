@@ -59,7 +59,7 @@ function OrderTableBody({ order }: OrderTableBodyProps) {
       </TableCell>
       <TableCell>
         <Typography variant="caption" fontWeight={"400"} color={"text.primary"}>
-          {order._id}
+          {order.createdAt}
         </Typography>
       </TableCell>
       <TableCell>

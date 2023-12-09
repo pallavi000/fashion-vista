@@ -2,6 +2,7 @@ import { TAddress } from "./address";
 import { TCart } from "./cart";
 import { TCategory } from "./category";
 import { TOrder } from "./order";
+import { TPermission } from "./permission";
 import { TProduct } from "./product";
 import { TSize } from "./size";
 import { TUser } from "./user";
@@ -15,6 +16,7 @@ export type ProductState = {
 export type ProductsState = {
   data: TProduct[];
   totalPages: number;
+  totalProducts: number;
   isLoading: boolean;
   error: string | null;
 };
@@ -80,6 +82,12 @@ export type OrderState = {
 
 export type UserStates = {
   data: TUser[];
+  isLoading: boolean;
+  error: string | null;
+};
+
+export type PermissionStates = {
+  data: TPermission[];
   isLoading: boolean;
   error: string | null;
 };

@@ -10,6 +10,8 @@ export type TAddress = {
   phone: string;
   isDefault: boolean;
   user: TUser;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 export type TAddressInput = {

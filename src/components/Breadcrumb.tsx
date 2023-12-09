@@ -1,5 +1,5 @@
 // MUI
-import { Breadcrumbs, Typography } from "@mui/material";
+import { Breadcrumbs, Divider, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 
 // component props type
@@ -13,9 +13,16 @@ function BreadCrumb({ label }: BreadCrumbProps) {
     <Typography color="text.primary">{label}</Typography>,
   ];
   return (
-    <Breadcrumbs separator="›" aria-label="breadcrumb">
-      {breadcrumbs}
-    </Breadcrumbs>
+    <>
+      <Breadcrumbs
+        separator="›"
+        aria-label="breadcrumb"
+        sx={{ marginBottom: 2 }}
+      >
+        {breadcrumbs}
+      </Breadcrumbs>
+      <Divider />
+    </>
   );
 }
 

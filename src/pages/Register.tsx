@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 // redux
@@ -36,7 +36,7 @@ const validationSchema = yup.object().shape({
     .min(8, "Password must be at least 8 characters")
     .required("Password is required"),
   role: yup.string().oneOf(["USER", "ADMIN"]).required("Role is required"),
-  avatar: yup.string().required("Avatar is required"),
+  avatar: yup.string().optional(),
 });
 
 function Register() {
@@ -60,18 +60,20 @@ function Register() {
     }
   }, [user]);
 
-  // react hook form with yup validation
+  const methods = useForm<RegisterInputs>({
+    resolver: yupResolver(validationSchema),
+  });
   const {
     handleSubmit,
     control,
+    reset,
+    watch,
     setValue,
+    getValues,
     setError,
     clearErrors,
-    getValues,
     formState: { errors },
-  } = useForm<RegisterInputs>({
-    resolver: yupResolver(validationSchema),
-  });
+  } = methods;
 
   useEffect(() => {
     // demo avatar link set
@@ -94,31 +96,28 @@ function Register() {
 
   return (
     <Container maxWidth="sm">
-      <Card
-        component={"form"}
-        onSubmit={handleSubmit(onSubmit)}
-        variant="outlined"
-        sx={{ padding: "3rem", textAlign: "center" }}
-      >
-        <Typography variant="h4" marginBottom={"3rem"}>
-          Register
-        </Typography>
+      <FormProvider {...methods}>
+        <Card
+          component={"form"}
+          onSubmit={handleSubmit(onSubmit)}
+          variant="outlined"
+          sx={{ padding: "3rem", textAlign: "center" }}
+        >
+          <Typography variant="h4" marginBottom={"3rem"}>
+            Register
+          </Typography>
 
-        <Box sx={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-          <UserForm
-            control={control}
-            errors={errors}
-            setError={setError}
-            clearErrors={clearErrors}
-          />
-          <LoadingButton
-            isLoading={isLoading}
-            isDisabled={!isEmailAvailable}
-            color="success"
-            title="Register"
-          />
-        </Box>
-      </Card>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+            <UserForm />
+            <LoadingButton
+              isLoading={isLoading}
+              isDisabled={!isEmailAvailable}
+              color="success"
+              title="Register"
+            />
+          </Box>
+        </Card>
+      </FormProvider>
     </Container>
   );
 }

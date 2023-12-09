@@ -6,7 +6,12 @@ import axiosInstance from "../../../utils/AxiosInstance";
 
 // types
 import { UserStates } from "../../../@types/reduxState";
-import { RegisterInputs, TUser, TUserEditInput } from "../../../@types/user";
+import {
+  RegisterInputs,
+  TUser,
+  TUserEditInput,
+  UpdateUserInputs,
+} from "../../../@types/user";
 
 // helpers
 import { showApiErrorToastr, showCustomToastr } from "../../../utils/helper";
@@ -150,16 +155,9 @@ export const fetchUsers = createAsyncThunk("fetchUsers", async () => {
 
 export const updateUser = createAsyncThunk(
   "updateUser",
-  async (data: TUser) => {
+  async ({ id, data }: { id: string; data: UpdateUserInputs }) => {
     try {
-      const newData = {
-        email: data.email,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        avatar: data.avatar,
-        role: data.role,
-      };
-      const result = await axiosInstance.put(`/users/${data._id}`, newData);
+      const result = await axiosInstance.put(`/users/${id}`, data);
       showCustomToastr("User updated successfully.", "success");
       return result.data;
     } catch (e) {
@@ -174,6 +172,7 @@ export const deleteUser = createAsyncThunk(
   "deleteUser",
   async ({ id }: { id: string }) => {
     try {
+      await axiosInstance.delete(`/users/${id}`);
       showCustomToastr("User deleted successfully.", "success");
       return id;
     } catch (e) {

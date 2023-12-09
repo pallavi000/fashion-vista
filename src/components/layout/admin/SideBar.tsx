@@ -23,8 +23,9 @@ import {
   Money,
   ShoppingBag,
   Store,
+  DeveloperMode,
+  Straighten,
 } from "@mui/icons-material";
-import MenuIcon from "@mui/icons-material/Menu";
 
 // components
 import SideBarItem from "./SideBarItem";
@@ -51,6 +52,11 @@ const sidebarItems: SidebarItem[] = [
     icon: <AccountCircle />,
   },
   {
+    title: "Permissions",
+    path: "/admin/permissions",
+    icon: <DeveloperMode />,
+  },
+  {
     title: "Categories",
     path: "/admin/categories",
     icon: <Category />,
@@ -61,14 +67,14 @@ const sidebarItems: SidebarItem[] = [
     icon: <ShoppingBag />,
   },
   {
+    title: "Sizes",
+    path: "/admin/sizes",
+    icon: <Straighten />,
+  },
+  {
     title: "Orders",
     path: "/admin/orders",
     icon: <Money />,
-  },
-  {
-    title: "Sizes",
-    path: "/admin/sizes",
-    icon: <Category />,
   },
 ];
 

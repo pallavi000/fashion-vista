@@ -1,3 +1,5 @@
+import { TPermission } from "./permission";
+
 export interface LoginInputs {
   email: string;
   password: string;
@@ -7,8 +9,11 @@ export interface RegisterInputs extends LoginInputs {
   firstName: string;
   lastName: string;
   role: "USER" | "ADMIN";
-  avatar: string;
+  avatar?: string;
+  permission?: string[];
 }
+
+export interface UpdateUserInputs extends Omit<RegisterInputs, "password"> {}
 
 export type TUserRole = "USER" | "ADMIN";
 
@@ -19,6 +24,7 @@ export type TUser = {
   lastName: string;
   role: TUserRole | null;
   avatar: string;
+  permission?: TPermission[];
   createdAt?: string;
   updatedAt?: string;
 };

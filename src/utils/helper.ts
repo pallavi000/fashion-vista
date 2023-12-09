@@ -25,7 +25,9 @@ export const valueToText = (value: number) => {
 
 export const showApiErrorToastr = (error: Error | AxiosError) => {
   enqueueSnackbar(
-    axios.isAxiosError(error) ? error.response?.data?.message : error.message,
+    axios.isAxiosError(error) && error.response?.data?.message
+      ? error.response?.data?.message
+      : error.message,
     {
       variant: "error",
     }

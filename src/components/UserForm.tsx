@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Controller,
-  Control,
-  FieldErrors,
-  UseFormSetError,
-  UseFormClearErrors,
-} from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 
 // MUI
 import {
@@ -20,18 +14,14 @@ import {
 // types
 import { RegisterInputs } from "../@types/user";
 
-// axios
-import axiosInstance from "../utils/AxiosInstance";
+function UserForm() {
+  const {
+    control,
+    setError,
+    clearErrors,
+    formState: { errors },
+  } = useFormContext<RegisterInputs>();
 
-// component props type
-type UserFormProps = {
-  control: Control<RegisterInputs, any>;
-  errors: FieldErrors<RegisterInputs>;
-  setError: UseFormSetError<RegisterInputs>;
-  clearErrors: UseFormClearErrors<RegisterInputs>;
-};
-
-function UserForm({ control, errors, setError, clearErrors }: UserFormProps) {
   // is email available?
   const handleEmailValidation = async (
     e: React.FocusEvent<HTMLInputElement>
@@ -39,7 +29,6 @@ function UserForm({ control, errors, setError, clearErrors }: UserFormProps) {
     if (!e.target.value) return;
     try {
       const data = { email: e.target.value };
-
       clearErrors("email");
     } catch (error) {
       setError("email", {
@@ -110,10 +99,12 @@ function UserForm({ control, errors, setError, clearErrors }: UserFormProps) {
         name="role"
         control={control}
         render={({ field }) => (
-          <FormControl error={Boolean(errors.role)}>
-            <InputLabel id="demo-simple-select-label">Select a role</InputLabel>
+          <FormControl {...field} error={Boolean(errors.role)}>
+            <InputLabel>Select a role</InputLabel>
             <Select
               {...field}
+              name="role"
+              value={field.value ?? ""}
               label="Select a role"
               variant="outlined"
               error={Boolean(errors.role)}

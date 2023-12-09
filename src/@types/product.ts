@@ -10,7 +10,7 @@ export type TProduct = {
   size: TSize;
   image: string;
   stock: number;
-  creationAt?: string;
+  createdAt?: string;
   updatedAt?: string;
 };
 
@@ -27,3 +27,8 @@ export interface ProductInputs {
 export interface ProductInputsData extends ProductInputs {
   _id: string;
 }
+
+export type TProductSortingOption =
+  | "newest"
+  | "price_low_to_high"
+  | "price_high_to_low";

@@ -1,4 +1,9 @@
-import { RegisterInputs, TUser, TUserEditInput } from "../../@types/user";
+import {
+  RegisterInputs,
+  TUser,
+  TUserEditInput,
+  UpdateUserInputs,
+} from "../../@types/user";
 import {
   addNewUser,
   deleteUser,
@@ -36,15 +41,14 @@ describe("user reducers", () => {
   });
 
   test("should update user data", async () => {
-    const data: TUser = {
-      _id: "2",
+    const data: UpdateUserInputs = {
       email: "test@mail.com",
       firstName: "Maria",
       lastName: "stha",
       role: "USER",
       avatar: "https://i.imgur.com/00qWleT.jpeg",
     };
-    const res = await store.dispatch(updateUser(data));
+    const res = await store.dispatch(updateUser({ id: "2", data }));
     expect(res.meta.arg).toMatchObject({
       _id: "2",
       email: "test@mail.com",

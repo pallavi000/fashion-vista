@@ -37,6 +37,8 @@ export type TOrder = {
     status: TPaymentStatus;
   };
   total: number;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 export type TPaymentMethodData = {

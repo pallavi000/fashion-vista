@@ -19,6 +19,8 @@ import {
   MenuItem,
   OutlinedInput,
   Tooltip,
+  Stack,
+  Fab,
 } from "@mui/material";
 
 // icons
@@ -27,6 +29,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { FavoriteBorder, ShoppingBagOutlined } from "@mui/icons-material";
 import SearchIcon from "@mui/icons-material/Search";
 import StoreIcon from "@mui/icons-material/Store";
+import NavigationIcon from "@mui/icons-material/KeyboardArrowUp";
 
 // types
 import { TUser } from "../../@types/user";
@@ -106,14 +109,15 @@ export default function Navbar() {
   return (
     <>
       <AppBar
-        position="static"
+        position="sticky"
         color={"primary"}
         elevation={0}
         sx={{
           borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
-          padding: "0.5rem 0rem",
+          padding: "0.2rem 0rem",
           backgroundColor: "background.default",
           color: "text.primary",
+          marginBottom: 4,
         }}
       >
         <Toolbar
@@ -206,9 +210,20 @@ export default function Navbar() {
               <Box
                 sx={{ display: "flex", gap: "0.5rem", alignItems: "center" }}
               >
-                <IconButton>
+                <IconButton disabled>
                   <FavoriteBorder />
                 </IconButton>
+
+                <Button>
+                  <Stack direction={"row"} gap={1} alignItems={"center"}>
+                    <Avatar
+                      src="https://tailwindui.com/img/flags/flag-united-states.svg"
+                      alt="currency"
+                      sx={{ width: 20, height: 20 }}
+                    />
+                    <Typography variant="button">USD</Typography>
+                  </Stack>
+                </Button>
 
                 <IconButton onClick={() => navigate(ROUTES.CART)}>
                   <Badge badgeContent={cartItem.items.length} color="success">
@@ -269,7 +284,6 @@ export default function Navbar() {
           </Box>
         </Toolbar>
       </AppBar>
-      <Toolbar />
     </>
   );
 }

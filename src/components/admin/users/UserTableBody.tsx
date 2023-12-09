@@ -55,6 +55,25 @@ function UserTableBody({
             </Typography>
           </Stack>
         </TableCell>
+        <TableCell>
+          <Stack
+            direction={"row"}
+            alignItems={"center"}
+            gap={1}
+            flexWrap={"wrap"}
+          >
+            {user.permission?.map((permission) => {
+              return (
+                <Chip
+                  key={permission._id}
+                  label={permission.name}
+                  color="success"
+                  size="small"
+                />
+              );
+            })}
+          </Stack>
+        </TableCell>
         <TableCell component={"td"} align="left">
           <Typography
             variant="caption"

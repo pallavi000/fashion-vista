@@ -36,11 +36,12 @@ import {
 // components
 import TableOptionPopover from "../../components/TableOptionPopover";
 import UserTableBody from "../../components/admin/users/UserTableBody";
-import AdminUserEditModal from "../../components/admin/users/AdminUserEditModal";
-import AdminUserAddModal from "../../components/admin/users/AdminUserAddModal";
 
 // types
 import { TUser } from "../../@types/user";
+import { fetchPermissions } from "../../redux/reducers/admin/adminPermissionReducer";
+import CustomModal from "../../components/CustomModal";
+import AdminUserForm from "../../components/admin/users/AdminUserForm";
 
 function AdminUsers() {
   // pagination states
@@ -58,8 +59,7 @@ function AdminUsers() {
   const [activeUser, setActiveUser] = useState<null | TUser>(null);
 
   // modal control states
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // app dispatch
   const dispatch = useAppDispatch();
@@ -73,6 +73,7 @@ function AdminUsers() {
   // get/fetch users
   useEffect(() => {
     dispatch(fetchUsers());
+    dispatch(fetchPermissions());
   }, []);
 
   // handle checkbox all click
@@ -133,10 +134,15 @@ function AdminUsers() {
     //setActiveUser(null);
   };
 
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setActiveUser(null);
+  };
+
   // popover menu item click handler
   const handleUserEditClick = () => {
     handlePopoverClose();
-    setIsEditModalOpen(true);
+    setIsModalOpen(true);
   };
 
   const handleUserDeleteClick = () => {
@@ -164,23 +170,23 @@ function AdminUsers() {
             size="small"
             variant="contained"
             startIcon={<PersonAdd />}
-            onClick={() => setIsAddModalOpen(true)}
+            onClick={() => setIsModalOpen(true)}
           >
             New User
           </Button>
         </Stack>
 
-        <AdminUserAddModal
-          isOpen={isAddModalOpen}
-          setIsOpen={setIsAddModalOpen}
+        <CustomModal
+          isOpen={isModalOpen}
+          modalTitle="Create User"
+          onClose={() => handleModalClose()}
+          component={
+            <AdminUserForm
+              user={activeUser}
+              onClose={() => setIsModalOpen(false)}
+            />
+          }
         />
-        {users.length ? (
-          <AdminUserEditModal
-            isOpen={isEditModalOpen}
-            setIsOpen={setIsEditModalOpen}
-            user={activeUser || users[0]}
-          />
-        ) : null}
 
         <Card>
           <TextField
@@ -215,6 +221,7 @@ function AdminUsers() {
                     />
                   </TableCell>
                   <TableCell>Name</TableCell>
+                  <TableCell>Permissions</TableCell>
                   <TableCell>Email</TableCell>
                   <TableCell>Role</TableCell>
                   <TableCell>Created At</TableCell>

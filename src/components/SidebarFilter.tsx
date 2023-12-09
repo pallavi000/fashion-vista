@@ -23,16 +23,30 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 // helpers
 import { valueToText } from "../utils/helper";
 
+// price range display text/label
+const MIN_PRICE_RANGE_DISTANCE = 500;
+const PRICE_RANGE_MARKS = [
+  { value: 0, label: "$0" },
+  { value: 5000, label: "$5000" },
+];
+for (let i = 0; i < 5000; i++) {
+  if (i % 500 === 0) {
+    PRICE_RANGE_MARKS.push({ value: i, label: "" });
+  }
+}
+
 // component props type
 type SidebarFilterProps = {
   price: number[];
   setPrice: Function;
+  selectedCategory?: string | number;
   setSelectedCategory: Function;
 };
 
 function SidebarFilter({
   price,
   setPrice,
+  selectedCategory = 0,
   setSelectedCategory,
 }: SidebarFilterProps) {
   // price ranges
@@ -43,17 +57,38 @@ function SidebarFilter({
 
   const handlePriceRangeChange = (
     event: Event,
-    newValue: number | number[]
+    newValue: number | number[],
+    activeThumb: number
   ) => {
-    setValue(newValue as number[]);
+    if (!Array.isArray(newValue)) {
+      return;
+    }
+    if (activeThumb === 0) {
+      setValue([
+        Math.min(newValue[0], value[1] - MIN_PRICE_RANGE_DISTANCE),
+        value[1],
+      ]);
+    } else {
+      setValue([
+        value[0],
+        Math.max(newValue[1], value[0] + MIN_PRICE_RANGE_DISTANCE),
+      ]);
+    }
   };
 
   const handlePriceRangeChangeCommited = (
     event: Event | React.SyntheticEvent<Element | Event>,
     newValue: number | number[]
   ) => {
-    setValue(newValue as number[]);
-    setPrice(newValue as number[]);
+    if (!Array.isArray(newValue)) {
+      return;
+    }
+    const val = [
+      Math.min(newValue[0], newValue[1] - MIN_PRICE_RANGE_DISTANCE),
+      Math.max(newValue[1], newValue[0] + MIN_PRICE_RANGE_DISTANCE),
+    ];
+    setValue(val as number[]);
+    setPrice(val as number[]);
   };
 
   const handleChangeCategory = (
@@ -65,7 +100,10 @@ function SidebarFilter({
 
   return (
     <Box>
-      <Accordion>
+      <Typography variant="h4" marginBottom={4}>
+        Filters
+      </Typography>
+      <Accordion expanded>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -75,11 +113,7 @@ function SidebarFilter({
         </AccordionSummary>
         <AccordionDetails>
           <FormControl>
-            <RadioGroup
-              aria-labelledby="demo-radio-buttons-group-label"
-              defaultValue={0}
-              name="radio-buttons-group"
-            >
+            <RadioGroup value={selectedCategory}>
               <FormControlLabel
                 value={0}
                 control={<Radio />}
@@ -115,6 +149,9 @@ function SidebarFilter({
             valueLabelDisplay="auto"
             getAriaValueText={valueToText}
             max={5000}
+            step={MIN_PRICE_RANGE_DISTANCE}
+            marks={PRICE_RANGE_MARKS}
+            disableSwap
           />
         </Box>
       </Box>

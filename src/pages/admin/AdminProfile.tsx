@@ -1,5 +1,5 @@
 import React from "react";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useSelector } from "react-redux";
@@ -31,7 +31,6 @@ const validationSchema = yup.object().shape({
     .min(8, "Password must be at least 8 characters")
     .required("Password is required"),
   role: yup.string().oneOf(["ADMIN", "USER"]).required("Role is required"),
-  avatar: yup.string().required("Avatar is required"),
 });
 
 function AdminProfile() {
@@ -40,18 +39,20 @@ function AdminProfile() {
   // auth user state
   const user = useSelector((state: AppState) => state.auth.user);
 
-  // react hook form with yup validation
+  const methods = useForm<RegisterInputs>({
+    resolver: yupResolver(validationSchema),
+  });
   const {
     handleSubmit,
     control,
+    reset,
+    watch,
     setValue,
+    getValues,
     setError,
     clearErrors,
-    reset,
     formState: { errors },
-  } = useForm<RegisterInputs>({
-    resolver: yupResolver(validationSchema),
-  });
+  } = methods;
 
   // set default value
   React.useEffect(() => {
@@ -67,42 +68,38 @@ function AdminProfile() {
   // form submit handler
   const onSubmit = async (data: RegisterInputs) => {
     if (!user) return;
-    const userData: TUserEditInput = { ...user, ...data };
-    await dispatch(updateUser(userData));
+    await dispatch(updateUser({ id: user._id, data }));
     reset();
   };
 
   return (
     <Container maxWidth="sm">
-      <Box
-        component={"form"}
-        onSubmit={handleSubmit(onSubmit)}
-        sx={{ padding: "1rem", textAlign: "center" }}
-      >
-        <Typography variant="h4" marginBottom={"1rem"}>
-          Update Profile
-        </Typography>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "2rem",
-              padding: "2rem 0rem",
-            }}
-          >
-            <UserForm
-              control={control}
-              errors={errors}
-              setError={setError}
-              clearErrors={clearErrors}
-            />
+      <FormProvider {...methods}>
+        <Box
+          component={"form"}
+          onSubmit={handleSubmit(onSubmit)}
+          sx={{ padding: "1rem", textAlign: "center" }}
+        >
+          <Typography variant="h4" marginBottom={"1rem"}>
+            Update Profile
+          </Typography>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "2rem",
+                padding: "2rem 0rem",
+              }}
+            >
+              <UserForm />
+            </Box>
+            <Button type="submit" variant="contained">
+              Update
+            </Button>
           </Box>
-          <Button type="submit" variant="contained">
-            Update
-          </Button>
         </Box>
-      </Box>
+      </FormProvider>
     </Container>
   );
 }

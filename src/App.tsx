@@ -1,6 +1,5 @@
 import { BrowserRouter as Router } from "react-router-dom";
 import { useEffect } from "react";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 
 // Redux
 import { useSelector } from "react-redux";
@@ -11,8 +10,10 @@ import { getCurrentUser } from "./redux/reducers/authReducer";
 import AppRouter from "./routes/AppRouter";
 
 // components
-import ScrollToTop from "./components/ScrollToTop";
+import ScrollToTopOnNavigation from "./components/ScrollToTopOnNavigation";
 import { getCartItems } from "./redux/reducers/cartReducer";
+import SettingsDrawer from "./components/SettingsDrawer";
+import ScrollToTopButton from "./components/ScrollToTopButton";
 
 const App = () => {
   // App Dispatch
@@ -40,10 +41,10 @@ const App = () => {
 
   return (
     <Router>
-      <GoogleOAuthProvider clientId="636134274529-2qocgmf3ug0qn5pdt3buo4ucd3vlej8v.apps.googleusercontent.com">
-        <ScrollToTop />
-        <AppRouter />
-      </GoogleOAuthProvider>
+      <ScrollToTopOnNavigation />
+      <SettingsDrawer />
+      <AppRouter />
+      <ScrollToTopButton />
     </Router>
   );
 };

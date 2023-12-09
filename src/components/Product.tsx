@@ -4,9 +4,6 @@ import { Link } from "react-router-dom";
 // MUI
 import { Avatar, Box, Grid, Typography } from "@mui/material";
 
-// icons
-import { FavoriteBorder } from "@mui/icons-material";
-
 // types
 import { TProduct } from "../@types/product";
 
@@ -50,9 +47,9 @@ function Product({ product }: ProductProps) {
               </Typography>
               <Typography variant="h6">${product.price}</Typography>
             </Box>
-            <Box>
+            {/* <Box>
               <FavoriteBorder />
-            </Box>
+            </Box> */}
           </Box>
         </Link>
       </Box>

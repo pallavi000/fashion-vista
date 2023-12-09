@@ -7,11 +7,13 @@ import { ProductsState } from "../../@types/reduxState";
 import { AxiosError } from "axios";
 import axiosInstance from "../../utils/AxiosInstance";
 import { Hail, NoiseControlOffTwoTone } from "@mui/icons-material";
+import { TProductSortingOption } from "../../@types/product";
 
 // initial state
 const initialState: ProductsState = {
   data: [],
   totalPages: 0,
+  totalProducts: 0,
   isLoading: false,
   error: null,
 };
@@ -35,6 +37,7 @@ const productsSlice = createSlice({
         error: null,
         data: action.payload.products,
         totalPages: action.payload.totalPages,
+        totalProducts: action.payload.totalProducts,
       };
     });
     builder.addCase(fetchProducts.rejected, (state, action) => {
@@ -58,18 +61,20 @@ export const fetchProducts = createAsyncThunk(
     price_min,
     price_max,
     categoryId = null,
+    sorting = "newest",
   }: {
     pageNo: number;
     perPage: number;
     price_min: number;
     price_max: number;
     categoryId?: string | null;
+    sorting?: TProductSortingOption;
   }) => {
     try {
       const result = await axiosInstance.get(
         `/products?pageNo=${pageNo}&perPage=${perPage}&minPrice=${price_min}&maxPrice=${price_max}${
           categoryId && categoryId !== "0" ? "&categoryId=" + categoryId : ""
-        }`
+        }&sorting=${sorting}`
       );
       return result.data;
     } catch (e) {
@@ -88,6 +93,7 @@ export const fetchSearchProducts = createAsyncThunk(
     price_min,
     price_max,
     categoryId,
+    sorting = "newest",
   }: {
     pageNo: number;
     perPage: number;
@@ -95,11 +101,12 @@ export const fetchSearchProducts = createAsyncThunk(
     price_min: number;
     price_max: number;
     categoryId: string;
+    sorting?: TProductSortingOption;
   }) => {
     try {
       const url = `/products/search/?title=${query}&price_min=${price_min}&price_max=${price_max}${
         categoryId && categoryId !== "0" ? "&categoryId=" + categoryId : ""
-      }&pageNo=${pageNo}&perPage=${perPage}`;
+      }&pageNo=${pageNo}&perPage=${perPage}&sorting=${sorting}`;
       const result = await axiosInstance.get(url);
       return result.data;
     } catch (e) {
