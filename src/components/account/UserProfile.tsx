@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 // redux
 import { useSelector } from "react-redux";
 import { AppState } from "../../redux/store";
@@ -7,15 +7,51 @@ import { AppState } from "../../redux/store";
 import {
   Avatar,
   Box,
+  Button,
   Card,
   CardContent,
   Divider,
   Typography,
 } from "@mui/material";
+import { Remove } from "@mui/icons-material";
+import CustomModal from "../CustomModal";
+import { TUser } from "../../@types/user";
+import UserForm from "../UserForm";
+import AdminUserForm from "../admin/users/AdminUserForm";
+import UpdateProfileForm from "../UpdateProfileForm";
+import ProfileUpdate from "../ProfileUpdate";
 
 function UserProfile() {
   // auth state
   const user = useSelector((state: AppState) => state.auth.user);
+
+  // modal control states
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  // popover menu states
+  const [popoverEle, setPopOverEle] = React.useState<
+    (EventTarget & HTMLButtonElement) | null
+  >(null);
+
+  const [activeUser, setActiveUser] = useState<null | TUser>(null);
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setActiveUser(null);
+  };
+
+  // popover open/close handler
+  const handlePopoverOpen = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    user: TUser
+  ) => {
+    setActiveUser(user);
+    setPopOverEle(e.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setPopOverEle(null);
+    //setActiveUser(null);
+  };
 
   return (
     <Card
@@ -108,6 +144,21 @@ function UserProfile() {
             {user?.role}
           </Typography>
         </Box>
+        <Button variant="contained" onClick={() => setIsModalOpen(true)}>
+          Update Profile
+        </Button>
+
+        <CustomModal
+          isOpen={isModalOpen}
+          modalTitle="Create User"
+          onClose={() => handleModalClose()}
+          component={
+            <ProfileUpdate
+              user={activeUser}
+              onClose={() => setIsModalOpen(false)}
+            />
+          }
+        />
       </Box>
     </Card>
   );

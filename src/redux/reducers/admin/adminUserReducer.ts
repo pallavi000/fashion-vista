@@ -11,6 +11,7 @@ import {
   TUser,
   TUserEditInput,
   UpdateUserInputs,
+  UpdateProfileInputs,
 } from "../../../@types/user";
 
 // helpers

@@ -11,7 +11,11 @@ import axiosInstance from "../../utils/AxiosInstance";
 
 // types
 import { AuthState } from "../../@types/reduxState";
-import { RegisterInputs, TUpdatePasswordInput } from "../../@types/user";
+import {
+  RegisterInputs,
+  TUpdatePasswordInput,
+  UpdateProfileInputs,
+} from "../../@types/user";
 
 // helper
 import { showApiErrorToastr, showCustomToastr } from "../../utils/helper";
@@ -134,6 +138,27 @@ const authSlice = createSlice({
         error: action.error.message || "",
       };
     });
+
+    builder.addCase(updateProfile.pending, (state, action) => {
+      return {
+        ...state,
+        isLoading: true,
+      };
+    });
+    builder.addCase(updateProfile.fulfilled, (state, action) => {
+      return {
+        ...state,
+        isLoading: false,
+        error: null,
+      };
+    });
+    builder.addCase(updateProfile.rejected, (state, action) => {
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error.message || "",
+      };
+    });
   },
 });
 
@@ -222,6 +247,17 @@ export const changePassword = createAsyncThunk(
       showApiErrorToastr(error);
       throw error;
     }
+  }
+);
+
+export const updateProfile = createAsyncThunk(
+  "updateProfile",
+  async (data: UpdateProfileInputs) => {
+    try {
+      const result = await axiosInstance.put("/auth/update-profile", data);
+      showCustomToastr("Password has been updated.", "success");
+      return result.data;
+    } catch (error) {}
   }
 );
 

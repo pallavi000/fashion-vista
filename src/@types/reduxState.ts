@@ -1,4 +1,5 @@
 import { TAddress } from "./address";
+import { TBanner } from "./banner";
 import { TCart } from "./cart";
 import { TCategory } from "./category";
 import { TOrder } from "./order";
@@ -53,6 +54,17 @@ export type SizesState = {
 
 export type SizeState = {
   data: TSize | null;
+  isLoading: boolean;
+  error: string | null;
+};
+export type BannersState = {
+  data: TBanner[];
+  isLoading: boolean;
+  error: string | null;
+};
+
+export type BannerState = {
+  data: TBanner | null;
   isLoading: boolean;
   error: string | null;
 };

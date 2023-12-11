@@ -27,50 +27,43 @@ import {
 import { Add, Search } from "@mui/icons-material";
 
 // components
-import CustomModal from "../../components/CustomModal";
-import TableOptionPopover from "../../components/TableOptionPopover";
-import SizeForm from "../../components/admin/sizes/SizeForm";
-import SizeBodyTable from "../../components/admin/sizes/SizeTableBody";
+import SkeletonCategoryCard from "../../components/skeleton/SkeletonCategoryCard";
 
 // reducers
 import {
-  deleteAdminSize,
-  fetchAdminSizes,
-} from "../../redux/reducers/admin/adminSizeReducer";
+  deleteAdminBanner,
+  fetchAdminBanners,
+} from "../../redux/reducers/admin/adminBannerReducer";
 
-//types
-import { TSize } from "../../@types/size";
+import CustomModal from "../../components/CustomModal";
+import TableOptionPopover from "../../components/TableOptionPopover";
 
-function AdminSizes() {
+import { TBanner } from "../../@types/banner";
+
+import BannerForm from "../../components/admin/banners/BannerForm";
+import BannerTableBody from "../../components/admin/banners/BannerTableBody";
+
+function AdminBanners() {
   const dispatch = useAppDispatch();
 
   // modal control states
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeSize, setActiveSize] = useState<null | TSize>(null);
+  const [activeBanner, setActiveBanner] = useState<null | TBanner>(null);
 
   // pagination states
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  // filter states
-  const [filterSizeName, setFilterSizeName] = React.useState("");
+
   // popover menu states
   const [popoverEle, setPopOverEle] = React.useState<
     (EventTarget & HTMLButtonElement) | null
   >(null);
 
-  // sizes states
-  const { sizes, isLoading } = useSelector((state: AppState) => ({
-    sizes: state.adminSizes.data,
-    isLoading: state.adminSizes.isLoading,
+  // banners states
+  const { banners, isLoading } = useSelector((state: AppState) => ({
+    banners: state.adminBanner.data,
+    isLoading: state.adminBanner.isLoading,
   }));
-
-  // handle search by order id
-  const handleFilterBySizeName = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setPage(0);
-    setFilterSizeName(event.target.value);
-  };
 
   // pagination handlers
   const handleChangePage = (
@@ -87,17 +80,17 @@ function AdminSizes() {
     setPage(0);
   };
 
-  // fetch sizes
+  // fetch banners
   useEffect(() => {
-    dispatch(fetchAdminSizes());
+    dispatch(fetchAdminBanners());
   }, []);
 
   // popover open/close handler
   const handlePopoverOpen = (
     e: React.MouseEvent<HTMLButtonElement>,
-    size: TSize
+    banner: TBanner
   ) => {
-    setActiveSize(size);
+    setActiveBanner(banner);
     setPopOverEle(e.currentTarget);
   };
 
@@ -107,27 +100,21 @@ function AdminSizes() {
 
   const handleModalClose = () => {
     setIsModalOpen(false);
-    setActiveSize(null);
+    setActiveBanner(null);
   };
 
   // popover menu item click handler
-  const handleSizeEditClick = () => {
+  const handleBannerEditClick = () => {
     handlePopoverClose();
     setIsModalOpen(true);
   };
 
-  const handleSizeDeleteClick = async () => {
-    if (activeSize) await dispatch(deleteAdminSize({ id: activeSize._id }));
+  const handleBannerDeleteClick = async () => {
+    if (activeBanner)
+      await dispatch(deleteAdminBanner({ id: activeBanner._id }));
     handlePopoverClose();
-    setActiveSize(null);
+    setActiveBanner(null);
   };
-
-  // filter orders
-  const filterSizes = sizes.filter((u) =>
-    u.name.toLocaleLowerCase().includes(filterSizeName.toLocaleLowerCase())
-  );
-
-  const isNotFound = !filterSizes.length && !!filterSizeName;
 
   return (
     <Container>
@@ -137,88 +124,62 @@ function AdminSizes() {
         justifyContent="space-between"
         mb={5}
       >
-        <Typography variant="h6">Sizes</Typography>
+        <Typography variant="h6">Banners</Typography>
         <Button
           size="small"
           variant="contained"
           startIcon={<Add />}
           onClick={() => setIsModalOpen(true)}
         >
-          New Size
+          New Banner
         </Button>
       </Stack>
 
-      {/* create/edit size modal */}
+      {/* create/edit banner modal */}
       <CustomModal
-        modalTitle="Create Size"
+        modalTitle="Create Banner"
         isOpen={isModalOpen}
         onClose={() => handleModalClose()}
         component={
-          <SizeForm size={activeSize} handleClose={() => handleModalClose()} />
+          <BannerForm
+            banner={activeBanner}
+            handleClose={() => handleModalClose()}
+          />
         }
       />
 
       <Card>
-        <TextField
-          size="small"
-          sx={{ ml: 1, flex: 1, margin: "1rem" }}
-          placeholder="Search by name"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Search />
-              </InputAdornment>
-            ),
-          }}
-          onChange={handleFilterBySizeName}
-        />
         <TableContainer>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Name</TableCell>
+                <TableCell>Banner</TableCell>
+                <TableCell>Position</TableCell>
+                <TableCell>Banner related Page</TableCell>
                 <TableCell>Created at</TableCell>
 
                 <TableCell>&nbsp;</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {filterSizes
+              {banners
                 .slice(page * rowsPerPage, rowsPerPage + page * rowsPerPage)
-                .map((size) => {
+                .map((banner) => {
                   return (
-                    <SizeBodyTable
-                      size={size}
-                      key={size._id}
+                    <BannerTableBody
+                      banner={banner}
+                      key={banner._id}
                       handlePopoverOpen={handlePopoverOpen}
                     />
                   );
                 })}
             </TableBody>
 
-            {isNotFound && (
-              <TableBody>
-                <TableRow>
-                  <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                    <Typography variant="h6" paragraph>
-                      Not found
-                    </Typography>
-
-                    <Typography variant="body2">
-                      No results found for &nbsp;
-                      <strong>&quot;{filterSizeName}&quot;</strong>.
-                      <br /> Try checking for the size name.
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            )}
-
             <TableFooter>
               <TableRow>
                 <TablePagination
                   rowsPerPageOptions={[10, 25]}
-                  count={filterSizeName.length}
+                  count={banners.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   onPageChange={handleChangePage}
@@ -231,12 +192,12 @@ function AdminSizes() {
       </Card>
       <TableOptionPopover
         anchorEl={popoverEle}
-        handleEdit={handleSizeEditClick}
-        handleDelete={handleSizeDeleteClick}
+        handleEdit={handleBannerEditClick}
+        handleDelete={handleBannerDeleteClick}
         handleCloseMenu={handlePopoverClose}
       />
     </Container>
   );
 }
 
-export default AdminSizes;
+export default AdminBanners;

@@ -57,6 +57,11 @@ const sidebarItems: SidebarItem[] = [
     icon: <DeveloperMode />,
   },
   {
+    title: "Banners",
+    path: "/admin/banners",
+    icon: <Category />,
+  },
+  {
     title: "Categories",
     path: "/admin/categories",
     icon: <Category />,

@@ -19,11 +19,12 @@ import AdminCategories from "../pages/admin/AdminCategories";
 import AdminProducts from "../pages/admin/AdminProducts";
 import AdminOrders from "../pages/admin/AdminOrders";
 import AdminProfile from "../pages/admin/AdminProfile";
+import AdminSizes from "../pages/admin/AdminSizes";
+import AdminBanners from "../pages/admin/AdminBanners";
+import AdminPermissions from "../pages/admin/AdminPermissions";
 
 // types
 import { Routers, TROUTES } from "../@types/routers";
-import AdminSizes from "../pages/admin/AdminSizes";
-import AdminPermissions from "../pages/admin/AdminPermissions";
 
 // routes
 export const ROUTES: TROUTES = {
@@ -46,6 +47,7 @@ export const ROUTES: TROUTES = {
   ADMIN_PROFILE: "/admin/profile",
   ADMIN_SIZES: "/admin/sizes",
   ADMIN_PERMISSIONS: "/admin/permissions",
+  ADMIN_BANNERS: "/admin/banners",
   NOT_FOUND: "*",
 };
 
@@ -77,6 +79,8 @@ export const routers: Routers[] = [
   { path: ROUTES.ADMIN_ORDERS, Component: AdminOrders, role: "ADMIN" },
   { path: ROUTES.ADMIN_PROFILE, Component: AdminProfile, role: "ADMIN" },
   { path: ROUTES.ADMIN_SIZES, Component: AdminSizes, role: "ADMIN" },
+  { path: ROUTES.ADMIN_BANNERS, Component: AdminBanners, role: "ADMIN" },
+
   {
     path: ROUTES.ADMIN_PERMISSIONS,
     Component: AdminPermissions,

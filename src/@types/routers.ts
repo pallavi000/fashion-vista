@@ -21,6 +21,7 @@ type Keys =
   | "ADMIN_PROFILE"
   | "ADMIN_SIZES"
   | "ADMIN_PERMISSIONS"
+  | "ADMIN_BANNERS"
   | "NOT_FOUND";
 
 type Path =
@@ -43,6 +44,7 @@ type Path =
   | "/admin/profile"
   | "/admin/sizes"
   | "/admin/permissions"
+  | "/admin/banners"
   | "*";
 
 export type TROUTES = {
