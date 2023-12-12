@@ -24,10 +24,13 @@ import {
 } from "@mui/material";
 
 // icons
-import { Add, Search } from "@mui/icons-material";
+import { Add } from "@mui/icons-material";
 
 // components
-import SkeletonCategoryCard from "../../components/skeleton/SkeletonCategoryCard";
+import CustomModal from "../../components/CustomModal";
+import TableOptionPopover from "../../components/TableOptionPopover";
+import BannerTableBody from "../../components/admin/banners/BannerTableBody";
+import AdminBannerForm from "../../components/admin/banners/AdminBannerForm";
 
 // reducers
 import {
@@ -35,13 +38,9 @@ import {
   fetchAdminBanners,
 } from "../../redux/reducers/admin/adminBannerReducer";
 
-import CustomModal from "../../components/CustomModal";
-import TableOptionPopover from "../../components/TableOptionPopover";
-
 import { TBanner } from "../../@types/banner";
-
-import BannerForm from "../../components/admin/banners/BannerForm";
-import BannerTableBody from "../../components/admin/banners/BannerTableBody";
+import withPermission from "../../context/withPermission";
+import usePermission from "../../hooks/userPermission";
 
 function AdminBanners() {
   const dispatch = useAppDispatch();
@@ -125,14 +124,16 @@ function AdminBanners() {
         mb={5}
       >
         <Typography variant="h6">Banners</Typography>
-        <Button
-          size="small"
-          variant="contained"
-          startIcon={<Add />}
-          onClick={() => setIsModalOpen(true)}
-        >
-          New Banner
-        </Button>
+        {usePermission("BANNERS_CREATE") && (
+          <Button
+            size="small"
+            variant="contained"
+            startIcon={<Add />}
+            onClick={() => setIsModalOpen(true)}
+          >
+            New Banner
+          </Button>
+        )}
       </Stack>
 
       {/* create/edit banner modal */}
@@ -141,7 +142,7 @@ function AdminBanners() {
         isOpen={isModalOpen}
         onClose={() => handleModalClose()}
         component={
-          <BannerForm
+          <AdminBannerForm
             banner={activeBanner}
             handleClose={() => handleModalClose()}
           />
@@ -155,7 +156,7 @@ function AdminBanners() {
               <TableRow>
                 <TableCell>Banner</TableCell>
                 <TableCell>Position</TableCell>
-                <TableCell>Banner related Page</TableCell>
+                <TableCell>Banner Page</TableCell>
                 <TableCell>Created at</TableCell>
 
                 <TableCell>&nbsp;</TableCell>
@@ -195,9 +196,11 @@ function AdminBanners() {
         handleEdit={handleBannerEditClick}
         handleDelete={handleBannerDeleteClick}
         handleCloseMenu={handlePopoverClose}
+        showDelete={usePermission("BANNERS_DELETE")}
+        showEdit={usePermission("BANNERS_UPDATE")}
       />
     </Container>
   );
 }
 
-export default AdminBanners;
+export default withPermission(AdminBanners, "BANNERS_READ");

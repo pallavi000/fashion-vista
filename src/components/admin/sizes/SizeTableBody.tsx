@@ -29,12 +29,16 @@ function SizeBodyTable({ size, handlePopoverOpen }: SizeBodyTableProps) {
       <TableRow hover tabIndex={-1} role="checkbox">
         <TableCell component={"td"} align="left">
           <Typography
-            variant="caption"
+            variant="subtitle2"
             fontWeight={"400"}
             color={"text.primary"}
           >
-            {size.name}
+            {size._id}
           </Typography>
+        </TableCell>
+
+        <TableCell component={"td"} align="left">
+          <Chip color="primary" label={size.name} size="small" />
         </TableCell>
 
         <TableCell align="left">

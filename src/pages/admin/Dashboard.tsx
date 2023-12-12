@@ -41,6 +41,7 @@ import {
   TVistorsBySite,
 } from "../../@types/dashboard";
 import VisitorBySiteCard from "../../components/admin/dashboard/VisitorBySiteCard";
+import withPermission from "../../context/withPermission";
 
 // data
 const cards: TDashboardMainCard[] = [
@@ -157,4 +158,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default withPermission(Dashboard, "DASHBOARD_READ");

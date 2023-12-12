@@ -1,6 +1,6 @@
 import { rest } from "msw";
 import { setupServer } from "msw/node";
-import { CategoryInputs } from "../@types/category";
+import { TCategoryInputs } from "../@types/category";
 import { categoryData } from "../test/testData/categoryData";
 
 export const categoriesHandlers = [
@@ -13,7 +13,7 @@ export const categoriesHandlers = [
   rest.post(
     "https://api.escuelajs.co/api/v1/categories",
     async (req, res, ctx) => {
-      let data: CategoryInputs | {} = {};
+      let data: TCategoryInputs | {} = {};
       await req.json().then((res) => (data = res));
       return res(ctx.json({ data }));
     }

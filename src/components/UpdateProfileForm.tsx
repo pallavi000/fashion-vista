@@ -17,26 +17,8 @@ import { UpdateProfileInputs } from "../@types/user";
 function UpdateProfileForm() {
   const {
     control,
-    setError,
-    clearErrors,
     formState: { errors },
   } = useFormContext<UpdateProfileInputs>();
-
-  // is email available?
-  const handleEmailValidation = async (
-    e: React.FocusEvent<HTMLInputElement>
-  ) => {
-    if (!e.target.value) return;
-    try {
-      const data = { email: e.target.value };
-      clearErrors("email");
-    } catch (error) {
-      setError("email", {
-        type: "manual",
-        message: "Email is already taken.",
-      });
-    }
-  };
 
   return (
     <>
@@ -66,20 +48,6 @@ function UpdateProfileForm() {
           />
         )}
       />
-      <Controller
-        name="email"
-        control={control}
-        render={({ field }) => (
-          <TextField
-            {...field}
-            onBlur={handleEmailValidation}
-            label="Email"
-            variant="outlined"
-            error={Boolean(errors.email)}
-            helperText={errors.email?.message}
-          />
-        )}
-      />
 
       <Controller
         name="avatar"
@@ -87,7 +55,6 @@ function UpdateProfileForm() {
         render={({ field }) => (
           <TextField
             {...field}
-            onBlur={handleEmailValidation}
             label="avatar"
             variant="outlined"
             error={Boolean(errors.avatar)}
@@ -102,7 +69,6 @@ function UpdateProfileForm() {
         render={({ field }) => (
           <TextField
             {...field}
-            onBlur={handleEmailValidation}
             label="phoneNumber"
             variant="outlined"
             error={Boolean(errors.phoneNumber)}

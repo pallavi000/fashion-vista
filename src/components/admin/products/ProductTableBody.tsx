@@ -10,6 +10,7 @@ import {
   TableRow,
   Typography,
   Chip,
+  Box,
 } from "@mui/material";
 
 // icons
@@ -57,7 +58,7 @@ function ProductTableBody({
         </Stack>
       </TableCell>
       <TableCell component={"td"} align="left">
-        <div
+        <Box
           style={{
             overflow: "hidden",
             textOverflow: "ellipsis",
@@ -72,29 +73,26 @@ function ProductTableBody({
           >
             {product.description}
           </Typography>
-        </div>
+        </Box>
       </TableCell>
       <TableCell align="left">
-        <Stack direction="row" alignItems="center" spacing={2}>
-          <Avatar
-            alt={product.category.name}
-            src={product.category.image}
-            sx={{
-              width: 24,
-              height: 24,
-            }}
-          />
-          <Typography
-            variant="caption"
-            fontWeight={"400"}
-            color={"text.primary"}
-          >
-            {product.category.name}
-          </Typography>
-        </Stack>
+        <Chip label={product.stock} size="small" color="primary" />
       </TableCell>
       <TableCell align="left">
-        <Chip color="success" size="small" label={`$${product.price}`} />
+        <Chip
+          avatar={
+            <Avatar alt={product.category.name} src={product.category.image} />
+          }
+          label={product.category.name}
+          variant="outlined"
+        />
+      </TableCell>
+      <TableCell align="left">
+        <Chip
+          color="warning"
+          avatar={<Avatar sx={{ bgcolor: "warning.light" }}>$</Avatar>}
+          label={product.price}
+        />
       </TableCell>
       <TableCell align="right">
         <IconButton

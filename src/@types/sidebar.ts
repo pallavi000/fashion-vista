@@ -1,3 +1,5 @@
+import { TUserPermission } from "./permission";
+
 export type SidebarTitle =
   | "Dashboard"
   | "Users"
@@ -22,4 +24,5 @@ export type SidebarItem = {
   title: SidebarTitle;
   path: SidebarPath;
   icon: React.ReactNode;
+  permission: TUserPermission;
 };

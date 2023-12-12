@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 // MUI
 import { MenuItem, Popover, Typography } from "@mui/material";
 
 // icons
 import { Delete, Edit } from "@mui/icons-material";
+import { showCustomToastr } from "../utils/helper";
+import usePermission from "../hooks/userPermission";
 
 // component props type
 type TableOptionPopoverProps = {
@@ -13,6 +15,8 @@ type TableOptionPopoverProps = {
   handleEdit: Function;
   handleDelete: Function;
   handleCloseMenu: Function;
+  showEdit?: boolean;
+  showDelete?: boolean;
 };
 
 function TableOptionPopover({
@@ -21,7 +25,17 @@ function TableOptionPopover({
   handleEdit,
   handleDelete,
   handleCloseMenu,
+  showEdit = true,
+  showDelete = true,
 }: TableOptionPopoverProps) {
+  useEffect(() => {
+    if (!showEdit && !showDelete && anchorEl) {
+      showCustomToastr("No option available", "error");
+    }
+  }, [showEdit, showDelete, anchorEl]);
+
+  if (!showEdit && !showDelete) return null;
+
   return (
     <Popover
       open={Boolean(anchorEl)}
@@ -41,37 +55,41 @@ function TableOptionPopover({
         },
       }}
     >
-      <MenuItem disabled={isLoading} onClick={() => handleEdit()}>
-        <Edit color="action" fontSize="small" />
-        <Typography
-          variant="caption"
-          fontWeight={"normal"}
-          color={"text.primary"}
-          sx={{
-            marginLeft: "1rem",
-          }}
-        >
-          Edit
-        </Typography>
-      </MenuItem>
+      {showEdit ? (
+        <MenuItem disabled={isLoading} onClick={() => handleEdit()}>
+          <Edit color="action" fontSize="small" />
+          <Typography
+            variant="caption"
+            fontWeight={"normal"}
+            color={"text.primary"}
+            sx={{
+              marginLeft: "1rem",
+            }}
+          >
+            Edit
+          </Typography>
+        </MenuItem>
+      ) : null}
 
-      <MenuItem
-        disabled={isLoading}
-        sx={{ color: "error.main" }}
-        onClick={() => handleDelete()}
-      >
-        <Delete color="error" fontSize="small" />
-        <Typography
-          variant="caption"
-          color={"error"}
-          fontWeight={"normal"}
-          sx={{
-            marginLeft: "1rem",
-          }}
+      {showDelete ? (
+        <MenuItem
+          disabled={isLoading}
+          sx={{ color: "error.main" }}
+          onClick={() => handleDelete()}
         >
-          Delete
-        </Typography>
-      </MenuItem>
+          <Delete color="error" fontSize="small" />
+          <Typography
+            variant="caption"
+            color={"error"}
+            fontWeight={"normal"}
+            sx={{
+              marginLeft: "1rem",
+            }}
+          >
+            Delete
+          </Typography>
+        </MenuItem>
+      ) : null}
     </Popover>
   );
 }

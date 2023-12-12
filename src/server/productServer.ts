@@ -1,7 +1,7 @@
 import { rest } from "msw";
 import { productsData } from "../test/testData/productData";
 import { setupServer } from "msw/node";
-import { ProductInputsData, TProduct } from "../@types/product";
+import { TProduct, TProductInputs } from "../@types/product";
 
 export const productsHandlers = [
   rest.get("https://api.escuelajs.co/api/v1/products", (req, res, ctx) => {
@@ -21,7 +21,7 @@ export const productsHandlers = [
 ];
 
 rest.post("https://api.escuelajs.co/api/v1/products", async (req, res, ctx) => {
-  let data: ProductInputsData | {} = {};
+  let data: TProductInputs | {} = {};
   await req.json().then((res) => (data = res));
   return res(ctx.json({ data }));
 });

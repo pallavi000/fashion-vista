@@ -4,18 +4,28 @@ import { useSelector } from "react-redux";
 import { AppState, useAppDispatch } from "../../redux/store";
 
 // MUI
-import { Button, Container, Grid, Stack, Typography } from "@mui/material";
+import {
+  Button,
+  Container,
+  Divider,
+  Grid,
+  Stack,
+  Typography,
+} from "@mui/material";
 
 // icons
 import { Add } from "@mui/icons-material";
 
 // components
 import AdminCategoryCard from "../../components/admin/categories/AdminCategoryCard";
-import AdminCategoryAddModal from "../../components/admin/categories/AdminCategoryAddModal";
 import SkeletonCategoryCard from "../../components/skeleton/SkeletonCategoryCard";
+import CustomModal from "../../components/CustomModal";
 
 // reducers
 import { fetchAdminCategories } from "../../redux/reducers/admin/adminCategoryReducer";
+import CategoryForm from "../../components/admin/categories/CategoryForm";
+import withPermission from "../../context/withPermission";
+import usePermission from "../../hooks/userPermission";
 
 function AdminCategories() {
   const dispatch = useAppDispatch();
@@ -27,7 +37,7 @@ function AdminCategories() {
   }));
 
   // new category modal state
-  const [isNewCategoryModalOpen, setIsNewCategoryModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // fetch categories
   useEffect(() => {
@@ -36,26 +46,26 @@ function AdminCategories() {
 
   return (
     <Container>
-      <Stack
-        direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        mb={5}
-      >
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Typography variant="h6">Categories</Typography>
-        <Button
-          onClick={() => setIsNewCategoryModalOpen(true)}
-          size="small"
-          variant="contained"
-          startIcon={<Add />}
-        >
-          New Category
-        </Button>
+        {usePermission("CATEGORIES_CREATE") && (
+          <Button
+            onClick={() => setIsModalOpen(true)}
+            size="small"
+            variant="contained"
+            startIcon={<Add />}
+          >
+            New Category
+          </Button>
+        )}
       </Stack>
+      <Divider sx={{ marginTop: 2, marginBottom: 4 }} />
 
-      <AdminCategoryAddModal
-        isOpen={isNewCategoryModalOpen}
-        setIsOpen={setIsNewCategoryModalOpen}
+      <CustomModal
+        isOpen={isModalOpen}
+        modalTitle="Creat Category"
+        onClose={() => setIsModalOpen(false)}
+        component={<CategoryForm onClose={() => setIsModalOpen(false)} />}
       />
 
       <Grid container spacing={3}>
@@ -75,4 +85,4 @@ function AdminCategories() {
   );
 }
 
-export default AdminCategories;
+export default withPermission(AdminCategories, "CATEGORIES_READ");

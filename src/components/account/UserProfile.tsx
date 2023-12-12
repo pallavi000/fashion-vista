@@ -150,12 +150,12 @@ function UserProfile() {
 
         <CustomModal
           isOpen={isModalOpen}
-          modalTitle="Create User"
+          modalTitle="Update Profile"
           onClose={() => handleModalClose()}
           component={
             <ProfileUpdate
               user={activeUser}
-              onClose={() => setIsModalOpen(false)}
+              handleClose={() => setIsModalOpen(false)}
             />
           }
         />

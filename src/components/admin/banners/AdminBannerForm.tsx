@@ -19,10 +19,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import LoadingButton from "../../LoadingButton";
 
 import { BannerInputs, TBanner } from "../../../@types/banner";
-import {
-  addNewSize,
-  updateAdminSize,
-} from "../../../redux/reducers/admin/adminSizeReducer";
+
 import {
   addNewBanner,
   updateAdminBanner,
@@ -30,16 +27,16 @@ import {
 
 // yup validation shchema
 const validationSchema = yup.object().shape({
-  banner: yup.string().required("Banner is required"),
+  image: yup.string().required("Banner Image is required"),
   position: yup.string().required("position is required"),
   page: yup.string().required("page is required"),
 });
 
-type BannerFormProps = {
+type AdminBannerFormProps = {
   handleClose: () => void;
   banner?: TBanner | null;
 };
-function BannerForm({ handleClose, banner = null }: BannerFormProps) {
+function AdminBannerForm({ handleClose, banner = null }: AdminBannerFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -48,28 +45,29 @@ function BannerForm({ handleClose, banner = null }: BannerFormProps) {
     handleSubmit,
     control,
     reset,
-    getValues,
     setValue,
-    watch,
     formState: { errors },
   } = useForm<BannerInputs>({
     resolver: yupResolver(validationSchema),
   });
 
+  useEffect(() => {
+    if (banner) {
+      setValue("image", banner.image);
+      setValue("position", banner.position);
+      setValue("page", banner.page);
+    }
+  }, [banner]);
+
   // form submit handler
   const onSubmit = async (data: BannerInputs) => {
     setIsSubmitting(true);
-    const formData = {
-      banner: data.banner,
-      position: data.position,
-      page: data.page,
-    };
     // update or create
     if (banner) {
       const bannerData: TBanner = { ...data, _id: banner._id };
       await dispatch(updateAdminBanner(bannerData));
     } else {
-      await dispatch(addNewBanner(formData));
+      await dispatch(addNewBanner(data));
     }
     reset();
     setIsSubmitting(false);
@@ -85,16 +83,17 @@ function BannerForm({ handleClose, banner = null }: BannerFormProps) {
       <Grid container spacing={3}>
         <Grid item xs={12} sm={12}>
           <Controller
-            name="banner"
+            name="image"
             control={control}
             render={({ field }) => (
               <TextField
                 {...field}
+                required
                 fullWidth
-                label="Banner"
+                label="Banner Image Link"
                 variant="outlined"
-                error={Boolean(errors.banner)}
-                helperText={errors.banner?.message}
+                error={Boolean(errors.image)}
+                helperText={errors.image?.message}
               />
             )}
           />
@@ -104,14 +103,29 @@ function BannerForm({ handleClose, banner = null }: BannerFormProps) {
             name="position"
             control={control}
             render={({ field }) => (
-              <TextField
+              <FormControl
                 {...field}
+                required
                 fullWidth
-                label="Banner Position"
-                variant="outlined"
                 error={Boolean(errors.position)}
-                helperText={errors.position?.message}
-              />
+              >
+                <InputLabel>Select a position</InputLabel>
+                <Select
+                  {...field}
+                  name="position"
+                  value={field.value ?? ""}
+                  label="Select Banner Position"
+                  variant="outlined"
+                  error={Boolean(errors.position)}
+                >
+                  <MenuItem value="top">Top</MenuItem>
+                  <MenuItem value="middle">Middle</MenuItem>
+                  <MenuItem value="bottom">Bottom</MenuItem>
+                </Select>
+                {errors.position?.message ? (
+                  <FormHelperText>{errors.position?.message}</FormHelperText>
+                ) : null}
+              </FormControl>
             )}
           />
         </Grid>
@@ -120,14 +134,33 @@ function BannerForm({ handleClose, banner = null }: BannerFormProps) {
             name="page"
             control={control}
             render={({ field }) => (
-              <TextField
+              <FormControl
                 {...field}
+                required
                 fullWidth
-                label="Banner related Page"
-                variant="outlined"
                 error={Boolean(errors.page)}
-                helperText={errors.page?.message}
-              />
+              >
+                <InputLabel>Select a Page</InputLabel>
+                <Select
+                  {...field}
+                  defaultValue="any"
+                  name="page"
+                  value={field.value ?? ""}
+                  label="Select a Page"
+                  variant="outlined"
+                  error={Boolean(errors.page)}
+                >
+                  <MenuItem value="home">Home</MenuItem>
+                  <MenuItem value="products">Products Page</MenuItem>
+                  <MenuItem value="category_products">
+                    Category Products
+                  </MenuItem>
+                  <MenuItem value="search">Search Page</MenuItem>
+                </Select>
+                {errors.page?.message ? (
+                  <FormHelperText>{errors.page?.message}</FormHelperText>
+                ) : null}
+              </FormControl>
             )}
           />
         </Grid>
@@ -143,4 +176,4 @@ function BannerForm({ handleClose, banner = null }: BannerFormProps) {
   );
 }
 
-export default BannerForm;
+export default AdminBannerForm;

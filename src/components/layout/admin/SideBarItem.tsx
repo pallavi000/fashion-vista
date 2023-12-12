@@ -4,12 +4,16 @@ import { NavLink } from "react-router-dom";
 // MUI
 import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { SidebarItem } from "../../../@types/sidebar";
+import usePermission from "../../../hooks/userPermission";
 
 type SideBarItemProps = {
   item: SidebarItem;
 };
 
 function SideBarItem({ item }: SideBarItemProps) {
+  // permission
+  const hasManagePermission = usePermission(item.permission);
+  if (!hasManagePermission) return <></>;
   return (
     <ListItemButton
       component={NavLink}

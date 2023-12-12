@@ -36,7 +36,7 @@ function Address() {
     a.isDefault === b.isDefault ? 0 : a.isDefault ? -1 : 1
   );
 
-  const [isAddNewAddressOpen, setIsAddNewAddressOpen] = useState(false);
+  const [isAddressFormModalOpen, setIsAddresssFormModalOpen] = useState(false);
   const [activeEditAddress, setActiveEditAddress] = useState<TAddress | null>(
     null
   );
@@ -52,25 +52,28 @@ function Address() {
     dispatch(makeAddressDefault(addressId));
   };
 
+  const handleAddressEditClick = (address: TAddress) => {
+    setActiveEditAddress(address);
+    setIsAddresssFormModalOpen(true);
+  };
+
+  const handleAddressModalClose = () => {
+    setIsAddresssFormModalOpen(false);
+    setActiveEditAddress(null);
+  };
+
   return (
     <Box>
-      {/* Add new Address Modal */}
+      {/* Add/edit new Address Modal */}
       <CustomModal
         modalTitle="Add New Address"
-        isOpen={isAddNewAddressOpen}
-        onClose={setIsAddNewAddressOpen}
-        component={<AddressForm handleNext={setIsAddNewAddressOpen} />}
-      />
-      {/* Dynamic Edit Address Modal */}
-      <CustomModal
-        modalTitle="Edit Address"
-        isOpen={Boolean(activeEditAddress)}
-        onClose={() => setActiveEditAddress(null)}
+        isOpen={isAddressFormModalOpen}
+        onClose={handleAddressModalClose}
         component={
           <AddressForm
-            handleNext={() => setActiveEditAddress(null)}
+            handleNext={handleAddressModalClose}
             address={activeEditAddress}
-            type="update"
+            type={activeEditAddress ? "update" : "create"}
           />
         }
       />
@@ -91,7 +94,7 @@ function Address() {
         >
           <Grid item xs={2} sm={4} md={6} minHeight={200}>
             <Box
-              onClick={() => setIsAddNewAddressOpen(true)}
+              onClick={() => setIsAddresssFormModalOpen(true)}
               sx={{
                 border: "2px dotted #ddd",
                 height: "100%",
@@ -154,7 +157,7 @@ function Address() {
                   <Button
                     variant="text"
                     size="small"
-                    onClick={() => setActiveEditAddress(address)}
+                    onClick={() => handleAddressEditClick(address)}
                   >
                     Edit
                   </Button>

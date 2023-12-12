@@ -14,8 +14,6 @@ type OrderTableBodyProps = {
 function OrderTableBody({ order }: OrderTableBodyProps) {
   return (
     <TableRow>
-      <TableCell>{order._id}</TableCell>
-
       <TableCell component="th" scope="row">
         {order.products.map((product) => {
           return (

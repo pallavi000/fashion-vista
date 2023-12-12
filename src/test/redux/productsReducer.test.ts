@@ -80,7 +80,7 @@ describe("product reducers", () => {
       size: "1",
     };
 
-    const res = store.dispatch(updateAdminProduct(data));
+    const res = store.dispatch(updateAdminProduct({ id: data._id, data }));
     expect(res.arg).toMatchObject({
       _id: "9",
       name: "new product",

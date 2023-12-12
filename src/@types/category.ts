@@ -6,7 +6,7 @@ export type TCategory = {
   updatedAt?: string;
 };
 
-export type CategoryInputs = {
+export type TCategoryInputs = {
   name: string;
   image: string;
 };

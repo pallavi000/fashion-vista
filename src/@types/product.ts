@@ -14,7 +14,7 @@ export type TProduct = {
   updatedAt?: string;
 };
 
-export interface ProductInputs {
+export interface TProductInputs {
   name: string;
   price: number;
   description: string;
@@ -22,10 +22,6 @@ export interface ProductInputs {
   image: string;
   stock: number;
   size: string;
-}
-
-export interface ProductInputsData extends ProductInputs {
-  _id: string;
 }
 
 export type TProductSortingOption =

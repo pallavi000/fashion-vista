@@ -36,7 +36,9 @@ describe("Category reducer: DELETE, PUT, POST", () => {
   });
 
   test("should update category by id", async () => {
-    const res = store.dispatch(updateAdminCategory(categoryData[0]));
+    const res = store.dispatch(
+      updateAdminCategory({ id: categoryData[0]._id, data: categoryData[0] })
+    );
     expect(res.arg).toMatchObject(categoryData[0]);
   });
 

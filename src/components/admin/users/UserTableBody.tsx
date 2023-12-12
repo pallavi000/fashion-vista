@@ -48,12 +48,11 @@ function UserTableBody({
           />
         </TableCell>
         <TableCell component="th" scope="row" padding="none">
-          <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar alt={user.firstName} src={user.avatar} />
-            <Typography variant="body1" noWrap>
-              {user.firstName} {user.lastName}
-            </Typography>
-          </Stack>
+          <Chip
+            avatar={<Avatar alt={user.firstName} src={user.avatar} />}
+            label={`${user.firstName} ${user.lastName}`}
+            variant="outlined"
+          />
         </TableCell>
         <TableCell>
           <Stack
@@ -93,7 +92,10 @@ function UserTableBody({
           </Typography>
         </TableCell>
         <TableCell align="left">
-          <Chip size="small" label={user.createdAt} />
+          <Chip
+            size="small"
+            label={new Date(user.createdAt ?? "").toLocaleString()}
+          />
         </TableCell>
         <TableCell align="right">
           <IconButton

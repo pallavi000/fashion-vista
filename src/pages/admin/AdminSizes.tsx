@@ -8,6 +8,7 @@ import {
   Button,
   Card,
   Container,
+  Divider,
   Grid,
   InputAdornment,
   Stack,
@@ -29,8 +30,9 @@ import { Add, Search } from "@mui/icons-material";
 // components
 import CustomModal from "../../components/CustomModal";
 import TableOptionPopover from "../../components/TableOptionPopover";
-import SizeForm from "../../components/admin/sizes/SizeForm";
 import SizeBodyTable from "../../components/admin/sizes/SizeTableBody";
+import TableSearchNotFound from "../../components/TableSearchNotFound";
+import AdminSizeForm from "../../components/admin/sizes/AdminSizeForm";
 
 // reducers
 import {
@@ -40,6 +42,8 @@ import {
 
 //types
 import { TSize } from "../../@types/size";
+import withPermission from "../../context/withPermission";
+import usePermission from "../../hooks/userPermission";
 
 function AdminSizes() {
   const dispatch = useAppDispatch();
@@ -122,7 +126,7 @@ function AdminSizes() {
     setActiveSize(null);
   };
 
-  // filter orders
+  // filter sizes
   const filterSizes = sizes.filter((u) =>
     u.name.toLocaleLowerCase().includes(filterSizeName.toLocaleLowerCase())
   );
@@ -131,22 +135,20 @@ function AdminSizes() {
 
   return (
     <Container>
-      <Stack
-        direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        mb={5}
-      >
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Typography variant="h6">Sizes</Typography>
-        <Button
-          size="small"
-          variant="contained"
-          startIcon={<Add />}
-          onClick={() => setIsModalOpen(true)}
-        >
-          New Size
-        </Button>
+        {usePermission("SIZES_CREATE") && (
+          <Button
+            size="small"
+            variant="contained"
+            startIcon={<Add />}
+            onClick={() => setIsModalOpen(true)}
+          >
+            New Size
+          </Button>
+        )}
       </Stack>
+      <Divider sx={{ marginTop: 2, marginBottom: 4 }} />
 
       {/* create/edit size modal */}
       <CustomModal
@@ -154,7 +156,10 @@ function AdminSizes() {
         isOpen={isModalOpen}
         onClose={() => handleModalClose()}
         component={
-          <SizeForm size={activeSize} handleClose={() => handleModalClose()} />
+          <AdminSizeForm
+            size={activeSize}
+            handleClose={() => handleModalClose()}
+          />
         }
       />
 
@@ -176,6 +181,7 @@ function AdminSizes() {
           <Table>
             <TableHead>
               <TableRow>
+                <TableCell>ID</TableCell>
                 <TableCell>Name</TableCell>
                 <TableCell>Created at</TableCell>
 
@@ -196,23 +202,7 @@ function AdminSizes() {
                 })}
             </TableBody>
 
-            {isNotFound && (
-              <TableBody>
-                <TableRow>
-                  <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                    <Typography variant="h6" paragraph>
-                      Not found
-                    </Typography>
-
-                    <Typography variant="body2">
-                      No results found for &nbsp;
-                      <strong>&quot;{filterSizeName}&quot;</strong>.
-                      <br /> Try checking for the size name.
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            )}
+            {isNotFound && <TableSearchNotFound query={filterSizeName} />}
 
             <TableFooter>
               <TableRow>
@@ -234,9 +224,11 @@ function AdminSizes() {
         handleEdit={handleSizeEditClick}
         handleDelete={handleSizeDeleteClick}
         handleCloseMenu={handlePopoverClose}
+        showDelete={usePermission("SIZES_DELETE")}
+        showEdit={usePermission("SIZES_UPDATE")}
       />
     </Container>
   );
 }
 
-export default AdminSizes;
+export default withPermission(AdminSizes, "SIZES_READ");

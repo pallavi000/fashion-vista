@@ -29,13 +29,12 @@ const validationSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
 });
 
-type SizeFormProps = {
+type AdminSizeFormProps = {
   handleClose: () => void;
   size?: TSize | null;
 };
-function SizeForm({ handleClose, size = null }: SizeFormProps) {
+function AdminSizeForm({ handleClose, size = null }: AdminSizeFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [sizeName, setSizeName] = useState<string>();
   const dispatch = useAppDispatch();
 
   // react hook form with yup validation
@@ -45,7 +44,6 @@ function SizeForm({ handleClose, size = null }: SizeFormProps) {
     reset,
     getValues,
     setValue,
-    watch,
     formState: { errors },
   } = useForm<SizeInputs>({
     resolver: yupResolver(validationSchema),
@@ -53,36 +51,22 @@ function SizeForm({ handleClose, size = null }: SizeFormProps) {
 
   useEffect(() => {
     if (size) {
-      setSizeName(size.name);
-      const sizeNameArray = size.name;
-      setValue("name", sizeNameArray[0]);
+      setValue("name", size.name);
     }
   }, [size]);
 
   // form submit handler
   const onSubmit = async (data: SizeInputs) => {
     setIsSubmitting(true);
-    const formData = {
-      name: sizeName || data.name.toUpperCase(),
-    };
     // update or create
     if (size) {
-      const sizeData: TSize = { ...data, _id: size._id };
-      await dispatch(updateAdminSize(sizeData));
+      await dispatch(updateAdminSize({ id: size._id, data }));
     } else {
-      await dispatch(addNewSize(formData));
+      await dispatch(addNewSize(data));
     }
     reset();
     setIsSubmitting(false);
     handleClose();
-  };
-
-  const handleSizeChange = () => {
-    const sizeName = getValues("name");
-    if (sizeName) {
-      setValue("name", sizeName.toUpperCase());
-    }
-    setSizeName(sizeName);
   };
 
   return (
@@ -100,7 +84,6 @@ function SizeForm({ handleClose, size = null }: SizeFormProps) {
               <TextField
                 {...field}
                 fullWidth
-                onBlur={handleSizeChange}
                 label="Size Name"
                 variant="outlined"
                 error={Boolean(errors.name)}
@@ -121,4 +104,4 @@ function SizeForm({ handleClose, size = null }: SizeFormProps) {
   );
 }
 
-export default SizeForm;
+export default AdminSizeForm;

@@ -6,7 +6,7 @@ import axiosInstance from "../../../utils/AxiosInstance";
 
 // types
 import { CategoriesState } from "../../../@types/reduxState";
-import { CategoryInputs, TCategory } from "../../../@types/category";
+import { TCategory, TCategoryInputs } from "../../../@types/category";
 
 // helpers
 import { showApiErrorToastr, showCustomToastr } from "../../../utils/helper";
@@ -138,7 +138,7 @@ export const fetchAdminCategories = createAsyncThunk(
 
 export const addNewCategory = createAsyncThunk(
   "addNewCategory",
-  async (data: CategoryInputs) => {
+  async (data: TCategoryInputs) => {
     try {
       const response = await axiosInstance.post(`/categories`, data);
       showCustomToastr("Category created successfully.", "success");
@@ -153,16 +153,9 @@ export const addNewCategory = createAsyncThunk(
 
 export const updateAdminCategory = createAsyncThunk(
   "updateAdminCategory",
-  async (data: TCategory) => {
+  async ({ id, data }: { id: string; data: TCategoryInputs }) => {
     try {
-      const newData = {
-        name: data.name,
-        image: data.image,
-      };
-      const response = await axiosInstance.put(
-        `/categories/${data._id}`,
-        newData
-      );
+      const response = await axiosInstance.put(`/categories/${id}`, data);
       showCustomToastr("Category updated successfully.", "success");
       return response.data;
     } catch (e) {

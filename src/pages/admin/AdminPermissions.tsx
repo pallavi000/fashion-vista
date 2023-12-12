@@ -20,6 +20,7 @@ import {
   Checkbox,
   Stack,
   Button,
+  Divider,
 } from "@mui/material";
 
 // icons
@@ -33,8 +34,11 @@ import { useSelector } from "react-redux";
 import PermissionTableBody from "../../components/admin/permission/PermissionTableBody";
 import { TPermission } from "../../@types/permission";
 import CustomModal from "../../components/CustomModal";
-import PermissionForm from "../../components/admin/permission/PermissionForm";
 import TableOptionPopover from "../../components/TableOptionPopover";
+import TableSearchNotFound from "../../components/TableSearchNotFound";
+import AdminPermissionForm from "../../components/admin/permission/AdminPermissionForm";
+import withPermission from "../../context/withPermission";
+import usePermission from "../../hooks/userPermission";
 
 function AdminPermissions() {
   const dispatch = useAppDispatch();
@@ -130,22 +134,20 @@ function AdminPermissions() {
 
   return (
     <Container>
-      <Stack
-        direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        mb={5}
-      >
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Typography variant="h6">Permissions</Typography>
-        <Button
-          size="small"
-          variant="contained"
-          startIcon={<Add />}
-          onClick={() => setIsModalOpen(true)}
-        >
-          New Permission
-        </Button>
+        {usePermission("PERMISSIONS_CREATE") && (
+          <Button
+            size="small"
+            variant="contained"
+            startIcon={<Add />}
+            onClick={() => setIsModalOpen(true)}
+          >
+            New Permission
+          </Button>
+        )}
       </Stack>
+      <Divider sx={{ marginTop: 2, marginBottom: 4 }} />
 
       {/* create/edit permission modal */}
       <CustomModal
@@ -153,7 +155,7 @@ function AdminPermissions() {
         isOpen={isModalOpen}
         onClose={() => handleModalClose()}
         component={
-          <PermissionForm
+          <AdminPermissionForm
             permission={activePermission}
             handleClose={() => handleModalClose()}
           />
@@ -199,23 +201,7 @@ function AdminPermissions() {
                 })}
             </TableBody>
 
-            {isNotFound && (
-              <TableBody>
-                <TableRow>
-                  <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                    <Typography variant="h6" paragraph>
-                      Not found
-                    </Typography>
-
-                    <Typography variant="body2">
-                      No results found for &nbsp;
-                      <strong>&quot;{filterPermissionName}&quot;</strong>.
-                      <br /> Try checking for the permission name.
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            )}
+            {isNotFound && <TableSearchNotFound query={filterPermissionName} />}
 
             <TableFooter>
               <TableRow>
@@ -237,9 +223,11 @@ function AdminPermissions() {
         handleEdit={handlePermissionEditClick}
         handleDelete={handlePermissionDeleteClick}
         handleCloseMenu={handlePopoverClose}
+        showDelete={usePermission("PERMISSIONS_DELETE")}
+        showEdit={usePermission("PERMISSIONS_UPDATE")}
       />
     </Container>
   );
 }
 
-export default AdminPermissions;
+export default withPermission(AdminPermissions, "PERMISSIONS_READ");

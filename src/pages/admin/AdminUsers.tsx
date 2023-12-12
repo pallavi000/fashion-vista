@@ -22,6 +22,11 @@ import {
   TextField,
   InputAdornment,
   LinearProgress,
+  CardContent,
+  Box,
+  Tabs,
+  Tab,
+  Divider,
 } from "@mui/material";
 
 // icons
@@ -42,8 +47,13 @@ import { TUser } from "../../@types/user";
 import { fetchPermissions } from "../../redux/reducers/admin/adminPermissionReducer";
 import CustomModal from "../../components/CustomModal";
 import AdminUserForm from "../../components/admin/users/AdminUserForm";
+import TableSearchNotFound from "../../components/TableSearchNotFound";
+import withPermission from "../../context/withPermission";
+import { ADMIN_SIDEBAR_WIDTH } from "../../utils/constants";
+import usePermission from "../../hooks/userPermission";
 
 function AdminUsers() {
+  const [tabValue, setTabValue] = React.useState(0);
   // pagination states
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -151,21 +161,25 @@ function AdminUsers() {
   };
 
   // search filter hanlder
-  const filteredUsers = users.filter((u: TUser) =>
-    u.firstName.toLocaleLowerCase().includes(filterName.toLocaleLowerCase())
+  const filteredUsers = users.filter(
+    (u: TUser) =>
+      u.firstName
+        .toLocaleLowerCase()
+        .includes(filterName.toLocaleLowerCase()) &&
+      u.role === (tabValue === 0 ? "ADMIN" : "USER")
   );
+
   const isNotFound = !filteredUsers.length && !!filterName;
 
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setTabValue(newValue);
+  };
+
   return (
-    <>
-      <Container>
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          mb={5}
-        >
-          <Typography variant="h6">Users</Typography>
+    <Container>
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
+        <Typography variant="h6">Users</Typography>
+        {usePermission("USERS_CREATE") && (
           <Button
             size="small"
             variant="contained"
@@ -174,21 +188,21 @@ function AdminUsers() {
           >
             New User
           </Button>
-        </Stack>
+        )}
+      </Stack>
+      <Divider sx={{ marginTop: 2, marginBottom: 4 }} />
 
-        <CustomModal
-          isOpen={isModalOpen}
-          modalTitle="Create User"
-          onClose={() => handleModalClose()}
-          component={
-            <AdminUserForm
-              user={activeUser}
-              onClose={() => setIsModalOpen(false)}
-            />
-          }
-        />
+      <CustomModal
+        isOpen={isModalOpen}
+        modalTitle="Create User"
+        onClose={() => handleModalClose()}
+        component={
+          <AdminUserForm user={activeUser} onClose={() => handleModalClose()} />
+        }
+      />
 
-        <Card>
+      <Card>
+        <CardContent>
           <TextField
             size="small"
             sx={{ ml: 1, flex: 1, margin: "1rem" }}
@@ -203,98 +217,92 @@ function AdminUsers() {
             onChange={handleFilterByName}
           />
 
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      indeterminate={
-                        selectedUsers.length > 0 &&
-                        selectedUsers.length < users.length
-                      }
-                      checked={
-                        users.length > 0 &&
-                        selectedUsers.length === users.length
-                      }
-                      onChange={handleSelectAllClick}
-                    />
-                  </TableCell>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Permissions</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Role</TableCell>
-                  <TableCell>Created At</TableCell>
-                  <TableCell>&nbsp;</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {filteredUsers
-                  .slice(page * rowsPerPage, rowsPerPage + page * rowsPerPage)
-                  .map((user: TUser) => {
-                    return (
-                      <UserTableBody
-                        key={user._id}
-                        user={user}
-                        selectedUsers={selectedUsers}
-                        handleSelectClick={handleSelectClick}
-                        handlePopoverOpen={handlePopoverOpen}
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <Tabs value={tabValue} onChange={handleTabChange}>
+              <Tab label="Admin/Staffs" />
+              <Tab label="Users/Customers" />
+            </Tabs>
+          </Box>
+
+          <Container maxWidth="md">
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        indeterminate={
+                          selectedUsers.length > 0 &&
+                          selectedUsers.length < users.length
+                        }
+                        checked={
+                          users.length > 0 &&
+                          selectedUsers.length === users.length
+                        }
+                        onChange={handleSelectAllClick}
                       />
-                    );
-                  })}
-              </TableBody>
-              {isLoading && !users.length && (
-                <TableBody>
-                  <TableRow>
-                    <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                      <LinearProgress />
                     </TableCell>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Permissions</TableCell>
+                    <TableCell>Email</TableCell>
+                    <TableCell>Role</TableCell>
+                    <TableCell>Created At</TableCell>
+                    <TableCell>Action</TableCell>
                   </TableRow>
-                </TableBody>
-              )}
-              {isNotFound && (
+                </TableHead>
                 <TableBody>
-                  <TableRow>
-                    <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                      <Typography variant="h6" paragraph>
-                        Not found
-                      </Typography>
-
-                      <Typography variant="body2">
-                        No results found for &nbsp;
-                        <strong>&quot;{filterName}&quot;</strong>.
-                        <br /> Try checking for typos or using complete words.
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
+                  {filteredUsers
+                    .slice(page * rowsPerPage, rowsPerPage + page * rowsPerPage)
+                    .map((user: TUser) => {
+                      return (
+                        <UserTableBody
+                          key={user._id}
+                          user={user}
+                          selectedUsers={selectedUsers}
+                          handleSelectClick={handleSelectClick}
+                          handlePopoverOpen={handlePopoverOpen}
+                        />
+                      );
+                    })}
                 </TableBody>
-              )}
+                {isLoading && !users.length && (
+                  <TableBody>
+                    <TableRow>
+                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                        <LinearProgress />
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                )}
+                {isNotFound && <TableSearchNotFound query={filterName} />}
 
-              <TableFooter>
-                <TableRow>
-                  <TablePagination
-                    rowsPerPageOptions={[10, 50]}
-                    count={users.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </TableRow>
-              </TableFooter>
-            </Table>
-          </TableContainer>
-
+                <TableFooter>
+                  <TableRow>
+                    <TablePagination
+                      rowsPerPageOptions={[10, 50]}
+                      count={users.length}
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      onPageChange={handleChangePage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                  </TableRow>
+                </TableFooter>
+              </Table>
+            </TableContainer>
+          </Container>
           <TableOptionPopover
             anchorEl={popoverEle}
             handleEdit={handleUserEditClick}
             handleDelete={handleUserDeleteClick}
             handleCloseMenu={handlePopoverClose}
+            showEdit={usePermission("USERS_UPDATE")}
+            showDelete={usePermission("USERS_DELETE")}
           />
-        </Card>
-      </Container>
-    </>
+        </CardContent>
+      </Card>
+    </Container>
   );
 }
 
-export default AdminUsers;
+export default withPermission(AdminUsers, "USERS_READ");

@@ -18,19 +18,18 @@ import { useSelector } from "react-redux";
 const validationSchema = yup.object().shape({
   firstName: yup.string().required("firstName is required"),
   lastName: yup.string().required("lastName is required"),
-  email: yup
-    .string()
-    .email("Invalid email address")
-    .required("Email is required"),
 });
 
 // component props type
 type ProfileUpdateProps = {
   user?: TUser | null;
-  onClose: () => void;
+  handleClose: () => void;
 };
 
-export default function ProfileUpdate({ user, onClose }: ProfileUpdateProps) {
+export default function ProfileUpdate({
+  user,
+  handleClose,
+}: ProfileUpdateProps) {
   const dispatch = useAppDispatch();
 
   // user state
@@ -53,7 +52,6 @@ export default function ProfileUpdate({ user, onClose }: ProfileUpdateProps) {
   React.useEffect(() => {
     setValue("avatar", "https://i.imgur.com/fpT4052.jpeg");
     if (currentUser) {
-      setValue("email", currentUser.email);
       setValue("firstName", currentUser.firstName);
       setValue("lastName", currentUser.lastName);
       setValue("avatar", currentUser.avatar ?? "");
@@ -63,12 +61,10 @@ export default function ProfileUpdate({ user, onClose }: ProfileUpdateProps) {
 
   // form submit handler
   const onSubmit = async (data: UpdateProfileInputs) => {
-    console.log(currentUser);
     if (!currentUser) return;
     await dispatch(updateProfile(data));
-
     reset();
-    onClose();
+    handleClose();
   };
 
   return (

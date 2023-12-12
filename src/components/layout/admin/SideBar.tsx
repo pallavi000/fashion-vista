@@ -38,6 +38,7 @@ import { useThemeContext } from "../../../context/ThemeContext";
 
 // utils
 import { ADMIN_SIDEBAR_WIDTH } from "../../../utils/constants";
+import usePermission from "../../../hooks/userPermission";
 
 // sidebar menus
 const sidebarItems: SidebarItem[] = [
@@ -45,41 +46,49 @@ const sidebarItems: SidebarItem[] = [
     title: "Dashboard",
     path: "/admin/dashboard",
     icon: <Dashboard />,
+    permission: "DASHBOARD_READ",
   },
   {
     title: "Users",
     path: "/admin/users",
     icon: <AccountCircle />,
+    permission: "USERS_READ",
   },
   {
     title: "Permissions",
     path: "/admin/permissions",
     icon: <DeveloperMode />,
+    permission: "PERMISSIONS_READ",
   },
   {
     title: "Banners",
     path: "/admin/banners",
     icon: <Category />,
+    permission: "BANNERS_READ",
   },
   {
     title: "Categories",
     path: "/admin/categories",
     icon: <Category />,
+    permission: "CATEGORIES_READ",
   },
   {
     title: "Products",
     path: "/admin/products",
     icon: <ShoppingBag />,
+    permission: "PRODUCTS_READ",
   },
   {
     title: "Sizes",
     path: "/admin/sizes",
     icon: <Straighten />,
+    permission: "SIZES_READ",
   },
   {
     title: "Orders",
     path: "/admin/orders",
     icon: <Money />,
+    permission: "ORDERS_READ",
   },
 ];
 

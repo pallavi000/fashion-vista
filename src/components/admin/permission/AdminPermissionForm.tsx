@@ -32,14 +32,14 @@ const validationSchema = yup.object().shape({
   description: yup.string().optional(),
 });
 
-type PermissionFormProps = {
+type AdminPermissionFormProps = {
   handleClose: () => void;
   permission?: TPermission | null;
 };
-function PermissionForm({
+function AdminPermissionForm({
   handleClose,
   permission = null,
-}: PermissionFormProps) {
+}: AdminPermissionFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [permissionName, setPermissionName] = useState<string>();
   const dispatch = useAppDispatch();
@@ -202,4 +202,4 @@ function PermissionForm({
   );
 }
 
-export default PermissionForm;
+export default AdminPermissionForm;

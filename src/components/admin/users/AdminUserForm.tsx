@@ -30,6 +30,7 @@ import { RegisterInputs, TUser, UpdateUserInputs } from "../../../@types/user";
 import LoadingButton from "../../LoadingButton";
 import CustomModal from "../../CustomModal";
 import PermissionsPickerModal from "../../PermissionsPickerModal";
+import { getCurrentUser } from "../../../redux/reducers/authReducer";
 
 // yup validation shchema
 const validationSchema = yup.object().shape({
@@ -72,6 +73,8 @@ export default function AdminUserForm({
   const isLoading = useSelector(
     (state: AppState) => state.adminUsers.isLoading
   );
+  // current user
+  const currentUser = useSelector((state: AppState) => state.auth.user);
 
   // react hook form with yup validation
   const methods = useForm<RegisterInputs | UpdateUserInputs>({
@@ -79,15 +82,7 @@ export default function AdminUserForm({
       user ? validationSchema : validationSchema.concat(passwordSchema)
     ),
   });
-  const {
-    handleSubmit,
-    reset,
-    watch,
-    setValue,
-    getValues,
-
-    formState: { errors },
-  } = methods;
+  const { handleSubmit, reset, watch, setValue, getValues } = methods;
 
   // set default value for avatar
   React.useEffect(() => {
@@ -107,6 +102,7 @@ export default function AdminUserForm({
   const onSubmit = async (data: RegisterInputs | UpdateUserInputs) => {
     if (user) {
       await dispatch(updateUser({ id: user._id, data }));
+      if (currentUser?._id === user._id) dispatch(getCurrentUser());
     } else if ("password" in data) {
       await dispatch(addNewUser(data));
     }

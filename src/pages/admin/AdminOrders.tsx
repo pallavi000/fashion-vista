@@ -20,6 +20,8 @@ import {
   TextField,
   InputAdornment,
   Box,
+  CardContent,
+  Divider,
 } from "@mui/material";
 
 // icons
@@ -29,6 +31,8 @@ import { Search } from "@mui/icons-material";
 import { TOrder } from "../../@types/order";
 import OrderTableBody from "../../components/admin/orders/OrderTableBody";
 import { getOrders } from "../../redux/reducers/orderReducer";
+import TableSearchNotFound from "../../components/TableSearchNotFound";
+import withPermission from "../../context/withPermission";
 
 function AdminOrders() {
   // pagination states
@@ -78,75 +82,64 @@ function AdminOrders() {
 
   return (
     <Container>
+      <Typography variant="h6">Orders</Typography>
+      <Divider sx={{ marginTop: 2, marginBottom: 4 }} />
       <Card>
-        <TextField
-          size="small"
-          sx={{ ml: 1, flex: 1, margin: "1rem" }}
-          placeholder="Search Ordes By ID"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Search />
-              </InputAdornment>
-            ),
-          }}
-          onChange={handleFilterByOrderId}
-        />
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Items</TableCell>
-                <TableCell>Date</TableCell>
-                <TableCell>Payment Method</TableCell>
-                <TableCell>Delivery Status</TableCell>
-                <TableCell>Total</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {filterOrders
-                .slice(page * rowsPerPage, rowsPerPage + page * rowsPerPage)
-                .map((order) => {
-                  return <OrderTableBody order={order} key={order._id} />;
-                })}
-            </TableBody>
+        <CardContent>
+          <TextField
+            size="small"
+            sx={{ ml: 1, flex: 1, margin: "1rem" }}
+            placeholder="Search Ordes By ID"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Search />
+                </InputAdornment>
+              ),
+            }}
+            onChange={handleFilterByOrderId}
+          />
+          <Container maxWidth="md">
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Items</TableCell>
+                    <TableCell>Date</TableCell>
+                    <TableCell>Payment Method</TableCell>
+                    <TableCell>Delivery Status</TableCell>
+                    <TableCell>Total</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {filterOrders
+                    .slice(page * rowsPerPage, rowsPerPage + page * rowsPerPage)
+                    .map((order) => {
+                      return <OrderTableBody order={order} key={order._id} />;
+                    })}
+                </TableBody>
 
-            {isNotFound && (
-              <TableBody>
-                <TableRow>
-                  <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                    <Typography variant="h6" paragraph>
-                      Not found
-                    </Typography>
+                {isNotFound && <TableSearchNotFound query={filterOrderId} />}
 
-                    <Typography variant="body2">
-                      No results found for &nbsp;
-                      <strong>&quot;{filterOrderId}&quot;</strong>.
-                      <br /> Try checking for the Order ID.
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            )}
-
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[10, 25]}
-                  count={filterOrders.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-              </TableRow>
-            </TableFooter>
-          </Table>
-        </TableContainer>
+                <TableFooter>
+                  <TableRow>
+                    <TablePagination
+                      rowsPerPageOptions={[10, 25]}
+                      count={filterOrders.length}
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      onPageChange={handleChangePage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                  </TableRow>
+                </TableFooter>
+              </Table>
+            </TableContainer>
+          </Container>
+        </CardContent>
       </Card>
     </Container>
   );
 }
 
-export default AdminOrders;
+export default withPermission(AdminOrders, "ORDERS_READ");

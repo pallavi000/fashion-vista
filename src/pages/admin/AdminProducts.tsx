@@ -22,6 +22,7 @@ import {
   TextField,
   InputAdornment,
   LinearProgress,
+  Divider,
 } from "@mui/material";
 
 // icons
@@ -33,16 +34,19 @@ import {
   fetchAdminAllProducts,
 } from "../../redux/reducers/admin/adminProductReducer";
 import { fetchAdminCategories } from "../../redux/reducers/admin/adminCategoryReducer";
+import { fetchAdminSizes } from "../../redux/reducers/admin/adminSizeReducer";
 
 // components
 import TableOptionPopover from "../../components/TableOptionPopover";
 import ProductTableBody from "../../components/admin/products/ProductTableBody";
-import AdminProductEditModal from "../../components/admin/products/AdminProductEditModal";
-import AdminProductAddModal from "../../components/admin/products/AdminProductAddModal";
+import TableSearchNotFound from "../../components/TableSearchNotFound";
+import CustomModal from "../../components/CustomModal";
+import AdminProductForm from "../../components/admin/products/AdminProductForm";
 
 // types
 import { TProduct } from "../../@types/product";
-import { fetchAdminSizes } from "../../redux/reducers/admin/adminSizeReducer";
+import withPermission from "../../context/withPermission";
+import usePermission from "../../hooks/userPermission";
 
 function AdminProducts() {
   const dispatch = useAppDispatch();
@@ -64,8 +68,7 @@ function AdminProducts() {
   );
 
   // modal control states
-  const [isAddModalOpen, setIsAddModalOpen] = React.useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
+  const [isProductModalOpen, setIsProductModalOpen] = React.useState(false);
 
   // products state
   const { products, isLoading } = useSelector((state: AppState) => ({
@@ -147,64 +150,61 @@ function AdminProducts() {
 
   const handlePopoverClose = () => {
     setPopOverEle(null);
-    //setActiveUser(null);
+  };
+
+  const handleModalClose = () => {
+    setIsProductModalOpen(false);
+    setActiveProduct(null);
   };
 
   // handle popover menus click
   const handleProductEditClick = () => {
     handlePopoverClose();
-    setIsEditModalOpen(true);
+    setIsProductModalOpen(true);
   };
 
   const handleProductDeleteClick = async () => {
     if (activeProduct)
       await dispatch(deleteAdminProduct({ id: activeProduct._id }));
+    setActiveProduct(null);
     handlePopoverClose();
   };
 
   // serach/filter products
-  console.log(products);
   const filterProducts = products?.filter((u) =>
     u.name.toLocaleLowerCase().includes(filterName.toLocaleLowerCase())
   );
 
-  console.log(filterProducts, "filterproduct");
   const isNotFound = !filterProducts.length && !!filterName;
 
   return (
     <Container>
-      <Stack
-        direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        mb={5}
-      >
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Typography variant="h6">Products</Typography>
-        <Button
-          size="small"
-          variant="contained"
-          startIcon={<Add />}
-          onClick={() => setIsAddModalOpen(true)}
-        >
-          New Product
-        </Button>
+        {usePermission("PRODUCTS_CREATE") && (
+          <Button
+            size="small"
+            variant="contained"
+            startIcon={<Add />}
+            onClick={() => setIsProductModalOpen(true)}
+          >
+            New Product
+          </Button>
+        )}
       </Stack>
+      <Divider sx={{ marginTop: 2, marginBottom: 4 }} />
 
-      <AdminProductAddModal
-        categories={categories}
-        sizes={sizes}
-        isOpen={isAddModalOpen}
-        setIsOpen={setIsAddModalOpen}
+      <CustomModal
+        modalTitle={activeProduct ? "Update Product" : "Create Product"}
+        isOpen={isProductModalOpen}
+        onClose={handleModalClose}
+        component={
+          <AdminProductForm
+            product={activeProduct}
+            onClose={handleModalClose}
+          />
+        }
       />
-      {products.length ? (
-        <AdminProductEditModal
-          categories={categories}
-          sizes={sizes}
-          isOpen={isEditModalOpen}
-          setIsOpen={setIsEditModalOpen}
-          product={activeProduct || products[0]}
-        />
-      ) : null}
 
       <Card>
         <TextField
@@ -239,6 +239,7 @@ function AdminProducts() {
                 </TableCell>
                 <TableCell>Title</TableCell>
                 <TableCell>Description</TableCell>
+                <TableCell>Stock</TableCell>
                 <TableCell>Category</TableCell>
                 <TableCell>Price</TableCell>
                 <TableCell>&nbsp;</TableCell>
@@ -271,23 +272,7 @@ function AdminProducts() {
               </TableBody>
             )}
 
-            {isNotFound && (
-              <TableBody>
-                <TableRow>
-                  <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                    <Typography variant="h6" paragraph>
-                      Not found
-                    </Typography>
-
-                    <Typography variant="body2">
-                      No results found for &nbsp;
-                      <strong>&quot;{filterName}&quot;</strong>.
-                      <br /> Try checking for typos or using complete words.
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            )}
+            {isNotFound && <TableSearchNotFound query={filterName} />}
 
             <TableFooter>
               <TableRow>
@@ -309,10 +294,12 @@ function AdminProducts() {
           handleEdit={handleProductEditClick}
           handleDelete={handleProductDeleteClick}
           handleCloseMenu={handlePopoverClose}
+          showEdit={usePermission("PRODUCTS_UPDATE")}
+          showDelete={usePermission("PRODUCTS_DELETE")}
         />
       </Card>
     </Container>
   );
 }
 
-export default AdminProducts;
+export default withPermission(AdminProducts, "PRODUCTS_READ");

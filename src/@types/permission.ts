@@ -22,7 +22,9 @@ export type TPermissionResource =
   | "PRODUCTS"
   | "CATEGORIES"
   | "SIZES"
-  | "PERMISSIONS";
+  | "PERMISSIONS"
+  | "ORDERS"
+  | "BANNERS";
 
 export type TPermissionAction = "DELETE" | "UPDATE" | "READ" | "CREATE";
 

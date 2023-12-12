@@ -24,13 +24,15 @@ import { TransitionProps } from "@mui/material/transitions";
 import { Delete, Edit } from "@mui/icons-material";
 
 // components
-import AdminCategoryEditModal from "./AdminCategoryEditModal";
+import CustomModal from "../../CustomModal";
+import CategoryForm from "./CategoryForm";
 
 // types
 import { TCategory } from "../../../@types/category";
 
 // reducers
 import { deleteAdminCategory } from "../../../redux/reducers/admin/adminCategoryReducer";
+import usePermission from "../../../hooks/userPermission";
 
 // popover transition from down to up
 const Transition = React.forwardRef(function Transition(
@@ -63,10 +65,16 @@ function AdminCategoryCard({ category }: AdminCategoryCardProps) {
 
   return (
     <>
-      <AdminCategoryEditModal
-        category={category}
+      <CustomModal
         isOpen={isEditModalOpen}
-        setIsOpen={setIsEditModalOpen}
+        modalTitle="Update Category"
+        onClose={() => setIsEditModalOpen(false)}
+        component={
+          <CategoryForm
+            category={category}
+            onClose={() => setIsEditModalOpen(false)}
+          />
+        }
       />
 
       <Dialog
@@ -127,23 +135,31 @@ function AdminCategoryCard({ category }: AdminCategoryCardProps) {
             alignItems="center"
             justifyContent="space-between"
           >
-            <Fab
-              size="small"
-              color="warning"
-              aria-label="edit"
-              onClick={() => setIsEditModalOpen(true)}
-            >
-              <Edit fontSize={"small"} />
-            </Fab>
-            <Fab
-              size="small"
-              color="error"
-              disabled={isLoading}
-              aria-label="delete"
-              onClick={() => setIsDeleteModalOpen(true)}
-            >
-              {isLoading ? <CircularProgress /> : <Delete fontSize={"small"} />}
-            </Fab>
+            {usePermission("CATEGORIES_UPDATE") && (
+              <Fab
+                size="small"
+                color="warning"
+                aria-label="edit"
+                onClick={() => setIsEditModalOpen(true)}
+              >
+                <Edit fontSize={"small"} />
+              </Fab>
+            )}
+            {usePermission("CATEGORIES_DELETE") && (
+              <Fab
+                size="small"
+                color="error"
+                disabled={isLoading}
+                aria-label="delete"
+                onClick={() => setIsDeleteModalOpen(true)}
+              >
+                {isLoading ? (
+                  <CircularProgress />
+                ) : (
+                  <Delete fontSize={"small"} />
+                )}
+              </Fab>
+            )}
           </Stack>
         </Stack>
       </Card>

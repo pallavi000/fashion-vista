@@ -150,10 +150,9 @@ export const addNewSize = createAsyncThunk(
 
 export const updateAdminSize = createAsyncThunk(
   "updateAdminSize",
-  async (data: TSize) => {
+  async ({ id, data }: { id: string; data: SizeInputs }) => {
     try {
-      const { _id, ...newdata } = data;
-      const response = await axiosInstance.put(`/sizes/${_id}`, newdata);
+      const response = await axiosInstance.put(`/sizes/${id}`, data);
       showCustomToastr("Size updated successfully.", "success");
       return response.data;
     } catch (e) {

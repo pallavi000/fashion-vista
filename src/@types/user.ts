@@ -18,7 +18,6 @@ export interface UpdateUserInputs extends Omit<RegisterInputs, "password"> {}
 export type UpdateProfileInputs = {
   firstName: string;
   lastName: string;
-  email: string;
   avatar?: string;
   phoneNumber?: string;
 };
@@ -34,7 +33,6 @@ export type TUser = {
   avatar: string;
   phoneNumber?: string;
   permission?: TPermission[];
-
   createdAt?: string;
   updatedAt?: string;
 };
