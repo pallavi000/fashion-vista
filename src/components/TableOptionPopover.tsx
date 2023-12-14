@@ -6,7 +6,6 @@ import { MenuItem, Popover, Typography } from "@mui/material";
 // icons
 import { Delete, Edit } from "@mui/icons-material";
 import { showCustomToastr } from "../utils/helper";
-import usePermission from "../hooks/userPermission";
 
 // component props type
 type TableOptionPopoverProps = {

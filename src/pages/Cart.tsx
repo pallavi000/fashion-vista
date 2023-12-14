@@ -35,7 +35,7 @@ function Cart() {
   const navigate = useNavigate();
   // cart items state
   const cart = useSelector((state: AppState) => state.cart);
-  const { items } = cart;
+  const { items, isLoading } = cart;
 
   return (
     <Container>
@@ -48,7 +48,7 @@ function Cart() {
             size="medium"
             onClick={() => navigate("/checkout")}
             variant="contained"
-            disabled={!Boolean(items.length)}
+            disabled={!Boolean(items.length) || isLoading}
             endIcon={<KeyboardArrowRight />}
           >
             Checkout

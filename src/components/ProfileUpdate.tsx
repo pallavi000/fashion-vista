@@ -22,14 +22,10 @@ const validationSchema = yup.object().shape({
 
 // component props type
 type ProfileUpdateProps = {
-  user?: TUser | null;
   handleClose: () => void;
 };
 
-export default function ProfileUpdate({
-  user,
-  handleClose,
-}: ProfileUpdateProps) {
+export default function ProfileUpdate({ handleClose }: ProfileUpdateProps) {
   const dispatch = useAppDispatch();
 
   // user state

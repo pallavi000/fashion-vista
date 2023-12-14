@@ -113,7 +113,7 @@ function SidebarFilter({
         </AccordionSummary>
         <AccordionDetails>
           <FormControl>
-            <RadioGroup value={selectedCategory}>
+            <RadioGroup defaultValue={selectedCategory}>
               <FormControlLabel
                 value={0}
                 control={<Radio />}

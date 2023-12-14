@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // redux
 import { useAppDispatch } from "../redux/store";
 
@@ -28,21 +28,31 @@ import { removeFromCart, updateCartItem } from "../redux/reducers/cartReducer";
 
 // helpers
 import { showCustomToastr } from "../utils/helper";
+import useDebounce from "../hooks/useDebounce";
 
 type CartItemProps = { item: TCart };
 
 function CartItem({ item }: CartItemProps) {
   const [isQuantityUpdating, setIsQuantityUpdating] = useState(false);
   const [isItemRemoving, setIsItemRemoving] = useState(false);
+  const [quantity, setQuantity] = useState(item.quantity);
+  const debouncedQuantity = useDebounce(quantity, 1000);
 
   const dispatch = useAppDispatch();
 
   // Quantity change handler
-  const handleQuantityChange = async (action: "increase" | "decrease") => {
+  const handleQuantityChange = async () => {
     setIsQuantityUpdating(true);
-    await dispatch(updateCartItem({ cartId: item._id, action }));
+    const data = { quantity };
+    await dispatch(updateCartItem({ cartId: item._id, data }));
     setIsQuantityUpdating(false);
   };
+
+  useEffect(() => {
+    if (debouncedQuantity && debouncedQuantity !== item.quantity) {
+      handleQuantityChange();
+    }
+  }, [debouncedQuantity]);
 
   // remove item from cart handler
   const handleRemoveCart = async () => {
@@ -90,23 +100,23 @@ function CartItem({ item }: CartItemProps) {
         <ButtonGroup size="small" variant="contained" disableElevation>
           <Button
             color="inherit"
-            disabled={item.quantity <= 1 || isQuantityUpdating ? true : false}
-            onClick={() => handleQuantityChange("decrease")}
+            disabled={quantity <= 1 || isQuantityUpdating ? true : false}
+            onClick={() => setQuantity((prev) => prev - 1)}
           >
             <Remove fontSize="small" />
           </Button>
-          <Button disabled>{item.quantity}</Button>
+          <Button disabled>{quantity}</Button>
           <Button
             color="inherit"
-            disabled={isQuantityUpdating}
-            onClick={() => handleQuantityChange("increase")}
+            disabled={quantity >= item.product.stock || isQuantityUpdating}
+            onClick={() => setQuantity((prev) => prev + 1)}
           >
             <Add fontSize="small" />
           </Button>
         </ButtonGroup>
       </TableCell>
       <TableCell>${item.product.price}</TableCell>
-      <TableCell>${item.product.price * item.quantity}</TableCell>
+      <TableCell>${item.product.price * quantity}</TableCell>
       <TableCell>
         <Fab
           onClick={() => handleRemoveCart()}

@@ -36,7 +36,7 @@ const stripePromise = loadStripe("pk_test_TYooMQauvdEDq54NiTphI7jx");
 function PaymentForm({
   handleSubmit,
 }: {
-  handleSubmit: (data: TPaymentMethodData) => void;
+  handleSubmit: (data: TPaymentMethodData) => Promise<void>;
 }) {
   // context
   const { theme, themeMode } = useThemeContext();
@@ -69,10 +69,12 @@ function PaymentHandler({
   handleSubmit,
 }: {
   cart: CartState;
-  handleSubmit: (data: TPaymentMethodData) => void;
+  handleSubmit: (data: TPaymentMethodData) => Promise<void>;
 }) {
   // cart items
   const { items } = cart;
+
+  const isLoading = useSelector((state: AppState) => state.orders.isLoading);
 
   // stripe hooks
   const stripe = useStripe();
@@ -88,7 +90,7 @@ function PaymentHandler({
     }
     const { error } = await elements.submit();
     if (!error) {
-      handleSubmit({
+      await handleSubmit({
         method: "Credit Card",
         status: "Paid",
       });
@@ -106,7 +108,7 @@ function PaymentHandler({
         sx={{ marginTop: "1rem", marginBottom: "1rem" }}
         type="submit"
         variant="contained"
-        disabled={!elements || !stripe}
+        disabled={!elements || !stripe || isLoading}
       >
         Pay & Order
       </Button>

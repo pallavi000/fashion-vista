@@ -31,6 +31,7 @@ import LoadingButton from "../../LoadingButton";
 import CustomModal from "../../CustomModal";
 import PermissionsPickerModal from "../../PermissionsPickerModal";
 import { getCurrentUser } from "../../../redux/reducers/authReducer";
+import usePermission from "../../../hooks/userPermission";
 
 // yup validation shchema
 const validationSchema = yup.object().shape({
@@ -104,7 +105,7 @@ export default function AdminUserForm({
       await dispatch(updateUser({ id: user._id, data }));
       if (currentUser?._id === user._id) dispatch(getCurrentUser());
     } else if ("password" in data) {
-      await dispatch(addNewUser(data));
+      await dispatch(addNewUser(data as RegisterInputs));
     }
     reset();
     onClose();
@@ -116,7 +117,10 @@ export default function AdminUserForm({
   };
 
   const getPermissionNameFromId = (id: string) => {
-    const permission = permissions.find((p) => p._id === id);
+    let permission = permissions.find((p) => p._id === id);
+    if (!permission && user?.permission?.length) {
+      permission = user.permission.find((p) => p._id === id);
+    }
     return permission ? permission.name : "UNKNOWN";
   };
 
@@ -179,8 +183,11 @@ export default function AdminUserForm({
             variant="contained"
             color="info"
             onClick={() => setIsPermissionModalOpen(true)}
+            disabled={!usePermission("PERMISSIONS_READ")}
           >
-            Select Permissions
+            {usePermission("PERMISSIONS_READ")
+              ? "Select Permissions"
+              : "Permission 'PERMISSION_READ' required to update"}
           </Button>
         </FormControl>
         <Divider sx={{ marginBottom: 2, marginTop: 2 }} />

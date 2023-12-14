@@ -181,7 +181,6 @@ export const addToCart = createAsyncThunk(
       return response.data;
     } catch (e) {
       const error = e as AxiosError;
-      console.log(error, "error");
       showApiErrorToastr(error);
       throw error;
     }
@@ -200,13 +199,13 @@ export const getCartItems = createAsyncThunk("getCartItems", async () => {
 
 export const updateCartItem = createAsyncThunk(
   "updateCartItem",
-  async ({ cartId, action }: { cartId: string; action: string }) => {
+  async ({ cartId, data }: { cartId: string; data: any }) => {
     try {
-      const data = { action };
       const response = await axiosInstance.put(`/carts/${cartId}`, data);
       return response.data;
     } catch (e) {
       const error = e as AxiosError;
+      showApiErrorToastr(error);
       throw error;
     }
   }
@@ -221,6 +220,7 @@ export const removeFromCart = createAsyncThunk(
       return itemId;
     } catch (e) {
       const error = e as AxiosError;
+      showApiErrorToastr(error);
       throw error;
     }
   }

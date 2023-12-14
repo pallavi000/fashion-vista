@@ -59,7 +59,6 @@ function AdminUsers() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   // filter states
-  const [selectedUsers, setSelectedUsers] = React.useState<string[]>([]);
   const [filterName, setFilterName] = React.useState("");
 
   // popover menu states
@@ -80,34 +79,13 @@ function AdminUsers() {
     isLoading: state.adminUsers.isLoading,
   }));
 
+  const canReadPermission = usePermission("PERMISSIONS_READ");
+
   // get/fetch users
   useEffect(() => {
     dispatch(fetchUsers());
-    dispatch(fetchPermissions());
+    if (canReadPermission) dispatch(fetchPermissions());
   }, []);
-
-  // handle checkbox all click
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      const newSelecteds = users.map((u) => u._id);
-      setSelectedUsers(newSelecteds);
-      return;
-    }
-    setSelectedUsers([]);
-  };
-
-  // handle single checkbox click
-  const handleSelectClick = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    id: string
-  ) => {
-    if (selectedUsers.includes(id)) {
-      const filterdSelectedUsers = selectedUsers.filter((s) => s !== id);
-      setSelectedUsers(filterdSelectedUsers);
-    } else {
-      setSelectedUsers((prev) => [...prev, id]);
-    }
-  };
 
   // handle search by name
   const handleFilterByName = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -229,19 +207,6 @@ function AdminUsers() {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        indeterminate={
-                          selectedUsers.length > 0 &&
-                          selectedUsers.length < users.length
-                        }
-                        checked={
-                          users.length > 0 &&
-                          selectedUsers.length === users.length
-                        }
-                        onChange={handleSelectAllClick}
-                      />
-                    </TableCell>
                     <TableCell>Name</TableCell>
                     <TableCell>Permissions</TableCell>
                     <TableCell>Email</TableCell>
@@ -258,8 +223,6 @@ function AdminUsers() {
                         <UserTableBody
                           key={user._id}
                           user={user}
-                          selectedUsers={selectedUsers}
-                          handleSelectClick={handleSelectClick}
                           handlePopoverOpen={handlePopoverOpen}
                         />
                       );

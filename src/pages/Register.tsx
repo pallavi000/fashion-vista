@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
+import {
+  useForm,
+  SubmitHandler,
+  FormProvider,
+  Controller,
+} from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 // redux
@@ -8,7 +13,7 @@ import { useSelector } from "react-redux";
 import { AppState, useAppDispatch } from "../redux/store";
 
 // MUI
-import { Box, Card, Container, Typography } from "@mui/material";
+import { Box, Card, Container, TextField, Typography } from "@mui/material";
 
 // components
 import UserForm from "../components/UserForm";
@@ -78,11 +83,11 @@ function Register() {
   useEffect(() => {
     // demo avatar link set
     setValue("avatar", "https://i.imgur.com/fpT4052.jpeg");
+    setValue("role", "USER");
   }, []);
 
   useEffect(() => {
     if (getValues("email") && !errors.email) {
-      console.log("ooooo");
       setIsEmailAvailable(true);
     }
   }, [errors, getValues]);
@@ -91,7 +96,23 @@ function Register() {
   const onSubmit: SubmitHandler<RegisterInputs> = async (data) => {
     await dispatch(registerUser(data));
     // login user
-    dispatch(loginUser({ email: data.email, password: data.password }));
+    await dispatch(loginUser({ email: data.email, password: data.password }));
+  };
+
+  // is email available?
+  const handleEmailValidation = async (
+    e: React.FocusEvent<HTMLInputElement>
+  ) => {
+    if (!e.target.value) return;
+    try {
+      const data = { email: e.target.value };
+      clearErrors("email");
+    } catch (error) {
+      setError("email", {
+        type: "manual",
+        message: "Email is already taken.",
+      });
+    }
   };
 
   return (
@@ -108,7 +129,61 @@ function Register() {
           </Typography>
 
           <Box sx={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-            <UserForm />
+            <Controller
+              name="firstName"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="First name"
+                  variant="outlined"
+                  error={Boolean(errors.firstName)}
+                  helperText={errors.firstName?.message}
+                />
+              )}
+            />
+            <Controller
+              name="lastName"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Last name"
+                  variant="outlined"
+                  error={Boolean(errors.lastName)}
+                  helperText={errors.lastName?.message}
+                />
+              )}
+            />
+            <Controller
+              name="email"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  onBlur={handleEmailValidation}
+                  label="Email"
+                  variant="outlined"
+                  error={Boolean(errors.email)}
+                  helperText={errors.email?.message}
+                />
+              )}
+            />
+            <Controller
+              name="password"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  type="password"
+                  {...field}
+                  id="outlined-basic"
+                  label="Password"
+                  variant="outlined"
+                  error={Boolean(errors.password)}
+                  helperText={errors.password?.message}
+                />
+              )}
+            />
             <LoadingButton
               isLoading={isLoading}
               isDisabled={!isEmailAvailable}

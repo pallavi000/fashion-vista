@@ -20,6 +20,7 @@ import categoriesReducer from "./reducers/categoriesReducer";
 import categoryReducer from "./reducers/categoryReducer";
 import orderReducer from "./reducers/orderReducer";
 import addressReducer from "./reducers/addressReducer";
+import bannerReducer from "./reducers/bannerReducer";
 
 // Admin Reducers
 import adminUserReducer from "./reducers/admin/adminUserReducer";
@@ -36,6 +37,7 @@ const store = configureStore({
     product: productReducer,
     categories: categoriesReducer,
     category: categoryReducer,
+    banner: bannerReducer,
     auth: authReducer,
     cart: cartReducer,
     orders: orderReducer,

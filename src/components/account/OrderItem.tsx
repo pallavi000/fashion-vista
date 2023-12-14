@@ -1,7 +1,7 @@
 import React from "react";
 
 // MUI
-import { TableCell, TableRow, Chip } from "@mui/material";
+import { TableCell, TableRow, Chip, Tooltip } from "@mui/material";
 
 // type
 import { TOrder } from "../../@types/order";
@@ -17,7 +17,18 @@ function OrderItem({ order }: OrderItemProps) {
     <>
       <TableRow>
         <TableCell rowSpan={order.products.length + 1}>
-          <Chip label={`#${order._id}`} />
+          <Tooltip title={order._id}>
+            <Chip
+              label={`#${order._id}`}
+              sx={{
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                maxWidth: "100px",
+                cursor: "pointer",
+              }}
+            />
+          </Tooltip>
         </TableCell>
       </TableRow>
       {order.products.map((product) => {

@@ -118,7 +118,7 @@ function ProductDetail() {
       {isLoading && !product ? (
         <SkeletonProductDetail />
       ) : (
-        <Box>
+        <Box sx={{ marginBottom: 8 }}>
           <BreadCrumb label={product?.name || "Product Detail"} />
           <Grid container marginTop={0} spacing={6}>
             <Grid item xs={12} md={6} lg={6}>
@@ -271,7 +271,7 @@ function ProductDetail() {
         Related Products
       </Typography>
       <Grid container columnSpacing={6} rowSpacing={0} columns={12}>
-        {products.slice(0, 4).map((product: TProduct) => {
+        {products.slice(0, 8).map((product: TProduct) => {
           return <Product key={product._id} product={product} />;
         })}
       </Grid>

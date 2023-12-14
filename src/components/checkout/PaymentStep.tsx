@@ -5,7 +5,9 @@ import PaymentForm from "../PaymentForm";
 import { Box } from "@mui/material";
 import { TPaymentMethodData } from "../../@types/order";
 
-type PaymentStepProps = { handleSubmit: (data: TPaymentMethodData) => void };
+type PaymentStepProps = {
+  handleSubmit: (data: TPaymentMethodData) => Promise<void>;
+};
 
 function PaymentStep({ handleSubmit }: PaymentStepProps) {
   return (

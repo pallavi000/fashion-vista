@@ -13,10 +13,11 @@ import { Box, Button, Container, Typography } from "@mui/material";
 import UserForm from "../../components/UserForm";
 
 // types
-import { RegisterInputs, TUser, TUserEditInput } from "../../@types/user";
+import { RegisterInputs, UpdateUserInputs } from "../../@types/user";
 
 // reducers
 import { updateUser } from "../../redux/reducers/admin/adminUserReducer";
+import LoadingButton from "../../components/LoadingButton";
 
 // yup validation schema
 const validationSchema = yup.object().shape({
@@ -29,7 +30,7 @@ const validationSchema = yup.object().shape({
   password: yup
     .string()
     .min(8, "Password must be at least 8 characters")
-    .required("Password is required"),
+    .optional(),
   role: yup.string().oneOf(["ADMIN", "USER"]).required("Role is required"),
 });
 
@@ -37,20 +38,20 @@ function AdminProfile() {
   const dispatch = useAppDispatch();
 
   // auth user state
-  const user = useSelector((state: AppState) => state.auth.user);
+  const { user } = useSelector((state: AppState) => ({
+    user: state.auth.user,
+  }));
+  const { isLoading } = useSelector((state: AppState) => ({
+    isLoading: state.adminUsers.isLoading,
+  }));
 
-  const methods = useForm<RegisterInputs>({
+  const methods = useForm<UpdateUserInputs>({
     resolver: yupResolver(validationSchema),
   });
   const {
     handleSubmit,
-    control,
-    reset,
-    watch,
+    resetField,
     setValue,
-    getValues,
-    setError,
-    clearErrors,
     formState: { errors },
   } = methods;
 
@@ -66,10 +67,10 @@ function AdminProfile() {
   }, [user]);
 
   // form submit handler
-  const onSubmit = async (data: RegisterInputs) => {
+  const onSubmit = async (data: UpdateUserInputs) => {
     if (!user) return;
     await dispatch(updateUser({ id: user._id, data }));
-    reset();
+    resetField("password");
   };
 
   return (
@@ -94,9 +95,11 @@ function AdminProfile() {
             >
               <UserForm />
             </Box>
-            <Button type="submit" variant="contained">
-              Update
-            </Button>
+            <LoadingButton
+              isLoading={isLoading}
+              title="Update"
+              color="primary"
+            />
           </Box>
         </Box>
       </FormProvider>

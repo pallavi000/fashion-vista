@@ -26,7 +26,12 @@ import {
 // icons
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { FavoriteBorder, ShoppingBagOutlined } from "@mui/icons-material";
+import {
+  FavoriteBorder,
+  LocationOn,
+  ShoppingBag,
+  ShoppingBagOutlined,
+} from "@mui/icons-material";
 import SearchIcon from "@mui/icons-material/Search";
 import StoreIcon from "@mui/icons-material/Store";
 import NavigationIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -143,7 +148,7 @@ export default function Navbar() {
                 हाम्रो-Closet
               </Typography>
             </Link>
-            {categories.slice(0, 4).map((category) => {
+            {categories.slice(0, 5).map((category) => {
               return (
                 <Link
                   color="text.primary"
@@ -263,6 +268,24 @@ export default function Navbar() {
                     sx={{ minWidth: 180 }}
                   >
                     <AccountCircleIcon sx={{ marginRight: "0.5rem" }} /> Profile
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      handleClose();
+                      navigate("/account/address");
+                    }}
+                    sx={{ minWidth: 180 }}
+                  >
+                    <LocationOn sx={{ marginRight: "0.5rem" }} /> Address
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      handleClose();
+                      navigate("/account/orders");
+                    }}
+                    sx={{ minWidth: 180 }}
+                  >
+                    <ShoppingBag sx={{ marginRight: "0.5rem" }} /> Orders
                   </MenuItem>
                   <MenuItem onClick={logout}>
                     <LogoutIcon sx={{ marginRight: "0.5rem" }} /> Logout

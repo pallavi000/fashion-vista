@@ -34,7 +34,7 @@ function OrderItemItem({ order, product }: OrderItemItemProps) {
           </Link>
         </Tooltip>
       </TableCell>
-      <TableCell>{order._id}</TableCell>
+      <TableCell>{new Date(order.createdAt || "").toLocaleString()}</TableCell>
       <TableCell align="center">{order.payment.method}</TableCell>
       <TableCell>${product.price}</TableCell>
       <TableCell>{1}</TableCell>

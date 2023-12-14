@@ -13,7 +13,9 @@ export interface RegisterInputs extends LoginInputs {
   permission?: string[];
 }
 
-export interface UpdateUserInputs extends Omit<RegisterInputs, "password"> {}
+export interface UpdateUserInputs extends Omit<RegisterInputs, "password"> {
+  password?: string;
+}
 
 export type UpdateProfileInputs = {
   firstName: string;

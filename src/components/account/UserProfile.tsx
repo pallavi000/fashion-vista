@@ -13,12 +13,7 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-import { Remove } from "@mui/icons-material";
 import CustomModal from "../CustomModal";
-import { TUser } from "../../@types/user";
-import UserForm from "../UserForm";
-import AdminUserForm from "../admin/users/AdminUserForm";
-import UpdateProfileForm from "../UpdateProfileForm";
 import ProfileUpdate from "../ProfileUpdate";
 
 function UserProfile() {
@@ -27,30 +22,9 @@ function UserProfile() {
 
   // modal control states
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // popover menu states
-  const [popoverEle, setPopOverEle] = React.useState<
-    (EventTarget & HTMLButtonElement) | null
-  >(null);
-
-  const [activeUser, setActiveUser] = useState<null | TUser>(null);
 
   const handleModalClose = () => {
     setIsModalOpen(false);
-    setActiveUser(null);
-  };
-
-  // popover open/close handler
-  const handlePopoverOpen = (
-    e: React.MouseEvent<HTMLButtonElement>,
-    user: TUser
-  ) => {
-    setActiveUser(user);
-    setPopOverEle(e.currentTarget);
-  };
-
-  const handlePopoverClose = () => {
-    setPopOverEle(null);
-    //setActiveUser(null);
   };
 
   return (
@@ -153,10 +127,7 @@ function UserProfile() {
           modalTitle="Update Profile"
           onClose={() => handleModalClose()}
           component={
-            <ProfileUpdate
-              user={activeUser}
-              handleClose={() => setIsModalOpen(false)}
-            />
+            <ProfileUpdate handleClose={() => setIsModalOpen(false)} />
           }
         />
       </Box>

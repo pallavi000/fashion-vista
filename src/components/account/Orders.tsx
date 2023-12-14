@@ -6,6 +6,7 @@ import { AppState, useAppDispatch } from "../../redux/store";
 // MUI
 import {
   Alert,
+  LinearProgress,
   Paper,
   Table,
   TableBody,
@@ -25,7 +26,10 @@ import { getOrders } from "../../redux/reducers/orderReducer";
 function Orders() {
   const dispatch = useAppDispatch();
 
-  const orders = useSelector((state: AppState) => state.orders.data);
+  const { orders, isLoading } = useSelector((state: AppState) => ({
+    orders: state.orders.data,
+    isLoading: state.orders.isLoading,
+  }));
 
   // orders state
   useEffect(() => {
@@ -34,33 +38,36 @@ function Orders() {
 
   return (
     <>
-      {orders.length ? (
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Order ID</TableCell>
-                <TableCell>Items</TableCell>
-                <TableCell>Date</TableCell>
-                <TableCell>Method</TableCell>
-                <TableCell>Price</TableCell>
-                <TableCell>Qty</TableCell>
-                <TableCell>Subtotal</TableCell>
-                <TableCell>Order Status</TableCell>
-              </TableRow>
-            </TableHead>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Order ID</TableCell>
+              <TableCell>Items</TableCell>
+              <TableCell>Date</TableCell>
+              <TableCell>Method</TableCell>
+              <TableCell>Price</TableCell>
+              <TableCell>Qty</TableCell>
+              <TableCell>Subtotal</TableCell>
+              <TableCell>Order Status</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {orders.map((order: TOrder) => {
+              return <OrderItem key={order._id} order={order} />;
+            })}
+          </TableBody>
+          {isLoading && !orders.length && (
             <TableBody>
-              {orders.map((order: TOrder) => {
-                return <OrderItem key={order._id} order={order} />;
-              })}
+              <TableRow>
+                <TableCell align="center" colSpan={8} sx={{ py: 3 }}>
+                  <LinearProgress />
+                </TableCell>
+              </TableRow>
             </TableBody>
-          </Table>
-        </TableContainer>
-      ) : (
-        <Alert severity="error" sx={{ marginTop: "2rem" }}>
-          No orders yet! Your orders will be shown here.
-        </Alert>
-      )}
+          )}
+        </Table>
+      </TableContainer>
     </>
   );
 }

@@ -62,7 +62,6 @@ const authSlice = createSlice({
     builder.addCase(loginUser.rejected, (state, action) => {
       return {
         ...state,
-
         isLoading: false,
         error: action.error.message || "",
       };
@@ -77,7 +76,6 @@ const authSlice = createSlice({
     builder.addCase(registerUser.fulfilled, (state, action) => {
       return {
         ...state,
-        user: action.payload,
         isLoading: false,
         error: null,
       };
@@ -85,7 +83,6 @@ const authSlice = createSlice({
     builder.addCase(registerUser.rejected, (state, action) => {
       return {
         ...state,
-
         isLoading: false,
         error: action.error.message || "",
       };
@@ -148,6 +145,7 @@ const authSlice = createSlice({
     builder.addCase(updateProfile.fulfilled, (state, action) => {
       return {
         ...state,
+        user: action.payload,
         isLoading: false,
         error: null,
       };
