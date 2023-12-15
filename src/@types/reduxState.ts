@@ -89,6 +89,7 @@ export type CartState = {
 
 export type OrderState = {
   data: TOrder[];
+  order?: TOrder | null;
   isLoading: boolean;
   error: string | null;
 };

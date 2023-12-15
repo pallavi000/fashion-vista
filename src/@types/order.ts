@@ -30,8 +30,12 @@ export type TOrder = {
   _id: string;
   user: TUser;
   products: TProduct[];
-  shipping: string;
-  billing: string;
+  shipping: {
+    address: TAddress;
+  };
+  billing: {
+    address: TAddress;
+  };
   payment: {
     method: TPaymentMethod;
     status: TPaymentStatus;

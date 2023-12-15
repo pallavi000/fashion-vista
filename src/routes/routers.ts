@@ -26,6 +26,7 @@ import AdminPermissions from "../pages/admin/AdminPermissions";
 // types
 import { Routers, TROUTES } from "../@types/routers";
 import AdminSettings from "../pages/admin/AdminSettings";
+import OrderDetail from "../pages/OrderDetail";
 
 // routes
 export const ROUTES: TROUTES = {
@@ -39,6 +40,7 @@ export const ROUTES: TROUTES = {
   CART: "/cart",
   CHECKOUT: "/checkout",
   ACCOUNT_PAGE: "/account/:page?",
+  ORDER_DETAIL: "/orders/:orderId",
   ORDER_SUCCESS: "/order-success/:orderId",
   ADMIN_DASHBOARD: "/admin/dashboard",
   ADMIN_USERS: "/admin/users",
@@ -69,6 +71,7 @@ export const routers: Routers[] = [
   { path: ROUTES.CART, Component: Cart, role: "USER" },
   { path: ROUTES.CHECKOUT, Component: Checkout, role: "USER" },
   { path: ROUTES.ACCOUNT_PAGE, Component: Account, role: "USER" },
+  { path: ROUTES.ORDER_DETAIL, Component: OrderDetail, role: "USER" },
   {
     path: ROUTES.ORDER_SUCCESS,
     Component: OrderSuccess,

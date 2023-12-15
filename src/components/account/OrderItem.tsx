@@ -8,16 +8,21 @@ import { TOrder } from "../../@types/order";
 
 // components
 import OrderItemItem from "./OrderItemItem";
+import { useNavigate } from "react-router-dom";
 
 // component props type
 type OrderItemProps = { order: TOrder };
 
 function OrderItem({ order }: OrderItemProps) {
+  const navigate = useNavigate();
   return (
     <>
       <TableRow>
         <TableCell rowSpan={order.products.length + 1}>
-          <Tooltip title={order._id}>
+          <Tooltip
+            title={"Click to View"}
+            onClick={() => navigate(`/orders/${order._id}`)}
+          >
             <Chip
               label={`#${order._id}`}
               sx={{
