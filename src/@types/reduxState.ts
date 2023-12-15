@@ -5,6 +5,7 @@ import { TCategory } from "./category";
 import { TOrder } from "./order";
 import { TPermission } from "./permission";
 import { TProduct } from "./product";
+import { TSetting } from "./setting";
 import { TSize } from "./size";
 import { TUser } from "./user";
 
@@ -100,6 +101,12 @@ export type UserStates = {
 
 export type PermissionStates = {
   data: TPermission[];
+  isLoading: boolean;
+  error: string | null;
+};
+
+export type SettingStates = {
+  data: TSetting | null;
   isLoading: boolean;
   error: string | null;
 };

@@ -3,6 +3,7 @@ import React from "react";
 // MUI
 import {
   AppBar,
+  Avatar,
   Box,
   Divider,
   IconButton,
@@ -24,6 +25,8 @@ import { useThemeContext } from "../../../context/ThemeContext";
 
 // utils
 import { ADMIN_SIDEBAR_WIDTH } from "../../../utils/constants";
+import { useSelector } from "react-redux";
+import { AppState } from "../../../redux/store";
 
 // component props type
 type TopBarProps = {
@@ -32,6 +35,8 @@ type TopBarProps = {
 
 function TopBar({ handleSideBarOpen }: TopBarProps) {
   const { theme } = useThemeContext();
+
+  const setting = useSelector((state: AppState) => state.setting.data);
   return (
     <AppBar
       sx={{
@@ -79,11 +84,9 @@ function TopBar({ handleSideBarOpen }: TopBarProps) {
               height: 44,
             }}
           >
-            <img
-              width={24}
-              src={"https://tailwindui.com/img/flags/flag-united-states.svg"}
-              alt={"flag"}
-            />
+            <Avatar sx={{ width: 20, height: 20, padding: 2 }}>
+              {setting?.defaultCurrency}
+            </Avatar>
           </IconButton>
 
           <NotificationsPopover />

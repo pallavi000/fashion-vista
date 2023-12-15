@@ -8,6 +8,15 @@ export type ThemeContextStates = {
   onThemeModeChange: (mode: ThemeMode) => void;
 };
 
+export type TThemeInputs = {
+  primaryColor?: string;
+  secondaryColor?: string;
+  infoColor?: string;
+  warningColor?: string;
+  successColor?: string;
+  errorColor?: string;
+};
+
 export type ColorVariant =
   | "primary"
   | "info"

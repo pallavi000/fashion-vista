@@ -237,7 +237,7 @@ export const changePassword = createAsyncThunk(
   "changePassword",
   async (data: TUpdatePasswordInput) => {
     try {
-      const result = await axiosInstance.post("/auth/change-password", data);
+      const result = await axiosInstance.put("/auth/change-password", data);
       showCustomToastr("Password has been updated.", "success");
       return result.data;
     } catch (e) {

@@ -24,10 +24,10 @@ export type TPermissionResource =
   | "SIZES"
   | "PERMISSIONS"
   | "ORDERS"
-  | "BANNERS";
+  | "BANNERS"
+  | "SETTINGS"
+  | "DASHBOARD";
 
 export type TPermissionAction = "DELETE" | "UPDATE" | "READ" | "CREATE";
 
-export type TUserPermission =
-  | `${TPermissionResource}_${TPermissionAction}`
-  | "DASHBOARD_READ";
+export type TUserPermission = `${TPermissionResource}_${TPermissionAction}`;

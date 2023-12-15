@@ -21,6 +21,7 @@ import categoryReducer from "./reducers/categoryReducer";
 import orderReducer from "./reducers/orderReducer";
 import addressReducer from "./reducers/addressReducer";
 import bannerReducer from "./reducers/bannerReducer";
+import settingReducer from "./reducers/settingReducer";
 
 // Admin Reducers
 import adminUserReducer from "./reducers/admin/adminUserReducer";
@@ -41,6 +42,7 @@ const store = configureStore({
     auth: authReducer,
     cart: cartReducer,
     orders: orderReducer,
+    setting: settingReducer,
     addresses: addressReducer,
     adminUsers: adminUserReducer,
     adminProducts: adminProductReducer,

@@ -22,11 +22,12 @@ import AppLayout from "../components/layout/AppLayout";
 function AppRouter() {
   // Auth States
   const auth = useSelector((state: AppState) => state.auth);
+  const websiteSetting = useSelector((state: AppState) => state.setting);
   const { access_token, user } = auth;
 
   // we fetch current user from api based on access_token else app is ready almost instantly
   if (access_token && !user) return <AppLoading />;
-
+  if (!websiteSetting.data && websiteSetting.isLoading) return <AppLoading />;
   // layout for our app
   const Layout =
     user?.role && user?.role === "ADMIN" ? AdminDashboardLayout : AppLayout;

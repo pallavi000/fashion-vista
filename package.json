@@ -23,9 +23,11 @@
     "axios": "^1.5.0",
     "cors": "^2.8.5",
     "jwt-decode": "^3.1.2",
+    "lodash": "^4.17.21",
     "msw": "^1.3.2",
     "notistack": "^3.0.1",
     "react": "^18.2.0",
+    "react-color": "^2.19.3",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.46.2",
     "react-redux": "^8.1.2",
@@ -73,6 +75,8 @@
   },
   "devDependencies": {
     "@types/jest": "^29.5.10",
+    "@types/lodash": "^4.14.202",
+    "@types/react-color": "^3.0.10",
     "@types/react-slick": "^0.23.12",
     "jest": "^27.5.1"
   }

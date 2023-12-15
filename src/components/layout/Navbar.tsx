@@ -21,6 +21,7 @@ import {
   Tooltip,
   Stack,
   Fab,
+  useTheme,
 } from "@mui/material";
 
 // icons
@@ -33,8 +34,6 @@ import {
   ShoppingBagOutlined,
 } from "@mui/icons-material";
 import SearchIcon from "@mui/icons-material/Search";
-import StoreIcon from "@mui/icons-material/Store";
-import NavigationIcon from "@mui/icons-material/KeyboardArrowUp";
 
 // types
 import { TUser } from "../../@types/user";
@@ -56,6 +55,7 @@ import MobileNavbarDrawer from "./MobileNavbarDrawer";
 export default function Navbar() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const theme = useTheme();
 
   // user profile icon click popover state
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -73,6 +73,8 @@ export default function Navbar() {
 
   // categories
   const categories = useSelector((state: AppState) => state.categories.data);
+
+  const setting = useSelector((state: AppState) => state.setting.data);
 
   // fetch categories
   React.useEffect(() => {
@@ -143,10 +145,26 @@ export default function Navbar() {
               to="/"
               style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
             >
-              <StoreIcon fontSize={"large"} color="primary" />
-              <Typography variant="h6" color={"primary"}>
-                हाम्रो-Closet
-              </Typography>
+              <Avatar
+                alt={setting?.websiteName}
+                src={
+                  theme.palette.mode === "dark"
+                    ? setting?.logoDarkUrl
+                    : setting?.logoUrl
+                }
+                variant={"square"}
+                sx={{ width: 48, height: 48 }}
+              />
+              <Box>
+                <Typography variant="h6" color={"primary"}>
+                  {setting?.websiteName}
+                </Typography>
+                {setting?.websiteTagline ? (
+                  <Typography variant="caption">
+                    {setting?.websiteTagline}
+                  </Typography>
+                ) : null}
+              </Box>
             </Link>
             {categories.slice(0, 5).map((category) => {
               return (

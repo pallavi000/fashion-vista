@@ -25,6 +25,7 @@ import {
   Store,
   DeveloperMode,
   Straighten,
+  Settings,
 } from "@mui/icons-material";
 
 // components
@@ -90,6 +91,12 @@ const sidebarItems: SidebarItem[] = [
     icon: <Money />,
     permission: "ORDERS_READ",
   },
+  {
+    title: "Settings",
+    path: "/admin/settings",
+    icon: <Settings />,
+    permission: "SETTINGS_READ",
+  },
 ];
 
 // component props type
@@ -103,6 +110,7 @@ function SideBar({ isOpen, handleClose }: SideBarProps) {
 
   // auth user state
   const user = useSelector((state: AppState) => state.auth.user);
+  const setting = useSelector((state: AppState) => state.setting.data);
 
   // sidebar content
   const renderContent = (
@@ -125,10 +133,24 @@ function SideBar({ isOpen, handleClose }: SideBarProps) {
           gap: "0.5rem",
         }}
       >
-        <Store fontSize={"large"} color="primary" />
-        <Typography variant="h6" color={"primary"}>
-          Logo
-        </Typography>
+        <Avatar
+          alt={setting?.websiteName}
+          src={
+            theme.palette.mode === "dark"
+              ? setting?.logoDarkUrl
+              : setting?.logoUrl
+          }
+          variant={"square"}
+          sx={{ width: 48, height: 48 }}
+        />
+        <Box>
+          <Typography variant="h6" color={"primary"}>
+            {setting?.websiteName}
+          </Typography>
+          {setting?.websiteTagline ? (
+            <Typography variant="caption">{setting?.websiteTagline}</Typography>
+          ) : null}
+        </Box>
       </Box>
 
       <Box sx={{ mb: 3, mx: 2.5 }}>

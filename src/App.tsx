@@ -14,17 +14,34 @@ import ScrollToTopOnNavigation from "./components/ScrollToTopOnNavigation";
 import { getCartItems } from "./redux/reducers/cartReducer";
 import SettingsDrawer from "./components/SettingsDrawer";
 import ScrollToTopButton from "./components/ScrollToTopButton";
+import { getWebsiteSetting } from "./redux/reducers/settingReducer";
 
 const App = () => {
   // App Dispatch
   const dispatch = useAppDispatch();
 
   // Auth States
-  const { access_token, user, cart } = useSelector((state: AppState) => ({
-    access_token: state.auth.access_token,
-    user: state.auth.user,
-    cart: state.cart.items,
-  }));
+  const { access_token, user, cart, setting } = useSelector(
+    (state: AppState) => ({
+      access_token: state.auth.access_token,
+      user: state.auth.user,
+      cart: state.cart.items,
+      setting: state.setting.data,
+    })
+  );
+
+  useEffect(() => {
+    dispatch(getWebsiteSetting());
+  }, []);
+
+  useEffect(() => {
+    if (setting?.websiteName) {
+      document.title = setting.websiteName;
+    }
+    return () => {
+      document.title = "Ecommerce";
+    };
+  }, [setting]);
 
   // Get current user
   useEffect(() => {

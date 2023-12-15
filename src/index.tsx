@@ -13,6 +13,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import ThemeContextProvider from "./context/ThemeContext";
 import ToastrProvider from "./context/ToastrProvider";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import CustomizeThemeColorContext from "./context/CustomizeThemeColorContext";
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);
@@ -21,11 +22,13 @@ root.render(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <ThemeContextProvider>
-          <GoogleOAuthProvider clientId="636134274529-2qocgmf3ug0qn5pdt3buo4ucd3vlej8v.apps.googleusercontent.com">
-            <ToastrProvider>
-              <App />
-            </ToastrProvider>
-          </GoogleOAuthProvider>
+          <CustomizeThemeColorContext>
+            <GoogleOAuthProvider clientId="636134274529-2qocgmf3ug0qn5pdt3buo4ucd3vlej8v.apps.googleusercontent.com">
+              <ToastrProvider>
+                <App />
+              </ToastrProvider>
+            </GoogleOAuthProvider>
+          </CustomizeThemeColorContext>
         </ThemeContextProvider>
       </PersistGate>
     </Provider>

@@ -8,7 +8,8 @@ export type SidebarTitle =
   | "Orders"
   | "Sizes"
   | "Permissions"
-  | "Banners";
+  | "Banners"
+  | "Settings";
 
 export type SidebarPath =
   | "/admin/dashboard"
@@ -18,7 +19,8 @@ export type SidebarPath =
   | "/admin/orders"
   | "/admin/sizes"
   | "/admin/permissions"
-  | "/admin/banners";
+  | "/admin/banners"
+  | "/admin/settings";
 
 export type SidebarItem = {
   title: SidebarTitle;
