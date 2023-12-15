@@ -6,6 +6,7 @@ import { Box, Link, Stack, Typography } from "@mui/material";
 // types
 import { TBlogPostNews } from "../../../@types/dashboard";
 
+// component props type
 type BlogpostCardProps = { news: TBlogPostNews };
 
 function BlogpostCard({ news }: BlogpostCardProps) {

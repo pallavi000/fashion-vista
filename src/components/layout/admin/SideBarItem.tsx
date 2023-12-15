@@ -3,9 +3,14 @@ import { NavLink } from "react-router-dom";
 
 // MUI
 import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+
+//types
 import { SidebarItem } from "../../../@types/sidebar";
+
+//hooks
 import usePermission from "../../../hooks/userPermission";
 
+//component props type
 type SideBarItemProps = {
   item: SidebarItem;
 };

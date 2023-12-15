@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // redux
 import { useSelector } from "react-redux";
-import { AppState, useAppDispatch } from "../redux/store";
+import { AppState } from "../redux/store";
 
 // MUI
 import {

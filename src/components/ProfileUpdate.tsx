@@ -2,17 +2,23 @@ import * as React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-// redux
 
+//mui
+import { Box } from "@mui/material";
+
+// redux
+import { useSelector } from "react-redux";
 import { AppState, useAppDispatch } from "../redux/store";
-import { Box, Button } from "@mui/material";
 
 // types
-import { TUser, UpdateProfileInputs } from "../@types/user";
+import { UpdateProfileInputs } from "../@types/user";
+
+//components
 import UpdateProfileForm from "./UpdateProfileForm";
-import { updateProfile } from "../redux/reducers/authReducer";
 import LoadingButton from "./LoadingButton";
-import { useSelector } from "react-redux";
+
+//reducers
+import { updateProfile } from "../redux/reducers/authReducer";
 
 // yup validation shchema
 const validationSchema = yup.object().shape({

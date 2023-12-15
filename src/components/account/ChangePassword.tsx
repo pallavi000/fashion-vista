@@ -15,9 +15,15 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { AppState, useAppDispatch } from "../../redux/store";
-import { TUpdatePasswordInput } from "../../@types/user";
 import { useSelector } from "react-redux";
+
+//redux state
+import { AppState, useAppDispatch } from "../../redux/store";
+
+//types
+import { TUpdatePasswordInput } from "../../@types/user";
+
+//reducers
 import { changePassword } from "../../redux/reducers/authReducer";
 
 // yup validation schema

@@ -1,5 +1,7 @@
+//mui
 import { Box, Grid, Typography } from "@mui/material";
-import React from "react";
+
+//components
 import Brand from "../Brand";
 
 // images

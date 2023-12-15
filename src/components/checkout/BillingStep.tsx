@@ -1,6 +1,10 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+
+//redux
 import { AppState, useAppDispatch } from "../../redux/store";
+
+//reducers
 import { fetchUserAddress } from "../../redux/reducers/addressReducer";
 
 // MUI

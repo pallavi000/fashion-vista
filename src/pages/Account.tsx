@@ -17,7 +17,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AddressIcon from "@mui/icons-material/LocationOn";
 import PasswordIcon from "@mui/icons-material/Password";
 
-// types
+// components
 import UserProfile from "../components/account/UserProfile";
 import Orders from "../components/account/Orders";
 import Address from "../components/account/Address";
@@ -35,6 +35,7 @@ const sidebars = [
 ];
 
 type TPage = "orders" | "address" | "profile" | "change-password";
+
 function Account() {
   const navigate = useNavigate();
 

@@ -1,9 +1,13 @@
 import React from "react";
-import PaymentForm from "../PaymentForm";
 
 //MUI
 import { Box } from "@mui/material";
+
+//types
 import { TPaymentMethodData } from "../../@types/order";
+
+//components
+import PaymentForm from "../PaymentForm";
 
 type PaymentStepProps = {
   handleSubmit: (data: TPaymentMethodData) => Promise<void>;

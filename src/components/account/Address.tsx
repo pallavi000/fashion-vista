@@ -15,16 +15,24 @@ import {
 //icons
 import AddIcon from "@mui/icons-material/Add";
 import CheckIcon from "@mui/icons-material/CheckCircle";
+
+//component
 import AddressForm from "../AddressForm";
+import CustomModal from "../CustomModal";
+
+//types
+import { TAddress } from "../../@types/address";
+
+//redux-state
 import { useSelector } from "react-redux";
 import { AppState, useAppDispatch } from "../../redux/store";
+
+//reducers
 import {
   deleteAddress,
   fetchUserAddress,
   makeAddressDefault,
 } from "../../redux/reducers/addressReducer";
-import CustomModal from "../CustomModal";
-import { TAddress } from "../../@types/address";
 
 function Address() {
   const dispatch = useAppDispatch();

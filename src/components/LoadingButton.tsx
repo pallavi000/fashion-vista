@@ -1,8 +1,12 @@
 import React from "react";
+
 // MUI
 import { Button, CircularProgress } from "@mui/material";
+
+//type
 import { ColorVariant } from "../@types/theme";
 
+//component prop types
 type LoadingButtonProps = {
   isLoading: boolean;
   color: ColorVariant;

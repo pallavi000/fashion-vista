@@ -45,6 +45,8 @@ import AdminProductForm from "../../components/admin/products/AdminProductForm";
 
 // types
 import { TProduct } from "../../@types/product";
+
+//helpers
 import withPermission from "../../context/withPermission";
 import usePermission from "../../hooks/userPermission";
 

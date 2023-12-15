@@ -14,6 +14,8 @@ import ScrollToTopOnNavigation from "./components/ScrollToTopOnNavigation";
 import { getCartItems } from "./redux/reducers/cartReducer";
 import SettingsDrawer from "./components/SettingsDrawer";
 import ScrollToTopButton from "./components/ScrollToTopButton";
+
+//reducers
 import { getWebsiteSetting } from "./redux/reducers/settingReducer";
 
 const App = () => {

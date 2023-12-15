@@ -1,13 +1,15 @@
 import merge from "lodash/merge";
 import { useMemo } from "react";
-// @mui
+
+// mui
 import { ThemeProvider, createTheme, useTheme } from "@mui/material";
+
+//redux
 import { useSelector } from "react-redux";
 import { AppState } from "../redux/store";
 //
 
-// ----------------------------------------------------------------------
-
+//component props type
 type Props = {
   children: React.ReactNode;
 };

@@ -1,6 +1,10 @@
-import { Avatar, Box, Grid, Paper, Typography } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+
+//mui
+import { Avatar, Box, Grid, Paper, Typography } from "@mui/material";
+
+//redux
 import { AppState } from "../../redux/store";
 import { useSelector } from "react-redux";
 

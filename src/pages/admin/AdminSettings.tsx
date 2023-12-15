@@ -1,3 +1,9 @@
+import React, { useEffect } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+//mui
 import {
   Box,
   Container,
@@ -7,17 +13,23 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import React, { useEffect } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+
+//redux
+import { useSelector } from "react-redux";
+import { AppState, useAppDispatch } from "../../redux/store";
+
+//types
 import { TSettingInputs } from "../../@types/setting";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
+
+//components
 import GeneralSetting from "../../components/admin/settings/GeneralSetting";
 import BrandingSetting from "../../components/admin/settings/BrandingSetting";
 import LoadingButton from "../../components/LoadingButton";
-import { useSelector } from "react-redux";
-import { AppState, useAppDispatch } from "../../redux/store";
+
+//reducers
 import { updateWebsietSetting } from "../../redux/reducers/settingReducer";
+
+//helpers
 import usePermission from "../../hooks/userPermission";
 
 const TABS = [

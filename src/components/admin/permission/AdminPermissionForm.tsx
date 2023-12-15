@@ -1,3 +1,9 @@
+import React, { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+//mui
 import {
   Box,
   Chip,
@@ -11,18 +17,22 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+
+//redux
 import { useAppDispatch } from "../../../redux/store";
-import { Controller, useForm } from "react-hook-form";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
+//types
 import { TPermission, TPermissionInput } from "../../../@types/permission";
+
+//components
 import LoadingButton from "../../LoadingButton";
+
+//reducers
 import {
   addNewPermission,
   updatePermission,
 } from "../../../redux/reducers/admin/adminPermissionReducer";
 
+//constant
 const PERMISSION_ACTIONS = ["READ", "CREATE", "UPDATE", "DELETE"];
 
 // yup validation shchema
@@ -32,10 +42,12 @@ const validationSchema = yup.object().shape({
   description: yup.string().optional(),
 });
 
+// component props type
 type AdminPermissionFormProps = {
   handleClose: () => void;
   permission?: TPermission | null;
 };
+
 function AdminPermissionForm({
   handleClose,
   permission = null,

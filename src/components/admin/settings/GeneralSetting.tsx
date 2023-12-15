@@ -1,6 +1,10 @@
-import { Box, Stack, TextField } from "@mui/material";
 import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
+
+//mui
+import { Box, Stack, TextField } from "@mui/material";
+
+//types
 import { TSettingInputs } from "../../../@types/setting";
 
 function GeneralSetting({ isDisabled = false }: { isDisabled?: boolean }) {

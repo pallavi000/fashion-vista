@@ -5,11 +5,11 @@ import { AxiosError } from "axios";
 import axiosInstance from "../../../utils/AxiosInstance";
 
 // types
+import { SizeInputs, TSize } from "../../../@types/size";
+import { SizesState } from "../../../@types/reduxState";
 
 // helpers
 import { showApiErrorToastr, showCustomToastr } from "../../../utils/helper";
-import { SizeInputs, TSize } from "../../../@types/size";
-import { SizesState } from "../../../@types/reduxState";
 
 // initial states
 const initialState: SizesState = {

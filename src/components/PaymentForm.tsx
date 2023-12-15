@@ -1,8 +1,8 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+
 // redux
 import { useSelector } from "react-redux";
-import { AppState, useAppDispatch } from "../redux/store";
+import { AppState } from "../redux/store";
 
 // MUI
 import { Button, Card } from "@mui/material";
@@ -16,16 +16,9 @@ import {
   PaymentElement,
 } from "@stripe/react-stripe-js";
 
-// reducers
-import { emptyCart } from "../redux/reducers/cartReducer";
-import { addOrder } from "../redux/reducers/orderReducer";
-
 // types
-import { TOrder, TOrderInput, TPaymentMethodData } from "../@types/order";
+import { TPaymentMethodData } from "../@types/order";
 import { CartState } from "../@types/reduxState";
-
-// helpers
-import { getOrderDate, getOrderId } from "../utils/helper";
 
 // context
 import { useThemeContext } from "../context/ThemeContext";
@@ -71,9 +64,6 @@ function PaymentHandler({
   cart: CartState;
   handleSubmit: (data: TPaymentMethodData) => Promise<void>;
 }) {
-  // cart items
-  const { items } = cart;
-
   const isLoading = useSelector((state: AppState) => state.orders.isLoading);
 
   // stripe hooks

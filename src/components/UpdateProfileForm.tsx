@@ -1,15 +1,10 @@
 import React from "react";
+
+//redux
 import { Controller, useFormContext } from "react-hook-form";
 
 // MUI
-import {
-  FormControl,
-  FormHelperText,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from "@mui/material";
+import { TextField } from "@mui/material";
 
 // types
 import { UpdateProfileInputs } from "../@types/user";

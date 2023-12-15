@@ -1,6 +1,10 @@
 import { rest } from "msw";
 import { setupServer } from "msw/node";
+
+//types
 import { TCategoryInputs } from "../@types/category";
+
+//data
 import { categoryData } from "../test/testData/categoryData";
 
 export const categoriesHandlers = [

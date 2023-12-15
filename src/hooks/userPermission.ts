@@ -1,6 +1,8 @@
-// usePermission.ts
+// redux
 import { useSelector } from "react-redux";
 import { AppState } from "../redux/store";
+
+//types
 import { TUserPermission } from "../@types/permission";
 
 const usePermission = (requiredPermission: TUserPermission) => {

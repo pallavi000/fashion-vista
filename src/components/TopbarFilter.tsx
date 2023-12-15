@@ -12,10 +12,14 @@ import {
   Typography,
 } from "@mui/material";
 
-// icons
-import GridViewIcon from "@mui/icons-material/GridView";
+//redux
 import { useSelector } from "react-redux";
 import { AppState } from "../redux/store";
+
+// icons
+import GridViewIcon from "@mui/icons-material/GridView";
+
+//types
 import { TProductSortingOption } from "../@types/product";
 
 type TopbarFilterProps = {

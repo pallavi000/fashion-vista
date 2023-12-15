@@ -13,6 +13,8 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
+
+//components
 import CustomModal from "../CustomModal";
 import ProfileUpdate from "../ProfileUpdate";
 

@@ -1,9 +1,13 @@
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // types
 import { BannersState } from "../../@types/reduxState";
+
+//axios
 import axiosInstance from "../../utils/AxiosInstance";
 import { AxiosError } from "axios";
+
+//helpers
 import { showApiErrorToastr } from "../../utils/helper";
 
 // initail state

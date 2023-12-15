@@ -1,13 +1,8 @@
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-
-// axios
-import axiosInstance from "../../utils/AxiosInstance";
-import { AxiosError } from "axios";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 // types
 import { CategoryState } from "../../@types/reduxState";
 import { TCategory } from "../../@types/category";
-import { TProduct } from "../../@types/product";
 
 // initial states
 const initialState: CategoryState = {

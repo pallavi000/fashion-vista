@@ -5,16 +5,11 @@ import { AxiosError } from "axios";
 import axiosInstance from "../../../utils/AxiosInstance";
 
 // types
+import { PermissionStates } from "../../../@types/reduxState";
+import { IPermissionInputData, TPermission } from "../../../@types/permission";
 
 // helpers
 import { showApiErrorToastr, showCustomToastr } from "../../../utils/helper";
-import { SizeInputs, TSize } from "../../../@types/size";
-import { PermissionStates } from "../../../@types/reduxState";
-import {
-  IPermissionInputData,
-  TPermission,
-  TPermissionInput,
-} from "../../../@types/permission";
 
 // initial states
 const initialState: PermissionStates = {

@@ -1,3 +1,8 @@
+import { ChangeEvent, useMemo, useState } from "react";
+import { ChromePicker, ColorResult } from "react-color";
+import { useFormContext } from "react-hook-form";
+import { useSelector } from "react-redux";
+//mui
 import {
   Accordion,
   AccordionDetails,
@@ -16,14 +21,16 @@ import {
   Typography,
   styled,
 } from "@mui/material";
-import { useSelector } from "react-redux";
-import { AppState } from "../../../redux/store";
-import { ChromePicker, ColorResult } from "react-color";
-import { useFormContext } from "react-hook-form";
-import { TSetting, TSettingInputs } from "../../../@types/setting";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { ChangeEvent, useMemo, useState } from "react";
+
+//redux
+import { AppState } from "../../../redux/store";
+
+//types
+import { TSettingInputs } from "../../../@types/setting";
+
+//utils
 import { showCustomToastr } from "../../../utils/helper";
 
 const colorItems: { title: string; field: any }[] = [

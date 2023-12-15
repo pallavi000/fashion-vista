@@ -20,6 +20,7 @@ import {
 // components
 import DashboardCardWidget from "../../components/admin/dashboard/DashboardCardWidget";
 import BlogpostCard from "../../components/admin/dashboard/BlogpostCard";
+import VisitorBySiteCard from "../../components/admin/dashboard/VisitorBySiteCard";
 
 // icons
 import {
@@ -40,7 +41,8 @@ import {
   TDashboardMainCard,
   TVistorsBySite,
 } from "../../@types/dashboard";
-import VisitorBySiteCard from "../../components/admin/dashboard/VisitorBySiteCard";
+
+//helper
 import withPermission from "../../context/withPermission";
 
 // data

@@ -1,9 +1,10 @@
 import { RenderOptions, render } from "@testing-library/react";
 import { PropsWithChildren } from "react";
+import { BrowserRouter as Router } from "react-router-dom";
+
+//redux
 import { Provider, useSelector } from "react-redux";
 import store from "../redux/store";
-import { BrowserRouter as Router } from "react-router-dom";
-// Import BrowserRouter
 
 const customRender = (
   ui: React.ReactElement,

@@ -1,14 +1,17 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { persistReducer } from "redux-persist";
-import { cartPersistConfig } from "../../utils/reduxPersistConfig";
 
 // types
 import { CartState } from "../../@types/reduxState";
 import { TCart, TCartInput } from "../../@types/cart";
-import { TProduct } from "../../@types/product";
+
+//axios
 import axiosInstance from "../../utils/AxiosInstance";
-import { showApiErrorToastr, showCustomToastr } from "../../utils/helper";
 import { AxiosError } from "axios";
+
+//helpers
+import { showApiErrorToastr, showCustomToastr } from "../../utils/helper";
+import { cartPersistConfig } from "../../utils/reduxPersistConfig";
 
 //get Total amount of cartItems
 function calculateTotalPrice(items: TCart[]) {

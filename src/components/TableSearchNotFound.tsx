@@ -1,5 +1,7 @@
-import { TableBody, TableCell, TableRow, Typography } from "@mui/material";
 import React from "react";
+
+//mui
+import { TableBody, TableCell, TableRow, Typography } from "@mui/material";
 
 function TableSearchNotFound({ query }: { query: string }) {
   return (

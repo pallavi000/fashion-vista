@@ -5,22 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { AppState, useAppDispatch } from "../redux/store";
 
 //MUI
-import {
-  Box,
-  Button,
-  Container,
-  FormControl,
-  Grid,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Typography,
-  ButtonGroup,
-} from "@mui/material";
-
-// icons
-import GridViewIcon from "@mui/icons-material/GridView";
-import { ArrowLeft, ArrowRight } from "@mui/icons-material";
+import { Box, Container, Grid, SelectChangeEvent } from "@mui/material";
 
 // components
 import Product from "../components/Product";
@@ -33,6 +18,8 @@ import BannerContainer from "../components/BannerContainer";
 import { fetchSearchProducts } from "../redux/reducers/productsReducer";
 import CustomPagination from "../components/CustomPagination";
 import TopbarFilter from "../components/TopbarFilter";
+
+//types
 import { TProductSortingOption } from "../@types/product";
 
 function SearchResult() {

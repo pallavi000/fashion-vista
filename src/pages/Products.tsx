@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState } from "react";
+
 // redux
 import { useSelector } from "react-redux";
 import { AppState, useAppDispatch } from "../redux/store";
@@ -21,8 +21,6 @@ import TopbarFilter from "../components/TopbarFilter";
 import { TProductSortingOption } from "../@types/product";
 
 function Products() {
-  const { id } = useParams();
-
   // app dispatch
   const dispatch = useAppDispatch();
 

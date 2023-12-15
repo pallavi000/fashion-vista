@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import { TPermission } from "../@types/permission";
+
 import {
   Box,
-  Button,
   Checkbox,
   Divider,
   FormControlLabel,
-  FormGroup,
   Table,
   TableBody,
   TableCell,
@@ -14,8 +12,14 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+
+//component
 import LoadingButton from "./LoadingButton";
 
+//types
+import { TPermission } from "../@types/permission";
+
+//component props type
 type PermissionsPickerModalProps = {
   permissions: TPermission[];
   handleSubmit: (permissions: string[]) => void;

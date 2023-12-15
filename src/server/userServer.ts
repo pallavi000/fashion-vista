@@ -1,6 +1,10 @@
 import { rest } from "msw";
 import { setupServer } from "msw/node";
+
+//data
 import { userData } from "../test/testData/userData";
+
+//types
 import { RegisterInputs } from "../@types/user";
 
 export const handlers = [

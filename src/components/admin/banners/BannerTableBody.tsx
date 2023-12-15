@@ -1,9 +1,7 @@
 // MUI
 import {
   Avatar,
-  Checkbox,
   IconButton,
-  Stack,
   TableCell,
   TableRow,
   Typography,
@@ -14,7 +12,6 @@ import {
 import { MoreVert } from "@mui/icons-material";
 
 // types
-
 import { TBanner } from "../../../@types/banner";
 
 // component props type

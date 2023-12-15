@@ -2,22 +2,23 @@ import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+
+//redux
 import { useSelector } from "react-redux";
-// redux
 import { AppState, useAppDispatch } from "../../redux/store";
 
 // MUI
-import { Box, Button, Container, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 
 // components
 import UserForm from "../../components/UserForm";
+import LoadingButton from "../../components/LoadingButton";
 
 // types
-import { RegisterInputs, UpdateUserInputs } from "../../@types/user";
+import { UpdateUserInputs } from "../../@types/user";
 
 // reducers
 import { updateUser } from "../../redux/reducers/admin/adminUserReducer";
-import LoadingButton from "../../components/LoadingButton";
 
 // yup validation schema
 const validationSchema = yup.object().shape({

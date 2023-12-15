@@ -8,8 +8,6 @@ import {
   Button,
   Card,
   Container,
-  Grid,
-  InputAdornment,
   Stack,
   Table,
   TableBody,
@@ -19,7 +17,6 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  TextField,
   Typography,
 } from "@mui/material";
 
@@ -38,7 +35,10 @@ import {
   fetchAdminBanners,
 } from "../../redux/reducers/admin/adminBannerReducer";
 
+//types
 import { TBanner } from "../../@types/banner";
+
+//helpers
 import withPermission from "../../context/withPermission";
 import usePermission from "../../hooks/userPermission";
 

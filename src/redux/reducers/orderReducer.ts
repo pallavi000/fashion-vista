@@ -1,12 +1,14 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { persistReducer } from "redux-persist";
-import { orderPersistConfig } from "../../utils/reduxPersistConfig";
 
 // types
 import { OrderState } from "../../@types/reduxState";
 import { TOrder, TOrderData } from "../../@types/order";
+
+//axios
 import axiosInstance from "../../utils/AxiosInstance";
 import { AxiosError } from "axios";
+
+//hwlpers
 import { showApiErrorToastr } from "../../utils/helper";
 
 // initail state

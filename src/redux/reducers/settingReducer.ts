@@ -3,9 +3,12 @@ import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 // types
 import { SettingStates } from "../../@types/reduxState";
 import { TSetting, TSettingInputs } from "../../@types/setting";
-import { AxiosError } from "axios";
 
+//axios
+import { AxiosError } from "axios";
 import axiosInstance from "../../utils/AxiosInstance";
+
+//helpers
 import { showApiErrorToastr } from "../../utils/helper";
 
 // initial states

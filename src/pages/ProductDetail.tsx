@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+
 // redux
 import { useSelector } from "react-redux";
 import { AppState, useAppDispatch } from "../redux/store";
@@ -27,7 +28,7 @@ import CheckIcon from "@mui/icons-material/CheckCircle";
 // types
 import { TProduct } from "../@types/product";
 import { ProductState } from "../@types/reduxState";
-import { TCart, TCartInput } from "../@types/cart";
+import { TCartInput } from "../@types/cart";
 
 // components
 import Product from "../components/Product";

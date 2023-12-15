@@ -4,14 +4,19 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 // MUI
-import { Button, Box, Grid, TextField } from "@mui/material";
+import { Box, Grid, TextField } from "@mui/material";
 
-// types
-import { UserAddressInputs } from "../@types/user";
-import { useDispatch, useSelector } from "react-redux";
+// redux
+import { useSelector } from "react-redux";
 import { AppState, useAppDispatch } from "../redux/store";
+
+//types
 import { TAddress, TAddressInput, TAddressInputData } from "../@types/address";
+
+//reducers
 import { addNewAddress, updateAddress } from "../redux/reducers/addressReducer";
+
+//component
 import LoadingButton from "./LoadingButton";
 
 // yup validation schema

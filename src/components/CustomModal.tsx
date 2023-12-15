@@ -12,6 +12,7 @@ import {
 //icons
 import CloseIcon from "@mui/icons-material/Close";
 
+//component props type
 type TCustomModalProps = {
   modalTitle: string;
   isOpen: boolean;

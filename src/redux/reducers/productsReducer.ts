@@ -2,12 +2,11 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // types
 import { ProductsState } from "../../@types/reduxState";
+import { TProductSortingOption } from "../../@types/product";
 
 // axios
 import { AxiosError } from "axios";
 import axiosInstance from "../../utils/AxiosInstance";
-import { Hail, NoiseControlOffTwoTone } from "@mui/icons-material";
-import { TProductSortingOption } from "../../@types/product";
 
 // initial state
 const initialState: ProductsState = {

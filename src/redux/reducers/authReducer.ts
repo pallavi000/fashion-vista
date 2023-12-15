@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { persistReducer } from "redux-persist";
-import { authPersistConfig } from "../../utils/reduxPersistConfig";
 
 // App state
 import { AppState } from "../store";
@@ -9,6 +8,10 @@ import { AppState } from "../store";
 import { AxiosError } from "axios";
 import axiosInstance from "../../utils/AxiosInstance";
 
+// helper
+import { showApiErrorToastr, showCustomToastr } from "../../utils/helper";
+import { authPersistConfig } from "../../utils/reduxPersistConfig";
+
 // types
 import { AuthState } from "../../@types/reduxState";
 import {
@@ -16,9 +19,6 @@ import {
   TUpdatePasswordInput,
   UpdateProfileInputs,
 } from "../../@types/user";
-
-// helper
-import { showApiErrorToastr, showCustomToastr } from "../../utils/helper";
 
 // initial states
 const initialState: AuthState = {

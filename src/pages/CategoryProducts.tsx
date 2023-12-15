@@ -1,23 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+
 // redux
 import { useSelector } from "react-redux";
 import { AppState, useAppDispatch } from "../redux/store";
 
 // MUI
-import {
-  Box,
-  Container,
-  FormControl,
-  Grid,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Typography,
-} from "@mui/material";
+import { Box, Container, Grid, SelectChangeEvent } from "@mui/material";
 
 // reducers
 import { setCategory } from "../redux/reducers/categoryReducer";
+import { fetchProducts } from "../redux/reducers/productsReducer";
 
 // components
 import Product from "../components/Product";
@@ -26,13 +19,10 @@ import SidebarFilter from "../components/SidebarFilter";
 import SkeletonProductCard from "../components/skeleton/SkeletonProductCard";
 import BannerContainer from "../components/BannerContainer";
 import CustomPagination from "../components/CustomPagination";
-
-// icons
-import GridViewIcon from "@mui/icons-material/GridView";
-
-import { fetchProducts } from "../redux/reducers/productsReducer";
-import { TProductSortingOption } from "../@types/product";
 import TopbarFilter from "../components/TopbarFilter";
+
+//types
+import { TProductSortingOption } from "../@types/product";
 
 function CategoryProducts() {
   const { id } = useParams();

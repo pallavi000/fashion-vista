@@ -20,10 +20,12 @@ import { Add } from "@mui/icons-material";
 import AdminCategoryCard from "../../components/admin/categories/AdminCategoryCard";
 import SkeletonCategoryCard from "../../components/skeleton/SkeletonCategoryCard";
 import CustomModal from "../../components/CustomModal";
+import CategoryForm from "../../components/admin/categories/CategoryForm";
 
 // reducers
 import { fetchAdminCategories } from "../../redux/reducers/admin/adminCategoryReducer";
-import CategoryForm from "../../components/admin/categories/CategoryForm";
+
+//helpers
 import withPermission from "../../context/withPermission";
 import usePermission from "../../hooks/userPermission";
 

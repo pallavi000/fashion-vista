@@ -9,11 +9,7 @@ import { AddressesState } from "../../@types/reduxState";
 
 // helpers
 import { showApiErrorToastr, showCustomToastr } from "../../utils/helper";
-import {
-  TAddress,
-  TAddressInput,
-  TAddressInputData,
-} from "../../@types/address";
+import { TAddress, TAddressInputData } from "../../@types/address";
 
 // initial states
 const initialState: AddressesState = {

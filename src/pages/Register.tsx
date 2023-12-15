@@ -16,7 +16,6 @@ import { AppState, useAppDispatch } from "../redux/store";
 import { Box, Card, Container, TextField, Typography } from "@mui/material";
 
 // components
-import UserForm from "../components/UserForm";
 import LoadingButton from "../components/LoadingButton";
 
 // reducers

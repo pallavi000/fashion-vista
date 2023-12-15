@@ -1,10 +1,13 @@
-import { Avatar, Box } from "@mui/material";
 import React from "react";
-import { useSelector } from "react-redux";
-import { AppState } from "../../redux/store";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+
+//mui
+import { Avatar, Box } from "@mui/material";
+//redux
+import { useSelector } from "react-redux";
+import { AppState } from "../../redux/store";
 
 function HomeBanner() {
   const { banners } = useSelector((state: AppState) => ({

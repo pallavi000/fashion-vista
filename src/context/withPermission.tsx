@@ -1,7 +1,13 @@
 import React from "react";
+
+//redux
 import { useSelector } from "react-redux";
 import { AppState } from "../redux/store";
+
+//types
 import { TUserPermission } from "../@types/permission";
+
+//components
 import NoPermission from "../components/NoPermission";
 
 const withPermission = (

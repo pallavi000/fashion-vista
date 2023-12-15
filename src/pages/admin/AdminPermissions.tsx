@@ -13,11 +13,8 @@ import {
   TableFooter,
   TablePagination,
   Typography,
-  Chip,
   TextField,
   InputAdornment,
-  Box,
-  Checkbox,
   Stack,
   Button,
   Divider,
@@ -25,18 +22,28 @@ import {
 
 // icons
 import { Add, Search } from "@mui/icons-material";
+
+//redux
 import { AppState, useAppDispatch } from "../../redux/store";
+import { useSelector } from "react-redux";
+
+//reducers
 import {
   deletePermission,
   fetchPermissions,
 } from "../../redux/reducers/admin/adminPermissionReducer";
-import { useSelector } from "react-redux";
+
+//components
 import PermissionTableBody from "../../components/admin/permission/PermissionTableBody";
-import { TPermission } from "../../@types/permission";
 import CustomModal from "../../components/CustomModal";
 import TableOptionPopover from "../../components/TableOptionPopover";
 import TableSearchNotFound from "../../components/TableSearchNotFound";
 import AdminPermissionForm from "../../components/admin/permission/AdminPermissionForm";
+
+//types
+import { TPermission } from "../../@types/permission";
+
+//helpers
 import withPermission from "../../context/withPermission";
 import usePermission from "../../hooks/userPermission";
 
@@ -59,7 +66,7 @@ function AdminPermissions() {
   >(null);
 
   // permissions states
-  const { permissions, isLoading } = useSelector((state: AppState) => ({
+  const { permissions } = useSelector((state: AppState) => ({
     permissions: state.adminPermissions.data,
     isLoading: state.adminPermissions.isLoading,
   }));

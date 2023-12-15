@@ -1,7 +1,4 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { AppState, useAppDispatch } from "../../redux/store";
-import { fetchUserAddress } from "../../redux/reducers/addressReducer";
 
 // MUI
 import {
@@ -15,6 +12,13 @@ import {
   Divider,
   Button,
 } from "@mui/material";
+
+//redux
+import { useSelector } from "react-redux";
+import { AppState, useAppDispatch } from "../../redux/store";
+
+//reducers
+import { fetchUserAddress } from "../../redux/reducers/addressReducer";
 
 // components
 import CustomModal from "../CustomModal";

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+
 // redux
 import { useSelector } from "react-redux";
 import { AppState, useAppDispatch } from "../redux/store";
@@ -15,7 +16,6 @@ import {
 } from "@mui/material";
 
 // components
-import PaymentForm from "../components/PaymentForm";
 import ShippingStep from "../components/checkout/ShippingStep";
 import BillingStep from "../components/checkout/BillingStep";
 import PaymentStep from "../components/checkout/PaymentStep";

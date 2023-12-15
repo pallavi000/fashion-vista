@@ -16,10 +16,8 @@ import {
   TableFooter,
   TablePagination,
   Typography,
-  Chip,
   TextField,
   InputAdornment,
-  Box,
   CardContent,
   Divider,
 } from "@mui/material";
@@ -29,9 +27,15 @@ import { Search } from "@mui/icons-material";
 
 // types
 import { TOrder } from "../../@types/order";
+
+//components
 import OrderTableBody from "../../components/admin/orders/OrderTableBody";
-import { getOrders } from "../../redux/reducers/orderReducer";
 import TableSearchNotFound from "../../components/TableSearchNotFound";
+
+//reducers
+import { getOrders } from "../../redux/reducers/orderReducer";
+
+//helpers
 import withPermission from "../../context/withPermission";
 
 function AdminOrders() {

@@ -1,8 +1,10 @@
 import React from "react";
 
+//mui
 import { Pagination, PaginationItem, Button } from "@mui/material";
 import { ArrowLeft, ArrowRight } from "@mui/icons-material";
 
+//component prop types
 type CustomPaginationProps = {
   currentPage: number;
   totalPages: number;

@@ -1,3 +1,8 @@
+import { Controller, useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+//mui
 import {
   Box,
   Chip,
@@ -12,17 +17,21 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useAppDispatch } from "../../../redux/store";
-import { Controller, useForm } from "react-hook-form";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import LoadingButton from "../../LoadingButton";
 
+//redux-store
+import { useAppDispatch } from "../../../redux/store";
+
+//types
 import { SizeInputs, TSize } from "../../../@types/size";
+
+//reducers
 import {
   addNewSize,
   updateAdminSize,
 } from "../../../redux/reducers/admin/adminSizeReducer";
+
+//components
+import LoadingButton from "../../LoadingButton";
 
 // yup validation shchema
 const validationSchema = yup.object().shape({

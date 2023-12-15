@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 // redux
 import { useSelector } from "react-redux";
 import { AppState } from "../../../redux/store";
@@ -8,7 +7,6 @@ import {
   Avatar,
   Box,
   Drawer,
-  IconButton,
   Link,
   List,
   Typography,
@@ -22,7 +20,6 @@ import {
   Dashboard,
   Money,
   ShoppingBag,
-  Store,
   DeveloperMode,
   Straighten,
   Settings,
@@ -39,7 +36,6 @@ import { useThemeContext } from "../../../context/ThemeContext";
 
 // utils
 import { ADMIN_SIDEBAR_WIDTH } from "../../../utils/constants";
-import usePermission from "../../../hooks/userPermission";
 
 // sidebar menus
 const sidebarItems: SidebarItem[] = [

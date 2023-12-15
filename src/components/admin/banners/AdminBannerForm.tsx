@@ -1,25 +1,28 @@
 import {
   Box,
-  Chip,
   FormControl,
   FormHelperText,
   Grid,
   InputLabel,
   MenuItem,
   Select,
-  Stack,
   TextField,
-  Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useAppDispatch } from "../../../redux/store";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+
+//redux-store
+import { useAppDispatch } from "../../../redux/store";
+
+//component
 import LoadingButton from "../../LoadingButton";
 
+//types
 import { BannerInputs, TBanner } from "../../../@types/banner";
 
+//reducers
 import {
   addNewBanner,
   updateAdminBanner,
@@ -32,10 +35,12 @@ const validationSchema = yup.object().shape({
   page: yup.string().required("page is required"),
 });
 
+// component props type
 type AdminBannerFormProps = {
   handleClose: () => void;
   banner?: TBanner | null;
 };
+
 function AdminBannerForm({ handleClose, banner = null }: AdminBannerFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useAppDispatch();

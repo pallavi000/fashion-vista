@@ -1,6 +1,10 @@
 import { rest } from "msw";
-import { productsData } from "../test/testData/productData";
 import { setupServer } from "msw/node";
+
+//data
+import { productsData } from "../test/testData/productData";
+
+//types
 import { TProduct, TProductInputs } from "../@types/product";
 
 export const productsHandlers = [

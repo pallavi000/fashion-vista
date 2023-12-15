@@ -2,9 +2,8 @@ import * as React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-// redux
-import { useSelector } from "react-redux";
-import { AppState, useAppDispatch } from "../../../redux/store";
+
+//mui
 import {
   Alert,
   Box,
@@ -16,21 +15,27 @@ import {
   Stack,
 } from "@mui/material";
 
+// redux
+import { useSelector } from "react-redux";
+import { AppState, useAppDispatch } from "../../../redux/store";
+
 // components
 import UserForm from "../../UserForm";
+import LoadingButton from "../../LoadingButton";
+import CustomModal from "../../CustomModal";
+import PermissionsPickerModal from "../../PermissionsPickerModal";
 
-// reucers
+// reducers
 import {
   addNewUser,
   updateUser,
 } from "../../../redux/reducers/admin/adminUserReducer";
+import { getCurrentUser } from "../../../redux/reducers/authReducer";
 
 // types
 import { RegisterInputs, TUser, UpdateUserInputs } from "../../../@types/user";
-import LoadingButton from "../../LoadingButton";
-import CustomModal from "../../CustomModal";
-import PermissionsPickerModal from "../../PermissionsPickerModal";
-import { getCurrentUser } from "../../../redux/reducers/authReducer";
+
+//hooks
 import usePermission from "../../../hooks/userPermission";
 
 // yup validation shchema
