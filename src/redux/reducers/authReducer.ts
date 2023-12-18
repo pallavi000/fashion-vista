@@ -16,7 +16,9 @@ import { authPersistConfig } from "../../utils/reduxPersistConfig";
 import { AuthState } from "../../@types/reduxState";
 import {
   RegisterInputs,
+  TAvatarInputs,
   TUpdatePasswordInput,
+  TUser,
   UpdateProfileInputs,
 } from "../../@types/user";
 
@@ -157,6 +159,28 @@ const authSlice = createSlice({
         error: action.error.message || "",
       };
     });
+    builder.addCase(updateAvatar.pending, (state, action) => {
+      return {
+        ...state,
+        isLoading: true,
+      };
+    });
+    builder.addCase(updateAvatar.fulfilled, (state, action) => {
+      const updatedUser = { ...state.user, avatar: action.payload } as TUser;
+      return {
+        ...state,
+        user: updatedUser,
+        isLoading: false,
+        error: null,
+      };
+    });
+    builder.addCase(updateAvatar.rejected, (state, action) => {
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error.message || "",
+      };
+    });
   },
 });
 
@@ -254,6 +278,17 @@ export const updateProfile = createAsyncThunk(
     try {
       const result = await axiosInstance.put("/auth/update-profile", data);
       showCustomToastr("Password has been updated.", "success");
+      return result.data;
+    } catch (error) {}
+  }
+);
+
+export const updateAvatar = createAsyncThunk(
+  "updateAvatar",
+  async (data: FormData) => {
+    try {
+      const result = await axiosInstance.put("/auth/avatar", data);
+      showCustomToastr("Avatar has been updated.", "success");
       return result.data;
     } catch (error) {}
   }

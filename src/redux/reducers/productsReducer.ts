@@ -7,6 +7,7 @@ import { TProductSortingOption } from "../../@types/product";
 // axios
 import { AxiosError } from "axios";
 import axiosInstance from "../../utils/AxiosInstance";
+import { queryBuilder } from "../../utils/helper";
 
 // initial state
 const initialState: ProductsState = {
@@ -61,19 +62,23 @@ export const fetchProducts = createAsyncThunk(
     price_max,
     categoryId = null,
     sorting = "newest",
+    sizeIds = [],
   }: {
     pageNo: number;
     perPage: number;
     price_min: number;
     price_max: number;
     categoryId?: string | null;
+    sizeIds?: string[];
     sorting?: TProductSortingOption;
   }) => {
     try {
+      // Convert the array of sizes to a query string
+      const sizeQueryString = queryBuilder("size", sizeIds);
       const result = await axiosInstance.get(
         `/products?pageNo=${pageNo}&perPage=${perPage}&minPrice=${price_min}&maxPrice=${price_max}${
           categoryId && categoryId !== "0" ? "&categoryId=" + categoryId : ""
-        }&sorting=${sorting}`
+        }&sorting=${sorting}&${sizeQueryString}`
       );
       return result.data;
     } catch (e) {
@@ -92,6 +97,7 @@ export const fetchSearchProducts = createAsyncThunk(
     price_min,
     price_max,
     categoryId,
+    sizeIds = [],
     sorting = "newest",
   }: {
     pageNo: number;
@@ -100,12 +106,15 @@ export const fetchSearchProducts = createAsyncThunk(
     price_min: number;
     price_max: number;
     categoryId: string;
+    sizeIds: string[];
     sorting?: TProductSortingOption;
   }) => {
     try {
+      // Convert the array of sizes to a query string
+      const sizeQueryString = queryBuilder("size", sizeIds);
       const url = `/products/search/?title=${query}&price_min=${price_min}&price_max=${price_max}${
         categoryId && categoryId !== "0" ? "&categoryId=" + categoryId : ""
-      }&pageNo=${pageNo}&perPage=${perPage}&sorting=${sorting}`;
+      }&pageNo=${pageNo}&perPage=${perPage}&sorting=${sorting}&${sizeQueryString}`;
       const result = await axiosInstance.get(url);
       return result.data;
     } catch (e) {

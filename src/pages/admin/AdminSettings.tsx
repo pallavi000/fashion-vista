@@ -55,6 +55,9 @@ const validationSchema = yup.object().shape({
   websiteDescription: yup.string().optional(),
   websiteTagline: yup.string().optional(),
   theme: themeSchema.optional(),
+  logo: yup.mixed().optional(),
+  logoDark: yup.mixed().optional(),
+  favicon: yup.mixed().optional(),
 });
 
 function AdminSettings() {
@@ -120,11 +123,23 @@ function AdminSettings() {
 
   const onSubmit = (data: TSettingInputs) => {
     if (setting) {
-      dispatch(updateWebsietSetting({ settingId: setting._id, data }));
+      const formData = new FormData();
+      for (var key in data) {
+        if (data.hasOwnProperty(key)) {
+          const typedKey = key as keyof TSettingInputs;
+          formData.append(
+            typedKey,
+            typedKey === "theme"
+              ? JSON.stringify(data[typedKey])
+              : data[typedKey]
+          );
+        }
+      }
+      dispatch(
+        updateWebsietSetting({ settingId: setting._id, data: formData })
+      );
     }
   };
-
-  console.log(errors);
 
   return (
     <Container>
@@ -143,6 +158,7 @@ function AdminSettings() {
           component={"form"}
           onSubmit={handleSubmit(onSubmit)}
           sx={{ padding: "1rem" }}
+          encType="multipart/form-data"
         >
           {TABS.map((tab, index) => {
             return tabValue === index ? (

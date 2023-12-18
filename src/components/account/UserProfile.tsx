@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 // redux
 import { useSelector } from "react-redux";
-import { AppState } from "../../redux/store";
+import { AppState, useAppDispatch } from "../../redux/store";
 
 // MUI
 import {
@@ -11,14 +11,21 @@ import {
   Card,
   CardContent,
   Divider,
+  IconButton,
+  Tooltip,
   Typography,
 } from "@mui/material";
 
 //components
 import CustomModal from "../CustomModal";
 import ProfileUpdate from "../ProfileUpdate";
+import { MuiFileInput } from "mui-file-input";
+import { updateAvatar } from "../../redux/reducers/authReducer";
+import CustomFileUpload from "../CustomFileUpload";
 
 function UserProfile() {
+  const dispatch = useAppDispatch();
+  const inputRef = useRef<HTMLInputElement | null>(null);
   // auth state
   const user = useSelector((state: AppState) => state.auth.user);
 
@@ -29,6 +36,14 @@ function UserProfile() {
     setIsModalOpen(false);
   };
 
+  const handleAvatarChange = (file: File | null) => {
+    if (file) {
+      const data = new FormData();
+      data.append("avatar", file);
+      dispatch(updateAvatar(data));
+    }
+  };
+
   return (
     <Card
       sx={{
@@ -37,10 +52,20 @@ function UserProfile() {
       }}
     >
       <CardContent>
-        <Avatar
-          sx={{ width: 60, height: 60, margin: "auto" }}
-          src={user?.avatar}
-        />
+        <Tooltip title="Click to change">
+          <Box>
+            <CustomFileUpload
+              handleFileChange={handleAvatarChange}
+              mimeType="image/*"
+              buttonComponent={
+                <Avatar
+                  sx={{ width: 60, height: 60, margin: "auto" }}
+                  src={user?.avatar}
+                />
+              }
+            />
+          </Box>
+        </Tooltip>
         <h3
           style={{
             fontSize: 18,

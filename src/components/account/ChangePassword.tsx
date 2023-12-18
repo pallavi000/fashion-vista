@@ -25,6 +25,7 @@ import { TUpdatePasswordInput } from "../../@types/user";
 
 //reducers
 import { changePassword } from "../../redux/reducers/authReducer";
+import LoadingButton from "../LoadingButton";
 
 // yup validation schema
 const validationSchema = yup.object().shape({
@@ -47,8 +48,9 @@ function ChangePassword() {
   const dispatch = useAppDispatch();
 
   //current user
-  const { user } = useSelector((state: AppState) => ({
+  const { user, isLoading } = useSelector((state: AppState) => ({
     user: state.auth.user,
+    isLoading: state.auth.isLoading,
   }));
   const onSubmit = (data: TUpdatePasswordInput) => {
     if (user) {
@@ -81,6 +83,7 @@ function ChangePassword() {
                   <TextField
                     {...field}
                     fullWidth
+                    type="password"
                     label="Current Password"
                     variant="outlined"
                     error={Boolean(errors.currentPassword)}
@@ -98,6 +101,7 @@ function ChangePassword() {
                     {...field}
                     fullWidth
                     label="New Password"
+                    type="password"
                     variant="outlined"
                     error={Boolean(errors.newPassword)}
                     helperText={errors.newPassword?.message}
@@ -115,6 +119,7 @@ function ChangePassword() {
                     {...field}
                     fullWidth
                     label="ConfirmPassword"
+                    type="password"
                     variant="outlined"
                     error={Boolean(errors.confirmPassword)}
                     helperText={errors.confirmPassword?.message}
@@ -124,13 +129,13 @@ function ChangePassword() {
             </Grid>
           </Grid>
 
-          <Button
-            sx={{ marginTop: "1rem", marginBottom: "1rem", float: "right" }}
-            type="submit"
-            variant="contained"
-          >
-            Submit
-          </Button>
+          <Box sx={{ marginTop: "1rem", marginBottom: "1rem", float: "right" }}>
+            <LoadingButton
+              title="Submit"
+              isLoading={isLoading}
+              color="primary"
+            />
+          </Box>
         </CardContent>
       </Card>
     </Box>

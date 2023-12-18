@@ -1,5 +1,9 @@
 import { TPermission } from "./permission";
 
+export type TAvatarInputs = {
+  avatar: File;
+};
+
 export interface LoginInputs {
   email: string;
   password: string;

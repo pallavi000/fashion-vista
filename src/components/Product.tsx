@@ -7,7 +7,9 @@ import {
   Box,
   Card,
   CardContent,
+  Chip,
   Grid,
+  Stack,
   Typography,
 } from "@mui/material";
 
@@ -48,9 +50,21 @@ function Product({ product }: ProductProps) {
                   >
                     {product.name}
                   </Typography>
-                  <Typography variant="body2" color={"text.secondary"}>
-                    {product.category?.name}
-                  </Typography>
+                  <Stack
+                    direction={"row"}
+                    alignItems={"center"}
+                    justifyContent={"space-between"}
+                    marginRight={1}
+                  >
+                    <Typography variant="body2" color={"text.secondary"}>
+                      {product.category?.name}
+                    </Typography>
+                    <Chip
+                      label={product.size.name}
+                      size="small"
+                      sx={{ fontSize: 12 }}
+                    />
+                  </Stack>
                   <Typography variant="subtitle1">${product.price}</Typography>
                 </Box>
               </Box>

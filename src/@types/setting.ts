@@ -9,6 +9,9 @@ export type TSettingInputs = {
   websiteTagline?: string;
   websiteDescription?: string;
   theme?: TThemeInputs;
+  logo?: any;
+  logoDark?: any;
+  favicon?: any;
 };
 
 export type TSetting = TSettingInputs & {

@@ -37,3 +37,7 @@ export const showApiErrorToastr = (error: Error | AxiosError) => {
 export const showCustomToastr = (message: string, variant: VariantType) => {
   enqueueSnackbar(message, { variant });
 };
+
+export const queryBuilder = (key: string, arr: string[] | number[]) => {
+  return arr.map((a) => `${key}=${encodeURIComponent(a)}`).join("&");
+};

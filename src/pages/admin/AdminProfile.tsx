@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { AppState, useAppDispatch } from "../../redux/store";
 
 // MUI
-import { Box, Container, Typography } from "@mui/material";
+import { Avatar, Box, Container, Tooltip, Typography } from "@mui/material";
 
 // components
 import UserForm from "../../components/UserForm";
@@ -19,6 +19,8 @@ import { UpdateUserInputs } from "../../@types/user";
 
 // reducers
 import { updateUser } from "../../redux/reducers/admin/adminUserReducer";
+import CustomFileUpload from "../../components/CustomFileUpload";
+import { updateAvatar } from "../../redux/reducers/authReducer";
 
 // yup validation schema
 const validationSchema = yup.object().shape({
@@ -74,6 +76,14 @@ function AdminProfile() {
     resetField("password");
   };
 
+  const handleAvatarChange = (file: File | null) => {
+    if (file) {
+      const data = new FormData();
+      data.append("avatar", file);
+      dispatch(updateAvatar(data));
+    }
+  };
+
   return (
     <Container maxWidth="sm">
       <FormProvider {...methods}>
@@ -85,6 +95,20 @@ function AdminProfile() {
           <Typography variant="h4" marginBottom={"1rem"}>
             Update Profile
           </Typography>
+          <Tooltip title="Click to change">
+            <Box>
+              <CustomFileUpload
+                handleFileChange={handleAvatarChange}
+                mimeType="image/*"
+                buttonComponent={
+                  <Avatar
+                    sx={{ width: 60, height: 60, margin: "auto" }}
+                    src={user?.avatar}
+                  />
+                }
+              />
+            </Box>
+          </Tooltip>
           <Box sx={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
             <Box
               sx={{

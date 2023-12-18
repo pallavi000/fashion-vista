@@ -36,7 +36,9 @@ function CategoryProducts() {
   const [sorting, setSorting] = useState<TProductSortingOption>("newest");
 
   // sidebar filter states
-  const [price, setPrice] = React.useState<number[]>([1, 5000]);
+  const [price, setPrice] = React.useState<number[]>([1, 10000]);
+  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+
   const [selectedCategory, setSelectedCategory] = useState<string>();
 
   // categoreis states
@@ -71,10 +73,11 @@ function CategoryProducts() {
           price_max: price[1],
           categoryId: selectedCategory,
           sorting,
+          sizeIds: selectedSizes,
         })
       );
     }
-  }, [pageNo, perPage, price, selectedCategory, sorting]);
+  }, [pageNo, perPage, price, selectedCategory, sorting, selectedSizes]);
 
   // set current category
   React.useEffect(() => {
@@ -112,6 +115,8 @@ function CategoryProducts() {
             setPrice={setPrice}
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
+            selectedSizes={selectedSizes}
+            setSelectedSizes={setSelectedSizes}
           />
         </Grid>
         <Grid item xs={12} md={8} lg={9}>

@@ -9,7 +9,7 @@ import { AxiosError } from "axios";
 import axiosInstance from "../../utils/AxiosInstance";
 
 //helpers
-import { showApiErrorToastr } from "../../utils/helper";
+import { showApiErrorToastr, showCustomToastr } from "../../utils/helper";
 
 // initial states
 const initialState: SettingStates = {
@@ -107,9 +107,10 @@ export const createWebsiteSetting = createAsyncThunk(
 
 export const updateWebsietSetting = createAsyncThunk(
   "updateWebsietSetting",
-  async ({ settingId, data }: { settingId: string; data: TSettingInputs }) => {
+  async ({ settingId, data }: { settingId: string; data: FormData }) => {
     try {
       const response = await axiosInstance.put(`/settings/${settingId}`, data);
+      showCustomToastr("Settings Updated successfully.", "success");
       return response.data;
     } catch (e) {
       const error = e as AxiosError;

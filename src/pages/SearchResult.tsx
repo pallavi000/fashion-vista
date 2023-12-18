@@ -38,7 +38,8 @@ function SearchResult() {
   const [sorting, setSorting] = useState<TProductSortingOption>("newest");
 
   // sidebar filter
-  const [price, setPrice] = React.useState<number[]>([1, 5000]);
+  const [price, setPrice] = React.useState<number[]>([1, 10000]);
+  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
 
   // products state
@@ -77,10 +78,19 @@ function SearchResult() {
           price_max: price[1],
           categoryId: selectedCategory,
           sorting,
+          sizeIds: selectedSizes,
         })
       );
     }
-  }, [perPage, pageNo, searchQuery, price, selectedCategory, sorting]);
+  }, [
+    perPage,
+    pageNo,
+    searchQuery,
+    price,
+    selectedCategory,
+    sorting,
+    selectedSizes,
+  ]);
 
   const handlePerPageChange = (e: SelectChangeEvent) => {
     setPerPage(Number(e.target.value));
@@ -109,6 +119,8 @@ function SearchResult() {
             price={price}
             setPrice={setPrice}
             setSelectedCategory={setSelectedCategory}
+            selectedSizes={selectedSizes}
+            setSelectedSizes={setSelectedSizes}
           />
         </Grid>
         <Grid item xs={12} md={8} lg={9}>

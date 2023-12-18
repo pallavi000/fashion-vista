@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // redux
 import { useSelector } from "react-redux";
-import { AppState } from "../redux/store";
+import { AppState, useAppDispatch } from "../redux/store";
 
 // MUI
 import {
@@ -15,6 +15,11 @@ import {
   Radio,
   RadioGroup,
   Slider,
+  Grid,
+  Paper,
+  Card,
+  CardContent,
+  Button,
 } from "@mui/material";
 
 // icons
@@ -22,15 +27,16 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 // helpers
 import { valueToText } from "../utils/helper";
+import { fetchAdminSizes } from "../redux/reducers/admin/adminSizeReducer";
 
 // price range display text/label
 const MIN_PRICE_RANGE_DISTANCE = 500;
 const PRICE_RANGE_MARKS = [
   { value: 0, label: "$0" },
-  { value: 5000, label: "$5000" },
+  { value: 10000, label: "$10000" },
 ];
-for (let i = 0; i < 5000; i++) {
-  if (i % 500 === 0) {
+for (let i = 0; i < 10000; i++) {
+  if (i % 1000 === 0) {
     PRICE_RANGE_MARKS.push({ value: i, label: "" });
   }
 }
@@ -38,9 +44,11 @@ for (let i = 0; i < 5000; i++) {
 // component props type
 type SidebarFilterProps = {
   price: number[];
-  setPrice: Function;
+  setPrice: React.Dispatch<React.SetStateAction<number[]>>;
   selectedCategory?: string | number;
   setSelectedCategory: Function;
+  selectedSizes: string[];
+  setSelectedSizes: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 function SidebarFilter({
@@ -48,12 +56,20 @@ function SidebarFilter({
   setPrice,
   selectedCategory = 0,
   setSelectedCategory,
+  selectedSizes,
+  setSelectedSizes,
 }: SidebarFilterProps) {
+  const dispatch = useAppDispatch();
   // price ranges
   const [value, setValue] = useState<number[]>(price);
 
   // categories states
   const categories = useSelector((state: AppState) => state.categories.data);
+  const sizes = useSelector((state: AppState) => state.adminSizes.data);
+
+  useEffect(() => {
+    dispatch(fetchAdminSizes());
+  }, []);
 
   const handlePriceRangeChange = (
     event: Event,
@@ -98,6 +114,15 @@ function SidebarFilter({
     setSelectedCategory((event.target as HTMLInputElement).value);
   };
 
+  const handleSizeChange = (id: string) => {
+    if (selectedSizes?.includes(id)) {
+      // remove
+      setSelectedSizes((prev) => prev.filter((p) => p !== id));
+    } else {
+      setSelectedSizes((prev) => [...prev, id]);
+    }
+  };
+
   return (
     <Box>
       <Typography variant="h4" marginBottom={4}>
@@ -109,7 +134,7 @@ function SidebarFilter({
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography>Categories</Typography>
+          <Typography variant="h6">Categories</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <FormControl>
@@ -140,7 +165,7 @@ function SidebarFilter({
         <Typography variant="h6" marginBottom={"1rem 0rem"}>
           Price
         </Typography>
-        <Box sx={{ px: 1 }}>
+        <Box sx={{ px: 1, mt: 1 }}>
           <Slider
             getAriaLabel={() => "Price range"}
             value={value}
@@ -148,12 +173,45 @@ function SidebarFilter({
             onChange={handlePriceRangeChange}
             valueLabelDisplay="auto"
             getAriaValueText={valueToText}
-            max={5000}
+            max={10000}
             step={MIN_PRICE_RANGE_DISTANCE}
             marks={PRICE_RANGE_MARKS}
             disableSwap
           />
         </Box>
+      </Box>
+      <Box sx={{ margin: "2rem 0rem" }}>
+        <Typography variant="h6" marginBottom={"1rem 0rem"}>
+          Size
+        </Typography>
+        <Grid container sx={{ marginTop: 1 }} spacing={2}>
+          {sizes.map((size) => {
+            return (
+              <Grid item key={size._id}>
+                <Button
+                  variant="text"
+                  sx={{ padding: 0 }}
+                  onClick={() => handleSizeChange(size._id)}
+                >
+                  <Paper
+                    sx={{
+                      padding: 2,
+                      textAlign: "center",
+                      minWidth: 60,
+                      borderWidth: 2,
+                      borderStyle: "solid",
+                      borderColor: selectedSizes.includes(size._id)
+                        ? "primary.main"
+                        : "background.default",
+                    }}
+                  >
+                    <Typography variant="subtitle2">{size.name}</Typography>
+                  </Paper>
+                </Button>
+              </Grid>
+            );
+          })}
+        </Grid>
       </Box>
     </Box>
   );

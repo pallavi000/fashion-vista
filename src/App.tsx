@@ -1,6 +1,6 @@
 import { BrowserRouter as Router } from "react-router-dom";
 import { useEffect } from "react";
-
+import { Helmet } from "react-helmet";
 // Redux
 import { useSelector } from "react-redux";
 import { AppState, useAppDispatch } from "./redux/store";
@@ -36,15 +36,6 @@ const App = () => {
     dispatch(getWebsiteSetting());
   }, []);
 
-  useEffect(() => {
-    if (setting?.websiteName) {
-      document.title = setting.websiteName;
-    }
-    return () => {
-      document.title = "Ecommerce";
-    };
-  }, [setting]);
-
   // Get current user
   useEffect(() => {
     if (access_token && !user) {
@@ -60,6 +51,17 @@ const App = () => {
 
   return (
     <Router>
+      <Helmet>
+        {setting?.websiteName ? (
+          <title>
+            {setting.websiteName}
+            {setting?.websiteTagline ? ` - ${setting.websiteTagline}` : ""}
+          </title>
+        ) : null}
+        {setting?.faviconUrl ? (
+          <link rel="icon" type="image/x-icon" href={setting.faviconUrl} />
+        ) : null}
+      </Helmet>
       <ScrollToTopOnNavigation />
       <SettingsDrawer />
       <AppRouter />
